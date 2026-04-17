@@ -21,9 +21,9 @@ device = torch.device(opts["device"])
 
 node = RosNode("recognize_scene", args.uri)
 node.stopSimulation()
-rospy.sleep(1.0)
+rospy.sleep(2.0)
 node.startSimulation()
-rospy.sleep(1.0)
+rospy.sleep(2.0)
 
 model = EffectRegressorMLP(opts)
 model.load(opts["save"], "_best", 1)

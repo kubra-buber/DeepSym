@@ -24,7 +24,7 @@ model.encoder2.eval()
 transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, std=0.0094)
 trainset = data.SingleObjectData(transform=transform)
 loader = torch.utils.data.DataLoader(trainset, batch_size=2400, shuffle=False)
-objects = iter(loader).next()["observation"]
+objects = next(iter(loader))["observation"]
 objects = objects.reshape(5, 10, 3, 4, 4, opts["size"], opts["size"])
 
 dist = torch.zeros(25, 3, 10, 10)

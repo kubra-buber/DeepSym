@@ -25,7 +25,8 @@ transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, 
 trainset = data.PairedObjectData(transform=transform)
 trainset.train = False
 loader = torch.utils.data.DataLoader(trainset, batch_size=36, shuffle=True)
-objects = iter(loader).next()["observation"]
+# objects = iter(loader).next()["observation"]
+objects = next(iter(loader))["observation"]
 with torch.no_grad():
     codes = model.encoder2(objects)
 

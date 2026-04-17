@@ -1,0 +1,22 @@
+batch_norm: true
+cnn: true
+
+epoch1: 300
+batch_size1: 128
+learning_rate1: 0.00005
+code1_dim: 2
+filters1: [1, 32, 64, 128, 256]
+
+epoch2: 300
+batch_size2: 128
+learning_rate2: 0.00005
+code2_dim: 1
+filters2: [2, 32, 64, 128, 256]
+
+hidden_dim: 128
+depth: 2
+size: 42
+
+device: cuda
+load: null
+save: save/myrun

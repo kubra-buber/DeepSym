@@ -94,7 +94,7 @@ def tree_to_code(tree, feature_names, effect_names, obj_names):
             effect = ":effect (and (probabilistic"
             # this shenanigan is needed because probabilities add up to more than one.
             probs = (eff / eff.sum())
-            probs = (probs * 1000).round().astype(np.int)
+            probs = (probs * 1000).round().astype(int)
             ptotal = probs.sum()
             if ptotal > 1000:
                 residual = ptotal - 1000
@@ -242,7 +242,7 @@ def find_objects(img, window_size):
     while not is_empty:
         h_i, w_i = mask.nonzero()[0]
         pp = cc_pix_avg(mask, h_i.item(), w_i.item())
-        h_c, w_c = np.mean(pp, axis=0).round().astype(np.int)
+        h_c, w_c = np.mean(pp, axis=0).round().astype(int)
         locations.append([h_c, w_c])
         # depths.append(img[int(h_c), int(w_c)].item())
         depths.append(img.min())
