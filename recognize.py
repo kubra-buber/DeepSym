@@ -69,23 +69,42 @@ obj_infos = []
 comparisons = []
 with torch.no_grad():
     for i, obj in enumerate(objs):
-        cat = model.encoder1(obj.unsqueeze(0).unsqueeze(0))
-        # TODO: this uses true location and size.
-        print("Category: (%d %d), Location: (%.5f %.5f)" % (cat[0, 0], cat[0, 1], locations[indices[i], 0], locations[indices[i], 1]))
+        raw_cat = model.encoder1(obj.unsqueeze(0).unsqueeze(0))
+        
+        # --- VQ COMPATIBLE SHAPE EXTRACTION ---
+        try:
+            # VQ Layer: Get the integer index directly
+            cat_idx = int(model.encoder1[-1].get_indices(raw_cat)[0].item())
+        except AttributeError:
+            # Gumbel Baseline: Calculate from binary
+            cat_idx = utils.binary_to_decimal([int(raw_cat[0, 0]), int(raw_cat[0, 1])])
+        # --------------------------------------
+        
+        print("Category: %d, Location: (%.5f %.5f)" % (cat_idx, locations[indices[i], 0], locations[indices[i], 1]))
         info = {}
         info["name"] = "O{}".format(i+1)
         info["loc"] = (locations[indices[i], 0].item(), locations[indices[i], 1].item())
         info["size"] = objSizes[indices[i]]*0.1
-        info["type"] = "objtype{}".format(utils.binary_to_decimal([int(cat[0, 0]), int(cat[0, 1])]))
+        info["type"] = "objtype{}".format(cat_idx)
 
         obj_infos.append(info)
+        
         for j in range(len(objs)):
             if i != j:
-                rel = model.encoder2(torch.stack([obj, objs[j]]).unsqueeze(0))[0, 0]
-                if rel == -1:
-                    comparisons.append("(relation0 O%d O%d)" % (i+1, j+1))
-                else:
-                    comparisons.append("(relation1 O%d O%d)" % (i+1, j+1))
+                raw_rel = model.encoder2(torch.stack([obj, objs[j]]).unsqueeze(0))
+                
+                # --- VQ COMPATIBLE RELATION EXTRACTION ---
+                try:
+                    # VQ Layer: Get index (0 or 1)
+                    rel_idx = int(model.encoder2[-1].get_indices(raw_rel)[0].item())
+                    rel_str = "relation1" if rel_idx == 1 else "relation0"
+                except AttributeError:
+                    # Gumbel Baseline: Check for -1 or 1
+                    rel_val = raw_rel[0, 0]
+                    rel_str = "relation0" if rel_val == -1 else "relation1"
+                # -----------------------------------------
+                
+                comparisons.append("(%s O%d O%d)" % (rel_str, i+1, j+1))
 print(obj_infos)
 print(comparisons)
 
