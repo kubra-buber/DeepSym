@@ -26,8 +26,15 @@ node.startSimulation()
 rospy.sleep(2.0)
 
 model = EffectRegressorMLP(opts)
-model.load(opts["save"], "_best", 1)
-model.load(opts["save"], "_best", 2)
+
+try:
+    # Try the end-to-end loading signature
+    model.load(opts["save"], "_best")
+except TypeError:
+    # Fallback to the progressive loading signature
+    model.load(opts["save"], "_best", 1)
+    model.load(opts["save"], "_best", 2)
+    
 model.encoder1.eval()
 model.encoder2.eval()
 # Homogeneous transformation matrix
