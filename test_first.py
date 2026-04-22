@@ -17,23 +17,38 @@ opts = yaml.safe_load(open(file_loc, "r"))
 opts["device"] = "cpu"
 
 model = EffectRegressorMLP(opts)
-model.load(args.ckpt, "_best", 1)
+
+# Robust Loading Block
+try:
+    model.load(args.ckpt, "_best")
+except TypeError:
+    model.load(args.ckpt, "_best", 1)
 
 transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, std=0.0094)
 trainset = data.SingleObjectData(transform=transform)
 loader = torch.utils.data.DataLoader(trainset, batch_size=2400, shuffle=True)
-# sample = iter(loader).next()
+
 sample = next(iter(loader))
 objects = sample["observation"].reshape(5, 10, 3, 4, 4, opts["size"], opts["size"])
 objects = objects[:, :, 0].reshape(-1, 1, 42, 42)
 colored = [[], [], [], []]
+
 model.encoder1.eval()
 with torch.no_grad():
     done = False
     it = 0
     while not done:
         c = model.encoder1(objects[it].reshape(1, 1, 42, 42))
-        cat = int(utils.binary_to_decimal(c[0]))
+        
+        # --- THE VQ FIX: Extract the integer class index ---
+        try:
+            # If using VQLayer, grab the codebook index
+            cat = int(model.encoder1[-1].get_indices(c)[0].item())
+        except AttributeError:
+            # If using original Gumbel STLayer, calculate decimal from binary
+            cat = int(utils.binary_to_decimal(c[0]))
+        # ---------------------------------------------------
+        
         if len(colored[cat]) < 20:
             colored[cat].append(objects[it].clone())
         it += 1
@@ -51,4 +66,6 @@ colored = colored.reshape(-1, 42, 42)
 colored = (colored - colored.min()) / (colored.max() - colored.min())
 cm = plt.cm.plasma
 colored = torch.tensor(cm(colored.numpy()), dtype=torch.float).permute(0, 3, 1, 2)[:, :3]
-torchvision.utils.save_image(colored, "colored-objects.png", nrow=20)
+
+# output_img = os.path.join(args.ckpt, "colored-objects.png")
+torchvision.utils.save_image(colored, "colored-objects_vq.png", nrow=20)

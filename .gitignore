@@ -136,7 +136,7 @@ out/*
 data/*
 
 # save files
-save/*
+# save/*
 
 # vscode settings
 .vscode/*
