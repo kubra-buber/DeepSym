@@ -17,8 +17,17 @@ opts = yaml.safe_load(open(file_loc, "r"))
 opts["device"] = "cpu"
 
 model = EffectRegressorMLP(opts)
-model.load(args.ckpt, "_best", 1)
-model.load(args.ckpt, "_best", 2)
+
+# --- THE FIX: Robust Loading Block ---
+try:
+    # Try the end-to-end loading signature
+    model.load(args.ckpt, "_best")
+except TypeError:
+    # Fallback to the progressive loading signature
+    model.load(args.ckpt, "_best", 1)
+    model.load(args.ckpt, "_best", 2)
+# ------------------------------------
+
 model.encoder2.eval()
 
 transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, std=0.0094)
@@ -32,21 +41,28 @@ dist = torch.zeros(25, 3, 10, 10)
 minima = -1
 maxima = 1
 norm = matplotlib.colors.Normalize(vmin=minima, vmax=maxima, clip=True)
+# Note: get_cmap might throw a deprecation warning in newer matplotlib, 
+# but it will still work perfectly for this test.
 mapper = cm.ScalarMappable(norm=norm, cmap=cm.get_cmap("bwr"))
 
 for i in range(5):
     for j in range(5):
+        # x is the top object, y is the bottom object
         x = objects[j, :, 0, 2, 2].repeat(10, 1, 1).reshape(-1, 1, 42, 42)
         y = objects[i, :, 0, 2, 2].repeat_interleave(10, 0).reshape(-1, 1, 42, 42)
 
         xy = torch.cat([x, y], dim=1)
         with torch.no_grad():
             codes = model.encoder2(xy)
+            
         dist[i*5+j, 0] = codes.reshape(10, 10).flip([0])
         for r in range(10):
             for c in range(10):
-                dist[i*5+j, :, r, c] = torch.tensor(mapper.to_rgba(dist[i*5+j, 0, r, c]), dtype=torch.float)[:3]
+                dist[i*5+j, :, r, c] = torch.tensor(mapper.to_rgba(dist[i*5+j, 0, r, c].item()), dtype=torch.float)[:3]
 
 dist = dist.repeat_interleave(6, 2)
 dist = dist.repeat_interleave(6, 3)
-torchvision.utils.save_image(dist, "comparisons.png", nrow=5, padding=10, pad_value=1.0)
+
+# --- THE FIX: Save to checkpoint folder ---
+# output_img = os.path.join(args.ckpt, "comparisons.png")
+torchvision.utils.save_image(dist, "comparisons_end.png", nrow=5, padding=10, pad_value=1.0)

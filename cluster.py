@@ -16,7 +16,14 @@ opts["device"] = "cpu"
 device = opts["device"]
 
 model = EffectRegressorMLP(opts)
-model.load(opts["save"], "_best", 2)
+
+try:
+    # Try the end-to-end loading signature
+    model.load(opts["save"], "_best")
+except TypeError:
+    # Fallback to the progressive loading signature
+    model.load(opts["save"], "_best", 2)
+
 model.encoder2.eval()
 
 transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, std=0.0094)

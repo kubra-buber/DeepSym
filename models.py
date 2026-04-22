@@ -51,11 +51,11 @@ class EffectRegressorMLP:
         loss = self.criterion(effect_pred, effect)
         return loss
 
-    def loss(self, sample_single, sample_paired):
-        # Calculate individual losses and sum them up
+    def loss(self, sample_single, sample_paired, lambda_weight=0.5):
         l1 = self.loss1(sample_single)
         l2 = self.loss2(sample_paired)
-        return l1 + l2
+        # Reduce the impact of the paired loss on the joint network
+        return l1 + (lambda_weight * l2)
 
     # Update arguments to take both loaders
     def one_pass_optimize(self, loader1, loader2):
