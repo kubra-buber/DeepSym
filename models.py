@@ -96,9 +96,10 @@ class EffectRegressorMLP:
         num_emb_1 = 2 ** opts["code1_dim"]
         num_emb_2 = 2 ** opts["code2_dim"]
 
-        # CRITICAL: Replace the STLayer (the last layer, index -1) with our new VQ layer
-        self.encoder1[-1] = EMAVQLayer(num_emb_1, opts["code1_dim"]).to(self.device)
-        self.encoder2[-1] = EMAVQLayer(num_emb_2, opts["code2_dim"]).to(self.device)
+        # CRITICAL FIX: Level 1 gets standard hyperparameters. 
+        # Level 2 gets aggressive commitment cost and slow EMA decay to prevent shortcut learning.
+        self.encoder1[-1] = EMAVQLayer(num_emb_1, opts["code1_dim"], commitment_cost=0.25, decay=0.99).to(self.device)
+        self.encoder2[-1] = EMAVQLayer(num_emb_2, opts["code2_dim"], commitment_cost=1.50, decay=0.999).to(self.device)
 
         self.decoder1 = MLP([opts["code1_dim"] + 3] + [opts["hidden_dim"]] * opts["depth"] + [3]).to(self.device)
         self.decoder2 = MLP([opts["code2_dim"] + opts["code1_dim"]*2] + [opts["hidden_dim"]] * opts["depth"] + [6]).to(self.device)
