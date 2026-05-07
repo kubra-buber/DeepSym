@@ -4,9 +4,9 @@ batch_size2: 128
 cnn: true
 code1_dim: 2
 code2_dim: 1
-depth: 2
+depth: 3
 device: cuda
-epoch1: 400
+epoch1: 300
 epoch2: 300
 filters1:
 - 1
@@ -20,10 +20,10 @@ filters2:
 - 64
 - 128
 - 256
-hidden_dim: 128
-learning_rate1: 5.0e-05
-learning_rate2: 0.05
+hidden_dim: 256
+learning_rate1: 0.0005
+learning_rate2: 0.0005
 load: null
-save: save/myrun_vq2
+save: save/myrun_vq3
 size: 42
-time: Thu May  7 16:30:12 2026
+time: Thu May  7 17:08:27 2026

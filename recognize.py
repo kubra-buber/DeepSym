@@ -99,6 +99,7 @@ with torch.no_grad():
                     rel_idx = int(model.encoder2[-1].get_indices(raw_rel)[0].item())
                     # INVERTED LOGIC: If the model outputs 0, it means relation1 (Stackable)
                     rel_str = "relation1" if rel_idx == 0 else "relation0"
+                    # rel_str = "relation1" if rel_idx == 1 else "relation0"
 
                 except AttributeError:
                     # Gumbel Baseline: Check for -1 or 1
