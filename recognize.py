@@ -33,6 +33,8 @@ model.encoder2.eval()
 # Homogeneous transformation matrix
 H = torch.load("H.pt")
 
+np.random.seed(64)
+
 # GENERATE A RANDOM SCENE
 NUM_OBJECTS = 5
 objTypes = np.random.randint(1, 6, (NUM_OBJECTS, ))
