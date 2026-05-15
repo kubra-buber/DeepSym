@@ -12,8 +12,9 @@ args = parser.parse_args()
 
 opts = yaml.safe_load(open(args.opts, "r"))
 opts["device"] = "cpu"
-device = torch.device(opts["device"])
+device = torch.device("cpu")
 
+print("Loading models...")
 model = EffectRegressorMLP(opts)
 model.load(opts["save"], "_best", 1)
 model.load(opts["save"], "_best", 2)
@@ -21,47 +22,41 @@ model.encoder1.eval()
 model.encoder2.eval()
 
 transform = data.default_transform(size=opts["size"], affine=False, mean=0.279, std=0.0094)
-X = torch.load("data/img/obs_prev_z.pt")
-X = X.reshape(5, 10, 3, 4, 4, 42, 42)
-X = X[:, :, 0, 2, 2]
-X = X.reshape(-1, 1, 42, 42)
-B, _, H, W = X.shape
-Y = torch.empty(B, 1, opts["size"], opts["size"])
+# Using PairedObjectData GUARANTEES perfect alignment with label.pt
+dataset2 = data.PairedObjectData(transform=transform)
+loader2 = torch.utils.data.DataLoader(dataset2, batch_size=200, shuffle=False)
 
-for i in range(B):
-    Y[i] = transform(X[i])
+all_cats = []
 
-# --- EXTRACT CATEGORY 1 (SHAPES) ---
 with torch.no_grad():
-    raw_cat1 = model.encoder1(Y.to(device))
-    try:
-        # VQ Logic: Get index and convert to binary array
-        idx1 = model.encoder1[-1].get_indices(raw_cat1)
-        # Convert each index (e.g., 2) to a binary list (e.g., [1, 0])
-        bin_list = [utils.decimal_to_binary(i.item(), length=opts["code1_dim"]) for i in idx1]
-        category1 = torch.tensor(bin_list, dtype=torch.int32)
-    except AttributeError:
-        # Gumbel Fallback
-        category1 = raw_cat1.int()
+    for sample in loader2:
+        obs = sample["observation"].to(device)
+        # DeepSym dataset: obs[:, 0] is Top Object, obs[:, 1] is Bottom Object
+        obs_top = obs[:, 0].unsqueeze(1)
+        obs_bot = obs[:, 1].unsqueeze(1)
 
-left_img = Y.repeat_interleave(B, 0)
-right_img = Y.repeat(B, 1, 1, 1)
-concat = torch.cat([left_img, right_img], dim=1)
+        h_top = model.encoder1(obs_top)
+        h_bot = model.encoder1(obs_bot)
+        h_rel = model.encoder2(obs)
 
-# --- EXTRACT CATEGORY 2 (RELATIONS) ---
-with torch.no_grad():
-    raw_cat2 = model.encoder2(concat.to(device))
-    try:
-        # VQ Logic: Get index and convert to binary array
-        idx2 = model.encoder2[-1].get_indices(raw_cat2)
-        bin_list2 = [utils.decimal_to_binary(i.item(), length=opts["code2_dim"]) for i in idx2]
-        category2 = torch.tensor(bin_list2, dtype=torch.int32)
-    except AttributeError:
-         # Gumbel Fallback
-        category2 = raw_cat2.int()
+        # Get VQ Integer Indices
+        idx_top = model.encoder1[-1].get_indices(h_top)
+        idx_bot = model.encoder1[-1].get_indices(h_bot)
+        idx_rel = model.encoder2[-1].get_indices(h_rel)
 
-left_cat = category1.repeat_interleave(B, 0)
-right_cat = category1.repeat(B, 1)
-category_all = torch.cat([left_cat, right_cat, category2], dim=-1)
-torch.save(category_all.cpu(), os.path.join(opts["save"], "category.pt"))
-print(f"Saved binary categories to {os.path.join(opts['save'], 'category.pt')}")
+        # Safely convert to binary lists using the paper's native util
+        bits_top = [utils.decimal_to_binary(i.item(), length=opts["code1_dim"]) for i in idx_top]
+        bits_bot = [utils.decimal_to_binary(i.item(), length=opts["code1_dim"]) for i in idx_bot]
+        bits_rel = [utils.decimal_to_binary(i.item(), length=opts["code2_dim"]) for i in idx_rel]
+
+        t_top = torch.tensor(bits_top, dtype=torch.int32)
+        t_bot = torch.tensor(bits_bot, dtype=torch.int32)
+        t_rel = torch.tensor(bits_rel, dtype=torch.int32)
+
+        # Concatenate [Top, Bottom, Relation]
+        cat = torch.cat([t_top, t_bot, t_rel], dim=-1)
+        all_cats.append(cat)
+
+final_categories = torch.cat(all_cats, dim=0)
+torch.save(final_categories.cpu(), os.path.join(opts["save"], "category.pt"))
+print(f"Saved robust VQ binary categories to {os.path.join(opts['save'], 'category.pt')}")

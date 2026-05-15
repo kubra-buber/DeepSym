@@ -33,7 +33,7 @@ model.encoder2.eval()
 # Homogeneous transformation matrix
 H = torch.load("H.pt")
 
-np.random.seed(70)
+np.random.seed(17)
 
 # GENERATE A RANDOM SCENE
 NUM_OBJECTS = 5
@@ -94,14 +94,19 @@ with torch.no_grad():
         for j in range(len(objs)):
             if i != j:
                 raw_rel = model.encoder2(torch.stack([obj, objs[j]]).unsqueeze(0))
-                
+
                 # --- VQ COMPATIBLE RELATION EXTRACTION ---
                 try:
-                    # VQ Layer: Get index (0 or 1)
+                    # VQ Layer: Get the integer index directly
                     rel_idx = int(model.encoder2[-1].get_indices(raw_rel)[0].item())
-                    # INVERTED LOGIC: If the model outputs 0, it means relation1 (Stackable)
-                    rel_str = "relation1" if rel_idx == 0 else "relation0"
-                    # rel_str = "relation1" if rel_idx == 1 else "relation0"
+                    # DYNAMIC LOGIC: Trust the VQ index exactly as the Decision Tree learned it!
+                    rel_str = f"relation{rel_idx}"
+
+                except AttributeError:
+                    # Gumbel Baseline: Check for -1 or 1 (Old paper logic)
+                    rel_val = raw_rel[0, 0]
+                    rel_str = "relation0" if rel_val == -1 else "relation1"
+                # -----------------------------------------
 
                 except AttributeError:
                     # Gumbel Baseline: Check for -1 or 1

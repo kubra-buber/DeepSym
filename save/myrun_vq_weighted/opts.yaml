@@ -1,0 +1,29 @@
+batch_norm: true
+batch_size1: 128
+batch_size2: 128
+cnn: true
+code1_dim: 2
+code2_dim: 1
+depth: 2
+device: cuda
+epoch1: 300
+epoch2: 300
+filters1:
+- 1
+- 32
+- 64
+- 128
+- 256
+filters2:
+- 2
+- 32
+- 64
+- 128
+- 256
+hidden_dim: 128
+learning_rate1: 0.0005
+learning_rate2: 0.0005
+load: null
+save: save/myrun_vq_weighted
+size: 42
+time: Fri May 15 14:46:47 2026

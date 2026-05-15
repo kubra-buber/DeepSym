@@ -131,7 +131,15 @@ class EffectRegressorMLP:
         h_aug = torch.cat([h, action], dim=-1)
         effect_pred = self.decoder1(h_aug)
         
-        mse_loss = self.criterion(effect_pred, effect)
+        # --- NEW WEIGHTED MSE LOSS (Level 1: 3D Vector) ---
+        # Effect shape is [Batch, 3] -> (X, Y, Z)
+        raw_mse = torch.nn.functional.mse_loss(effect_pred, effect, reduction='none')
+        
+        # Weight the Z-axis (Dimension 2) by 10.0
+        weights = torch.tensor([1.0, 1.0, 10.0], device=self.device)
+        mse_loss = (raw_mse * weights).mean()
+        # --------------------------------------------------
+
         # Add the VQ Codebook commitment loss stored in the layer
         vq_loss = self.encoder1[-1].last_vq_loss
         
@@ -149,7 +157,15 @@ class EffectRegressorMLP:
         h_aug = torch.cat([h1, h2], dim=-1)
         effect_pred = self.decoder2(h_aug)
         
-        mse_loss = self.criterion(effect_pred, effect)
+        # --- NEW WEIGHTED MSE LOSS (Level 2: 6D Vector) ---
+        # Effect shape is [Batch, 6] -> (Top X, Top Y, Top Z, Bot X, Bot Y, Bot Z)
+        raw_mse = torch.nn.functional.mse_loss(effect_pred, effect, reduction='none')
+        
+        # Weight the Z-axes (Dimensions 2 and 5) by 10.0
+        weights = torch.tensor([1.0, 1.0, 5.0, 1.0, 1.0, 1.0], device=self.device)
+        mse_loss = (raw_mse * weights).mean()
+        # --------------------------------------------------
+
         # Add the VQ Codebook commitment loss stored in the layer
         vq_loss = self.encoder2[-1].last_vq_loss
         
