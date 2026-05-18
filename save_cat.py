@@ -32,8 +32,10 @@ with torch.no_grad():
     for sample in loader2:
         obs = sample["observation"].to(device)
         # DeepSym dataset: obs[:, 0] is Top Object, obs[:, 1] is Bottom Object
-        obs_top = obs[:, 0].unsqueeze(1)
-        obs_bot = obs[:, 1].unsqueeze(1)
+        # obs_top = obs[:, 0].unsqueeze(1)
+        # obs_bot = obs[:, 1].unsqueeze(1)
+        obs_bot = obs[:, 0].unsqueeze(1)
+        obs_top = obs[:, 1].unsqueeze(1)
 
         h_top = model.encoder1(obs_top)
         h_bot = model.encoder1(obs_bot)

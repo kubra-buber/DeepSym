@@ -9,7 +9,6 @@ import data
 import utils
 from simtools.rosutils import RosNode
 
-
 parser = argparse.ArgumentParser("Make plan.")
 parser.add_argument("-opts", help="option file", type=str, required=True)
 parser.add_argument("-goal", help="goal state", type=str, default="(H3) (S0)")
@@ -33,7 +32,7 @@ model.encoder2.eval()
 # Homogeneous transformation matrix
 H = torch.load("H.pt")
 
-np.random.seed(6)
+np.random.seed(1)
 
 # GENERATE A RANDOM SCENE
 NUM_OBJECTS = 5
@@ -93,23 +92,16 @@ with torch.no_grad():
         
         for j in range(len(objs)):
             if i != j:
+                # obj is objs[i] (Bottom object, ?below)
+                # objs[j] is the Top object (?above)
+                # Stack them exactly as the dataset provided them: [Bottom, Top]
                 raw_rel = model.encoder2(torch.stack([obj, objs[j]]).unsqueeze(0))
-
+                
                 # --- VQ COMPATIBLE RELATION EXTRACTION ---
                 try:
-                    # VQ Layer: Get the integer index directly
                     rel_idx = int(model.encoder2[-1].get_indices(raw_rel)[0].item())
-                    # DYNAMIC LOGIC: Trust the VQ index exactly as the Decision Tree learned it!
                     rel_str = f"relation{rel_idx}"
-
                 except AttributeError:
-                    # Gumbel Baseline: Check for -1 or 1 (Old paper logic)
-                    rel_val = raw_rel[0, 0]
-                    rel_str = "relation0" if rel_val == -1 else "relation1"
-                # -----------------------------------------
-
-                except AttributeError:
-                    # Gumbel Baseline: Check for -1 or 1
                     rel_val = raw_rel[0, 0]
                     rel_str = "relation0" if rel_val == -1 else "relation1"
                 # -----------------------------------------
