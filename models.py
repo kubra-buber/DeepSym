@@ -3,109 +3,142 @@ import torch
 import utils
 from blocks import MLP, build_encoder
 
-class EMAVQLayer(torch.nn.Module):
+class DynamicEMAVQLayer(torch.nn.Module):
     """
-    Vector Quantization Layer using Exponential Moving Average (EMA).
-    This prevents codebook collapse by tracking the moving average of assigned vectors 
-    rather than relying on unstable gradient descent for the codebook.
+    Dynamic Vector Quantization Layer.
+    Starts with 1 cluster and dynamically grows the codebook when it encounters 
+    inputs that exceed the `surprise_threshold`.
     """
-    def __init__(self, num_embeddings, embedding_dim, commitment_cost=0.25, decay=0.99, epsilon=1e-5):
+    def __init__(self, max_embeddings, embedding_dim, surprise_threshold=1.0, commitment_cost=0.25, decay=0.99, epsilon=1e-5):
         super().__init__()
         self.embedding_dim = embedding_dim
-        self.num_embeddings = num_embeddings
+        self.max_embeddings = max_embeddings
+        self.surprise_threshold = surprise_threshold
         self.commitment_cost = commitment_cost
         self.decay = decay
         self.epsilon = epsilon
 
-        # The Codebook
-        self.embedding = torch.nn.Embedding(self.num_embeddings, self.embedding_dim)
+        # Track how many embeddings are currently active (Saved in .ckpt)
+        self.register_buffer('active_embeddings', torch.tensor(1))
+
+        # Allocate the maximum possible codebook, but we only use [:active_embeddings]
+        self.embedding = torch.nn.Embedding(self.max_embeddings, self.embedding_dim)
         self.embedding.weight.data.normal_()
-        # Turn off gradients for the codebook; we update it manually via EMA
         self.embedding.weight.requires_grad = False 
 
-        # Buffers for EMA tracking (saved automatically in state_dict)
-        self.register_buffer('cluster_size', torch.zeros(num_embeddings))
+        # Buffers for EMA tracking
+        self.register_buffer('cluster_size', torch.zeros(max_embeddings))
         self.register_buffer('embed_avg', self.embedding.weight.data.clone())
+        
+        # Initialize the very first cluster size so it isn't zeroed out
+        self.cluster_size[0] = 1.0
         
         self.last_vq_loss = 0.0
 
     def forward(self, inputs):
         flat_inputs = inputs.view(-1, self.embedding_dim)
+        active_k = self.active_embeddings.item()
 
-        # Calculate distances
+        # 1. Calculate distances against currently ACTIVE embeddings only
+        active_weights = self.embedding.weight[:active_k]
         distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
-                    + torch.sum(self.embedding.weight**2, dim=1)
-                    - 2 * torch.matmul(flat_inputs, self.embedding.weight.t()))
+                    + torch.sum(active_weights**2, dim=1)
+                    - 2 * torch.matmul(flat_inputs, active_weights.t()))
 
-        # Find closest vector
+        # 2. Dynamic Growth Phase (Only during training)
+        if self.training and active_k < self.max_embeddings:
+            # Find the minimum distance for each input in the batch
+            min_dists, _ = torch.min(distances, dim=1)
+            # Find the most "surprising" input in the entire batch
+            max_min_dist, outlier_idx = torch.max(min_dists, dim=0)
+
+            # If the outlier is too strange, spawn a new cluster center!
+            if max_min_dist > self.surprise_threshold:
+                new_idx = active_k
+                
+                # Initialize the new cluster exactly at the outlier's position
+                self.embedding.weight.data[new_idx] = flat_inputs[outlier_idx].detach()
+                self.cluster_size[new_idx] = 1.0 
+                self.embed_avg.data[new_idx] = flat_inputs[outlier_idx].detach()
+                
+                # Increment active clusters
+                self.active_embeddings += 1
+                active_k = self.active_embeddings.item()
+                active_weights = self.embedding.weight[:active_k]
+                print(f"[VQ Layer] Surprise > {self.surprise_threshold}! Codebook grew to size: {active_k}")
+
+                # Recompute distances with the new codebook vector included
+                distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
+                            + torch.sum(active_weights**2, dim=1)
+                            - 2 * torch.matmul(flat_inputs, active_weights.t()))
+
+        # 3. Find the closest vector for standard quantization
         encoding_indices = torch.argmin(distances, dim=1).unsqueeze(1)
-        encodings = torch.zeros(encoding_indices.shape[0], self.num_embeddings, device=inputs.device)
+        encodings = torch.zeros(encoding_indices.shape[0], active_k, device=inputs.device)
         encodings.scatter_(1, encoding_indices, 1)
 
-        quantized = torch.matmul(encodings, self.embedding.weight).view_as(inputs)
+        quantized = torch.matmul(encodings, active_weights).view_as(inputs)
 
-        # EMA Training Updates
+        # 4. Standard EMA Training Updates for active clusters
         if self.training:
-            # 1. Track how many inputs were assigned to each cluster
-            self.cluster_size.data.mul_(self.decay).add_(
+            self.cluster_size[:active_k].data.mul_(self.decay).add_(
                 encodings.sum(0), alpha=1 - self.decay
             )
 
-            # Laplace smoothing (prevents cluster size from reaching absolute zero)
-            n = self.cluster_size.sum()
+            n = self.cluster_size[:active_k].sum()
             cluster_size = (
-                (self.cluster_size + self.epsilon)
-                / (n + self.num_embeddings * self.epsilon)
+                (self.cluster_size[:active_k] + self.epsilon)
+                / (n + active_k * self.epsilon)
                 * n
             )
 
-            # 2. Track the sum of the input vectors assigned to each cluster
             embed_sum = torch.matmul(encodings.t(), flat_inputs)
-            self.embed_avg.data.mul_(self.decay).add_(embed_sum, alpha=1 - self.decay)
+            self.embed_avg[:active_k].data.mul_(self.decay).add_(embed_sum, alpha=1 - self.decay)
 
-            # 3. Update the actual codebook weights to be the average of assigned vectors
-            self.embedding.weight.data.copy_(self.embed_avg / cluster_size.unsqueeze(1))
+            self.embedding.weight.data[:active_k] = self.embed_avg[:active_k] / cluster_size.unsqueeze(1)
 
-            # Loss: We only need the commitment loss now (forces encoder to stay near codebook)
             e_latent_loss = torch.nn.functional.mse_loss(quantized.detach(), inputs)
             self.last_vq_loss = self.commitment_cost * e_latent_loss
         else:
             self.last_vq_loss = torch.tensor(0.0, device=inputs.device)
 
-        # Straight-through estimator trick
         quantized = inputs + (quantized - inputs).detach()
 
         return quantized
 
     def get_indices(self, inputs):
         flat_inputs = inputs.view(-1, self.embedding_dim)
+        active_k = self.active_embeddings.item()
+        active_weights = self.embedding.weight[:active_k]
+        
         distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
-                    + torch.sum(self.embedding.weight**2, dim=1)
-                    - 2 * torch.matmul(flat_inputs, self.embedding.weight.t()))
+                    + torch.sum(active_weights**2, dim=1)
+                    - 2 * torch.matmul(flat_inputs, active_weights.t()))
         return torch.argmin(distances, dim=1)
+
 
 class EffectRegressorMLP:
     def __init__(self, opts):
         self.device = torch.device(opts["device"])
         
-        # Build original encoders
         self.encoder1 = build_encoder(opts, 1).to(self.device)
         self.encoder2 = build_encoder(opts, 2).to(self.device)
         
-        # Calculate codebook capacity (2^dim ensures we have the same capacity as binary approach)
-        num_emb_1 = 2 ** opts["code1_dim"]
-        num_emb_2 = 2 ** opts["code2_dim"]
+        # Max capacity based on binary dimensions (Acts as a ceiling, not a requirement)
+        max_emb_1 = 2 ** opts.get("code1_dim", 6) # Default safe ceiling: 64
+        max_emb_2 = 2 ** opts.get("code2_dim", 6)
 
-        self.encoder1[-1] = EMAVQLayer(num_emb_1, opts["code1_dim"]).to(self.device)
-        self.encoder2[-1] = EMAVQLayer(num_emb_2, opts["code2_dim"]).to(self.device)
+        # Pull surprise thresholds from opts.yaml, fallback to 1.0
+        thresh_1 = opts.get("surprise_threshold_1", 1.0)
+        thresh_2 = opts.get("surprise_threshold_2", 1.0)
 
-        # self.encoder1[-1] = EMAVQLayer(num_emb_1, opts["code1_dim"], commitment_cost=0.25, decay=0.99).to(self.device)
-        # self.encoder2[-1] = EMAVQLayer(num_emb_2, opts["code2_dim"], commitment_cost=1.50, decay=0.999).to(self.device)
+        # Swap to the Dynamic Layer
+        self.encoder1[-1] = DynamicEMAVQLayer(max_emb_1, opts["code1_dim"], surprise_threshold=thresh_1).to(self.device)
+        self.encoder2[-1] = DynamicEMAVQLayer(max_emb_2, opts["code2_dim"], surprise_threshold=thresh_2).to(self.device)
 
         self.decoder1 = MLP([opts["code1_dim"] + 3] + [opts["hidden_dim"]] * opts["depth"] + [3]).to(self.device)
         self.decoder2 = MLP([opts["code2_dim"] + opts["code1_dim"]*2] + [opts["hidden_dim"]] * opts["depth"] + [6]).to(self.device)
         
-        # Optimizers (will automatically pick up the new VQ codebook parameters)
         self.optimizer1 = torch.optim.Adam(lr=opts["learning_rate1"],
                                            params=[
                                                {"params": self.encoder1.parameters()},
@@ -131,18 +164,11 @@ class EffectRegressorMLP:
         h_aug = torch.cat([h, action], dim=-1)
         effect_pred = self.decoder1(h_aug)
         
-        # --- NEW WEIGHTED MSE LOSS (Level 1: 3D Vector) ---
-        # Effect shape is [Batch, 3] -> (X, Y, Z)
         raw_mse = torch.nn.functional.mse_loss(effect_pred, effect, reduction='none')
-        
-        # Weight the Z-axis (Dimension 2) by 10.0
         weights = torch.tensor([1.0, 1.0, 10.0], device=self.device)
         mse_loss = (raw_mse * weights).mean()
-        # --------------------------------------------------
 
-        # Add the VQ Codebook commitment loss stored in the layer
         vq_loss = self.encoder1[-1].last_vq_loss
-        
         return mse_loss + vq_loss
 
     def loss2(self, sample):
@@ -157,18 +183,11 @@ class EffectRegressorMLP:
         h_aug = torch.cat([h1, h2], dim=-1)
         effect_pred = self.decoder2(h_aug)
         
-        # --- NEW WEIGHTED MSE LOSS (Level 2: 6D Vector) ---
-        # Effect shape is [Batch, 6] -> (Top X, Top Y, Top Z, Bot X, Bot Y, Bot Z)
         raw_mse = torch.nn.functional.mse_loss(effect_pred, effect, reduction='none')
-        
-        # Weight the Z-axes (Dimensions 2 and 5) by 10.0
         weights = torch.tensor([1.0, 1.0, 5.0, 1.0, 1.0, 1.0], device=self.device)
         mse_loss = (raw_mse * weights).mean()
-        # --------------------------------------------------
 
-        # Add the VQ Codebook commitment loss stored in the layer
         vq_loss = self.encoder2[-1].last_vq_loss
-        
         return mse_loss + vq_loss
 
     def one_pass_optimize(self, loader, level):
