@@ -2,14 +2,24 @@ import os
 import torch
 import utils
 from blocks import MLP, build_encoder
+import numpy as np
+import random
+
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        # Forces deterministic algorithms
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
+set_seed(1)
 
 class DynamicEMAVQLayer(torch.nn.Module):
-    """
-    Dynamic Vector Quantization Layer.
-    Starts with 1 cluster and dynamically grows the codebook when it encounters 
-    inputs that exceed the `surprise_threshold`.
-    """
-    def __init__(self, max_embeddings, embedding_dim, surprise_threshold=1.0, commitment_cost=0.25, decay=0.99, epsilon=1e-5):
+    def __init__(self, max_embeddings, embedding_dim, surprise_threshold=1.0, commitment_cost=0.25, decay=0.99, epsilon=1e-5, warmup_steps=2000):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.max_embeddings = max_embeddings
@@ -17,20 +27,18 @@ class DynamicEMAVQLayer(torch.nn.Module):
         self.commitment_cost = commitment_cost
         self.decay = decay
         self.epsilon = epsilon
+        self.warmup_steps = warmup_steps # NEW: How long to wait before growing
 
-        # Track how many embeddings are currently active (Saved in .ckpt)
+        # Track active embeddings and training steps
         self.register_buffer('active_embeddings', torch.tensor(1))
+        self.register_buffer('step_counter', torch.tensor(0)) # NEW: Tracks iterations
 
-        # Allocate the maximum possible codebook, but we only use [:active_embeddings]
         self.embedding = torch.nn.Embedding(self.max_embeddings, self.embedding_dim)
         self.embedding.weight.data.normal_()
         self.embedding.weight.requires_grad = False 
 
-        # Buffers for EMA tracking
         self.register_buffer('cluster_size', torch.zeros(max_embeddings))
         self.register_buffer('embed_avg', self.embedding.weight.data.clone())
-        
-        # Initialize the very first cluster size so it isn't zeroed out
         self.cluster_size[0] = 1.0
         
         self.last_vq_loss = 0.0
@@ -39,47 +47,40 @@ class DynamicEMAVQLayer(torch.nn.Module):
         flat_inputs = inputs.view(-1, self.embedding_dim)
         active_k = self.active_embeddings.item()
 
-        # 1. Calculate distances against currently ACTIVE embeddings only
         active_weights = self.embedding.weight[:active_k]
         distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
                     + torch.sum(active_weights**2, dim=1)
                     - 2 * torch.matmul(flat_inputs, active_weights.t()))
 
-        # 2. Dynamic Growth Phase (Only during training)
-        if self.training and active_k < self.max_embeddings:
-            # Find the minimum distance for each input in the batch
-            min_dists, _ = torch.min(distances, dim=1)
-            # Find the most "surprising" input in the entire batch
-            max_min_dist, outlier_idx = torch.max(min_dists, dim=0)
+        # NEW: Only allow growth IF training AND warmup period is over
+        if self.training:
+            self.step_counter += 1 # Increment step
+            
+            if active_k < self.max_embeddings and self.step_counter > self.warmup_steps:
+                min_dists, _ = torch.min(distances, dim=1)
+                max_min_dist, outlier_idx = torch.max(min_dists, dim=0)
 
-            # If the outlier is too strange, spawn a new cluster center!
-            if max_min_dist > self.surprise_threshold:
-                new_idx = active_k
-                
-                # Initialize the new cluster exactly at the outlier's position
-                self.embedding.weight.data[new_idx] = flat_inputs[outlier_idx].detach()
-                self.cluster_size[new_idx] = 1.0 
-                self.embed_avg.data[new_idx] = flat_inputs[outlier_idx].detach()
-                
-                # Increment active clusters
-                self.active_embeddings += 1
-                active_k = self.active_embeddings.item()
-                active_weights = self.embedding.weight[:active_k]
-                print(f"[VQ Layer] Surprise > {self.surprise_threshold}! Codebook grew to size: {active_k}")
+                if max_min_dist > self.surprise_threshold:
+                    new_idx = active_k
+                    self.embedding.weight.data[new_idx] = flat_inputs[outlier_idx].detach()
+                    self.cluster_size[new_idx] = 1.0 
+                    self.embed_avg.data[new_idx] = flat_inputs[outlier_idx].detach()
+                    
+                    self.active_embeddings += 1
+                    active_k = self.active_embeddings.item()
+                    active_weights = self.embedding.weight[:active_k]
+                    print(f"[VQ Layer] Step {self.step_counter.item()}: Surprise > {self.surprise_threshold}! Codebook grew to size: {active_k}")
 
-                # Recompute distances with the new codebook vector included
-                distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
-                            + torch.sum(active_weights**2, dim=1)
-                            - 2 * torch.matmul(flat_inputs, active_weights.t()))
+                    # Recompute distances with the new codebook vector included
+                    distances = (torch.sum(flat_inputs**2, dim=1, keepdim=True)
+                                + torch.sum(active_weights**2, dim=1)
+                                - 2 * torch.matmul(flat_inputs, active_weights.t()))
 
-        # 3. Find the closest vector for standard quantization
         encoding_indices = torch.argmin(distances, dim=1).unsqueeze(1)
         encodings = torch.zeros(encoding_indices.shape[0], active_k, device=inputs.device)
         encodings.scatter_(1, encoding_indices, 1)
-
         quantized = torch.matmul(encodings, active_weights).view_as(inputs)
 
-        # 4. Standard EMA Training Updates for active clusters
         if self.training:
             self.cluster_size[:active_k].data.mul_(self.decay).add_(
                 encodings.sum(0), alpha=1 - self.decay
@@ -103,7 +104,6 @@ class DynamicEMAVQLayer(torch.nn.Module):
             self.last_vq_loss = torch.tensor(0.0, device=inputs.device)
 
         quantized = inputs + (quantized - inputs).detach()
-
         return quantized
 
     def get_indices(self, inputs):

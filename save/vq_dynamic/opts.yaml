@@ -26,6 +26,6 @@ learning_rate2: 0.0005
 load: null
 save: save/vq_dynamic
 size: 42
-surprise_threshold_1: 150.0
+surprise_threshold_1: 65.0
 surprise_threshold_2: 1.0
-time: Fri May 22 17:16:51 2026
+time: Sat May 23 18:36:37 2026

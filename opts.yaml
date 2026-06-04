@@ -5,7 +5,7 @@ epoch1: 300
 batch_size1: 128
 learning_rate1: 0.0005
 code1_dim: 4  # Capacity Ceiling: 2^4 = 16 maximum possible object types
-surprise_threshold_1: 150.0  # Dynamic growth trigger for Level 1
+surprise_threshold_1: 65.0  # Dynamic growth trigger for Level 1
 filters1: [1, 32, 64, 128, 256]
 
 epoch2: 3
