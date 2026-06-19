@@ -51,4 +51,4 @@ colored = colored.reshape(-1, 42, 42)
 colored = (colored - colored.min()) / (colored.max() - colored.min())
 cm = plt.cm.plasma
 colored = torch.tensor(cm(colored.numpy()), dtype=torch.float).permute(0, 3, 1, 2)[:, :3]
-torchvision.utils.save_image(colored, "colored-objects.png", nrow=20)
+torchvision.utils.save_image(colored, "save/myrun2/colored-objects.png", nrow=20)
