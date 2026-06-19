@@ -68,4 +68,4 @@ cm = plt.cm.plasma
 colored = torch.tensor(cm(colored.numpy()), dtype=torch.float).permute(0, 3, 1, 2)[:, :3]
 
 # output_img = os.path.join(args.ckpt, "colored-objects.png")
-torchvision.utils.save_image(colored, "colored-objects_vq.png", nrow=20)
+torchvision.utils.save_image(colored, "save/myrun_vq/colored_objects_vq.png", nrow=20)

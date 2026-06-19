@@ -24,6 +24,6 @@ hidden_dim: 128
 learning_rate1: 0.0005
 learning_rate2: 0.0005
 load: null
-save: save/myrun_vq_weighted
+save: save/run1
 size: 42
-time: Fri May 15 14:46:47 2026
+time: Fri Jun 19 16:40:55 2026
