@@ -1,0 +1,876 @@
+{
+  "stack_operators": [
+    {
+      "name": "stack0",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype3",
+      "below_type": "objtype0",
+      "above_type": "objtype3",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.015385,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.2,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.784615,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 7
+    },
+    {
+      "name": "stack1",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype3",
+      "below_type": "objtype3",
+      "above_type": "objtype3",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.013699,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.082192,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.068493,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.835616,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 8
+    },
+    {
+      "name": "stack2",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype0",
+      "below_type": "objtype0",
+      "above_type": "objtype0",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 1.0,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 10
+    },
+    {
+      "name": "stack3",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype0",
+      "below_type": "objtype3",
+      "above_type": "objtype0",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.051724,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.034483,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.034483,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.87931,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 11
+    },
+    {
+      "name": "stack4",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype3",
+      "below_type": "objtype3",
+      "above_type": "objtype3",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.074074,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.481482,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.444444,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 14
+    },
+    {
+      "name": "stack5",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype3",
+      "below_type": "objtype0",
+      "above_type": "objtype3",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.742857,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.257143,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 15
+    },
+    {
+      "name": "stack6",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype0",
+      "below_type": "objtype0",
+      "above_type": "objtype0",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.036364,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.145455,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.818181,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 17
+    },
+    {
+      "name": "stack7",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype0",
+      "below_type": "objtype3",
+      "above_type": "objtype0",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.02381,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.380952,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.595238,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 18
+    },
+    {
+      "name": "stack8",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype1",
+      "below_type": "objtype3",
+      "above_type": "objtype1",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.044304,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.050633,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.613924,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.082278,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.006329,
+          "effect_name": "roll2"
+        },
+        {
+          "probability": 0.202532,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 21
+    },
+    {
+      "name": "stack9",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype1",
+      "below_type": "objtype3",
+      "above_type": "objtype1",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.047619,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.02381,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.428571,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.357143,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.142857,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 22
+    },
+    {
+      "name": "stack10",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype1",
+      "below_type": "objtype0",
+      "above_type": "objtype1",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.045455,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.621211,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.227273,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.106061,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 24
+    },
+    {
+      "name": "stack11",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype1",
+      "below_type": "objtype0",
+      "above_type": "objtype1",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.007463,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.656716,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.231343,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.007463,
+          "effect_name": "roll2"
+        },
+        {
+          "probability": 0.097015,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 25
+    },
+    {
+      "name": "stack12",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype2",
+      "below_type": "objtype0",
+      "above_type": "objtype2",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.75,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.2,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.05,
+          "effect_name": "roll2"
+        }
+      ],
+      "source_leaf": 28
+    },
+    {
+      "name": "stack13",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype2",
+      "below_type": "objtype3",
+      "above_type": "objtype2",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.304348,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.478261,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.043478,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.130435,
+          "effect_name": "roll2"
+        },
+        {
+          "probability": 0.043478,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 29
+    },
+    {
+      "name": "stack14",
+      "obj1_type": "objtype3",
+      "obj2_type": "objtype2",
+      "below_type": "objtype3",
+      "above_type": "objtype2",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.038961,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.948052,
+          "effect_name": "roll2"
+        },
+        {
+          "probability": 0.012987,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 31
+    },
+    {
+      "name": "stack15",
+      "obj1_type": "objtype0",
+      "obj2_type": "objtype2",
+      "below_type": "objtype0",
+      "above_type": "objtype2",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.05,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.95,
+          "effect_name": "roll2"
+        }
+      ],
+      "source_leaf": 32
+    },
+    {
+      "name": "stack16",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype1",
+      "below_type": "objtype2",
+      "above_type": "objtype1",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.716981,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.169811,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.113208,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 37
+    },
+    {
+      "name": "stack17",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype3",
+      "below_type": "objtype2",
+      "above_type": "objtype3",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.75,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.15,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.1,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 38
+    },
+    {
+      "name": "stack18",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype2",
+      "below_type": "objtype2",
+      "above_type": "objtype2",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.589744,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.230769,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.179487,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 39
+    },
+    {
+      "name": "stack19",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype0",
+      "below_type": "objtype2",
+      "above_type": "objtype0",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.9,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.1,
+          "effect_name": "stacked"
+        }
+      ],
+      "source_leaf": 40
+    },
+    {
+      "name": "stack20",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype0",
+      "below_type": "objtype2",
+      "above_type": "objtype0",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 1.0,
+          "effect_name": "stacked"
+        }
+      ],
+      "source_leaf": 43
+    },
+    {
+      "name": "stack21",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype2",
+      "below_type": "objtype2",
+      "above_type": "objtype2",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 1.0,
+          "effect_name": "stacked"
+        }
+      ],
+      "source_leaf": 43
+    },
+    {
+      "name": "stack22",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype1",
+      "below_type": "objtype2",
+      "above_type": "objtype1",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.013605,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.965987,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.020408,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 44
+    },
+    {
+      "name": "stack23",
+      "obj1_type": "objtype2",
+      "obj2_type": "objtype3",
+      "below_type": "objtype2",
+      "above_type": "objtype3",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.0375,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.275,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.0125,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.675,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 45
+    },
+    {
+      "name": "stack24",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype0",
+      "below_type": "objtype1",
+      "above_type": "objtype0",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.053333,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.56,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.04,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.346667,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 50
+    },
+    {
+      "name": "stack25",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype1",
+      "below_type": "objtype1",
+      "above_type": "objtype1",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.014706,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.882353,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.102941,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 51
+    },
+    {
+      "name": "stack26",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype2",
+      "below_type": "objtype1",
+      "above_type": "objtype2",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.657895,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.342105,
+          "effect_name": "stacked"
+        }
+      ],
+      "source_leaf": 52
+    },
+    {
+      "name": "stack27",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype2",
+      "below_type": "objtype1",
+      "above_type": "objtype2",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.993827,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.006173,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 55
+    },
+    {
+      "name": "stack28",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype1",
+      "below_type": "objtype1",
+      "above_type": "objtype1",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.993976,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.003012,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.003012,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 56
+    },
+    {
+      "name": "stack29",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype0",
+      "below_type": "objtype1",
+      "above_type": "objtype0",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.808,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.064,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.016,
+          "effect_name": "roll2"
+        },
+        {
+          "probability": 0.112,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 57
+    },
+    {
+      "name": "stack30",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype3",
+      "below_type": "objtype1",
+      "above_type": "objtype3",
+      "relation": "relation0",
+      "prob_effects": [
+        {
+          "probability": 0.372093,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.023256,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.604651,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 59
+    },
+    {
+      "name": "stack31",
+      "obj1_type": "objtype1",
+      "obj2_type": "objtype3",
+      "below_type": "objtype1",
+      "above_type": "objtype3",
+      "relation": "relation1",
+      "prob_effects": [
+        {
+          "probability": 0.006369,
+          "effect_name": "inserted"
+        },
+        {
+          "probability": 0.210191,
+          "effect_name": "stacked"
+        },
+        {
+          "probability": 0.006369,
+          "effect_name": "roll1"
+        },
+        {
+          "probability": 0.019108,
+          "effect_name": "tumble1"
+        },
+        {
+          "probability": 0.757963,
+          "effect_name": "tumble2"
+        }
+      ],
+      "source_leaf": 60
+    }
+  ],
+  "auxiliary_operators": [
+    {
+      "type": "increase_height",
+      "name": "increase_height1",
+      "from_counter": "H0",
+      "to_counter": "H1"
+    },
+    {
+      "type": "increase_height",
+      "name": "increase_height2",
+      "from_counter": "H1",
+      "to_counter": "H2"
+    },
+    {
+      "type": "increase_height",
+      "name": "increase_height3",
+      "from_counter": "H2",
+      "to_counter": "H3"
+    },
+    {
+      "type": "increase_height",
+      "name": "increase_height4",
+      "from_counter": "H3",
+      "to_counter": "H4"
+    },
+    {
+      "type": "increase_height",
+      "name": "increase_height5",
+      "from_counter": "H4",
+      "to_counter": "H5"
+    },
+    {
+      "type": "increase_height",
+      "name": "increase_height6",
+      "from_counter": "H5",
+      "to_counter": "H6"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack1",
+      "from_counter": "S0",
+      "to_counter": "S1"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack2",
+      "from_counter": "S1",
+      "to_counter": "S2"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack3",
+      "from_counter": "S2",
+      "to_counter": "S3"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack4",
+      "from_counter": "S3",
+      "to_counter": "S4"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack5",
+      "from_counter": "S4",
+      "to_counter": "S5"
+    },
+    {
+      "type": "increase_stack",
+      "name": "increase_stack6",
+      "from_counter": "S5",
+      "to_counter": "S6"
+    },
+    {
+      "type": "makebase",
+      "name": "makebase"
+    }
+  ],
+  "metadata": {
+    "category_encoding": "vq_onehot",
+    "order": "original_deepsym_compatible",
+    "code1_dim": 2,
+    "code2_dim": 1,
+    "num_obj_types": 4,
+    "num_relations": 2,
+    "num_category_features": 10,
+    "effect_names": [
+      "inserted",
+      "stacked",
+      "roll1",
+      "tumble1",
+      "roll2",
+      "tumble2"
+    ],
+    "obj_names": {
+      "0": "objtype0",
+      "1": "objtype1",
+      "2": "objtype2",
+      "3": "objtype3"
+    },
+    "relation_names": {
+      "0": "relation0",
+      "1": "relation1"
+    },
+    "role_convention": "Preserves original DeepSym mapping: first category segment -> ?below; second category segment -> ?above.",
+    "tree_file": "tree_vq_onehot_original_order_leaf1_split2_depthNone.pkl",
+    "tree_min_samples_leaf": 1,
+    "tree_min_samples_split": 2,
+    "tree_max_depth": null,
+    "tree_random_state": 0,
+    "note": "VQ one-hot leaves are expanded by valid categorical tuple enumeration."
+  }
+}

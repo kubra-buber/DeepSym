@@ -56,7 +56,6 @@ for i in range(6):
         ax[i, j].set_title(str(display_codes[idx]))
 
 # output_pdf = os.path.join(args.ckpt, "paired.pdf")
-pp = PdfPages("paired.pdf")
+pp = PdfPages("save/run3/paired.pdf")
 pp.savefig(fig)
 pp.close()
-print(f"Saved paired evaluation to: {"paired.pdf"}")

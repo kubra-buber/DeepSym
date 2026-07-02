@@ -479,7 +479,7 @@
       "relation": "relation1",
       "prob_effects": [
         {
-          "probability": 0.657144,
+          "probability": 0.057144,
           "effect_name": "inserted"
         },
         {
@@ -487,11 +487,11 @@
           "effect_name": "roll1"
         },
         {
-          "probability": 0.285714,
+          "probability": 0.785714,
           "effect_name": "stacked"
         },
         {
-          "probability": 0.028571,
+          "probability": 0.128571,
           "effect_name": "tumble2"
         }
       ]

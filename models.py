@@ -9,7 +9,7 @@ class EMAVQLayer(torch.nn.Module):
     This prevents codebook collapse by tracking the moving average of assigned vectors 
     rather than relying on unstable gradient descent for the codebook.
     """
-    def __init__(self, num_embeddings, embedding_dim, commitment_cost=0.25, decay=0.99, epsilon=1e-5):
+    def __init__(self, num_embeddings, embedding_dim, commitment_cost=0.1, decay=0.95, epsilon=1e-5):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.num_embeddings = num_embeddings

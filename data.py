@@ -41,15 +41,6 @@ class PairedObjectData(torch.utils.data.Dataset):
         self.eff_std = self.effect.std(dim=0)
         self.effect = (self.effect - self.eff_mu) / (self.eff_std + 1e-6)
 
-        # --- ADD THIS NEW BLOCK ---
-        # Force dimensions 0, 1, 3, and 4 (the X and Y pixel movements) to be absolute values.
-        # This prevents the network from panicking over chaotic left/right bounces.
-        self.effect[:, 0] = torch.abs(self.effect[:, 0])  # Top Object X
-        self.effect[:, 1] = torch.abs(self.effect[:, 1])  # Top Object Y
-        self.effect[:, 3] = torch.abs(self.effect[:, 3])  # Bottom Object X
-        self.effect[:, 4] = torch.abs(self.effect[:, 4])  # Bottom Object Y
-        # --------------------------
-
     def __len__(self):
         return len(self.effect)
 

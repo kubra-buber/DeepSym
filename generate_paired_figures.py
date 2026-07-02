@@ -49,4 +49,4 @@ for i in range(5):
 
 dist = dist.repeat_interleave(6, 2)
 dist = dist.repeat_interleave(6, 3)
-torchvision.utils.save_image(dist, "save/myrun_vq/comparisons.png", nrow=5, padding=10, pad_value=1.0)
+torchvision.utils.save_image(dist, "save/run4/comparisons.png", nrow=5, padding=10, pad_value=1.0)
