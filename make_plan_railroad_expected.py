@@ -26,6 +26,7 @@ Usage:
 import argparse
 import json
 import math
+import heapq
 import os
 import re
 import sys
@@ -389,16 +390,35 @@ def is_stack_action(action_name: str) -> bool:
     return base.startswith("stack")
 
 
+def is_progress_state(state: State) -> bool:
+    """A progress stack outcome creates the transient flags consumed by aux operators."""
+    return F("stacked") in state.fluents or F("inserted") in state.fluents
+
+
+def progress_outcomes_for_plan(action_name: str, outcomes: Sequence[Tuple[State, float]]) -> List[Tuple[State, float]]:
+    """Keep only successful/progress branches for a fixed executable plan.
+
+    Expected-reachability policies may use failure branches as contingency states.
+    A linear plan.txt cannot represent those contingencies, so for the executable
+    representative plan we should not roll through roll/tumble branches and then
+    append fallback actions.
+    """
+    if not is_stack_action(action_name):
+        return list(outcomes)
+    return [(s, p) for s, p in outcomes if is_progress_state(s)]
+
+
 def transition_safe(state: State, action) -> List[Tuple[State, float]]:
     """Call Railroad transition and normalize/merge identical states.
 
-    get_usable_actions can be permissive with generated operators and negated
-    fluents. transition() is the final precondition check. If transition rejects
-    an action, skip it in the expected-reachability DP instead of crashing.
+    `get_usable_actions` can be permissive with generated operators and negated
+    fluents. Treat Railroad transition() as the final precondition check. If an
+    action is rejected by transition(), skip it in the expected-reachability DP
+    instead of crashing.
     """
     try:
         outcomes = transition(state, action)
-    except Exception as exc:
+    except Exception as exc:  # Railroad may raise bindings-side RuntimeError.
         msg = str(exc)
         if "Precondition not satisfied" in msg or "precondition" in msg.lower():
             return []
@@ -420,8 +440,8 @@ def transition_safe(state: State, action) -> List[Tuple[State, float]]:
     total = sum(p for _, p in merged.values())
     if total <= 0.0:
         return []
-
     return [(s, p / total) for s, p in merged.values()]
+
 
 def expected_reachability_plan(initial_state: State,
                                goal,
@@ -513,6 +533,15 @@ def choose_representative_outcome(outcomes: Sequence[Tuple[State, float]],
     if mode == "value":
         return max(outcomes, key=lambda item: value_fn(state_key(item[0]), remaining_depth))
 
+    if mode == "progress":
+        progress = [(s, p) for s, p in outcomes if is_progress_state(s)]
+        if progress:
+            # For plan.txt, prefer the most likely branch that actually makes progress.
+            # This avoids writing failure-branch fallback attempts as if they were
+            # a normal open-loop plan.
+            return max(progress, key=lambda item: (item[1], value_fn(state_key(item[0]), remaining_depth)))
+        return max(outcomes, key=lambda item: item[1])
+
     # Default: choose the branch with largest contribution p * V(s').
     return max(
         outcomes,
@@ -531,6 +560,7 @@ def rollout_policy(initial_state: State,
     """Roll out the computed policy into one representative action sequence."""
     state = initial_state
     history: List[str] = []
+    branch_probability = 1.0
     visited_guard = set()
 
     action_by_name = {a.name: a for a in all_actions}
@@ -558,14 +588,96 @@ def rollout_policy(initial_state: State,
         if not outcomes:
             break
 
-        state, _p = choose_representative_outcome(
+        state, chosen_p = choose_representative_outcome(
             outcomes,
             remaining - 1,
             value_fn,
             outcome_mode,
         )
+        branch_probability *= float(chosen_p)
 
-    return history, state
+    return history, state, branch_probability
+
+
+def max_probability_linear_plan(initial_state: State,
+                                goal,
+                                all_actions: Sequence,
+                                max_steps: int):
+    """Find the highest-probability single executable progress path to the goal.
+
+    This is different from expected reachability. Expected reachability computes a
+    policy that may take one action, observe a failure branch, and then use a
+    fallback action. A plain DeepSym plan.txt cannot express that contingency.
+
+    This function therefore ignores roll/tumble branches for stack actions and
+    searches for a single successful branch sequence with maximum probability
+    product. It is the right output mode before a closed-loop executor exists.
+    """
+    start_key = state_key(initial_state)
+    state_store: Dict[Tuple[str, ...], State] = {start_key: initial_state}
+    parent: Dict[Tuple[Tuple[str, ...], int], Tuple[Tuple[str, ...], int, str, float]] = {}
+    best_cost: Dict[Tuple[Tuple[str, ...], int], float] = {(start_key, 0): 0.0}
+
+    sorted_actions = sorted(all_actions, key=lambda a: a.name)
+    queue: List[Tuple[float, int, int, Tuple[str, ...]]] = []
+    push_counter = 0
+    heapq.heappush(queue, (0.0, 0, push_counter, start_key))
+
+    best_goal_node = None
+
+    while queue:
+        cost, depth, _seq, key = heapq.heappop(queue)
+        node = (key, depth)
+        if cost > best_cost.get(node, float("inf")) + 1e-12:
+            continue
+
+        state = state_store[key]
+        if goal.evaluate(state.fluents):
+            best_goal_node = node
+            break
+        if depth >= max_steps:
+            continue
+
+        for action in sorted(get_usable_actions(state, sorted_actions), key=lambda a: a.name):
+            outcomes = transition_safe(state, action)
+            if not outcomes:
+                continue
+
+            # A fixed linear plan can only represent success/progress branches.
+            # Failure branches become plan failure, not a later fallback action.
+            usable_outcomes = progress_outcomes_for_plan(action.name, outcomes)
+            if not usable_outcomes:
+                continue
+
+            for next_state, p in usable_outcomes:
+                p = float(p)
+                if p <= 0.0:
+                    continue
+                next_key = state_key(next_state)
+                state_store.setdefault(next_key, next_state)
+                next_node = (next_key, depth + 1)
+                next_cost = cost - math.log(max(p, 1e-12))
+                if next_cost + 1e-12 < best_cost.get(next_node, float("inf")):
+                    best_cost[next_node] = next_cost
+                    parent[next_node] = (key, depth, action.name, p)
+                    push_counter += 1
+                    heapq.heappush(queue, (next_cost, depth + 1, push_counter, next_key))
+
+    if best_goal_node is None:
+        return 0.0, [], initial_state
+
+    # Reconstruct path.
+    actions: List[str] = []
+    prob = 1.0
+    node = best_goal_node
+    final_state = state_store[node[0]]
+    while node in parent:
+        prev_key, prev_depth, action_name, p = parent[node]
+        actions.append(action_name)
+        prob *= float(p)
+        node = (prev_key, prev_depth)
+    actions.reverse()
+    return prob, actions, final_state
 
 
 # ---------------------------------------------------------------------------
@@ -623,9 +735,18 @@ def main() -> None:
     parser.add_argument("--debug-actions", action="store_true", help="print chosen actions and learned distributions")
     parser.add_argument(
         "--rollout-outcome",
-        choices=["contribution", "probability", "value"],
-        default="contribution",
-        help="how to choose representative outcome branches for writing plan.txt",
+        choices=["contribution", "probability", "value", "progress"],
+        default="progress",
+        help="how to choose representative outcome branches for policy-rollout plan.txt",
+    )
+    parser.add_argument(
+        "--plan-output",
+        choices=["maxprob-linear", "policy-rollout"],
+        default="maxprob-linear",
+        help=(
+            "maxprob-linear writes the highest-probability single executable success path; "
+            "policy-rollout writes one branch of the expected-reachability policy."
+        ),
     )
     args = parser.parse_args()
 
@@ -670,20 +791,29 @@ def main() -> None:
         debug=args.debug_actions,
     )
 
-    history, rollout_final_state = rollout_policy(
-        initial_state,
-        goal,
-        all_actions,
-        args.max_steps,
-        policy,
-        outcome_cache,
-        value_fn,
-        args.rollout_outcome,
-    )
-    rollout_goal = bool(goal.evaluate(rollout_final_state.fluents))
+    print(f"Expected closed-loop/policy probability within {args.max_steps} symbolic actions: {expected_p:.6f}")
 
-    print(f"Expected probability of reaching goal within {args.max_steps} symbolic actions: {expected_p:.6f}")
-    print(f"Representative rollout reaches goal: {rollout_goal}")
+    if args.plan_output == "maxprob-linear":
+        plan_probability, history, rollout_final_state = max_probability_linear_plan(
+            initial_state, goal, all_actions, args.max_steps
+        )
+        rollout_goal = bool(goal.evaluate(rollout_final_state.fluents))
+        print(f"Max-probability linear plan reaches goal: {rollout_goal}")
+        print(f"Max-probability linear plan probability: {plan_probability:.6f}")
+    else:
+        history, rollout_final_state, plan_probability = rollout_policy(
+            initial_state,
+            goal,
+            all_actions,
+            args.max_steps,
+            policy,
+            outcome_cache,
+            value_fn,
+            args.rollout_outcome,
+        )
+        rollout_goal = bool(goal.evaluate(rollout_final_state.fluents))
+        print(f"Representative policy rollout reaches goal: {rollout_goal}")
+        print(f"Representative branch probability: {plan_probability:.6f}")
 
     if history:
         for i, act in enumerate(history):
@@ -691,17 +821,18 @@ def main() -> None:
             if args.debug_actions:
                 debug_action(act)
     else:
-        print("No action selected by policy.")
+        print("No action selected.")
 
     stack_actions = extract_stack_actions(history)
 
     plan_path = os.path.join(save_dir, "plan.txt")
-    write_plan(plan_path, object_infos, expected_p, stack_actions, rollout_goal)
+    write_plan(plan_path, object_infos, plan_probability, stack_actions, rollout_goal)
 
     print(f"\n=== Plan written to {plan_path} ===")
-    print(f"Expected plan/policy probability: {expected_p:.6f}")
-    print(f"Symbolic rollout actions: {len(history)}")
-    print(f"Physical stack actions in representative rollout: {len(stack_actions)}")
+    print(f"Expected closed-loop/policy probability: {expected_p:.6f}")
+    print(f"Written linear plan probability: {plan_probability:.6f}")
+    print(f"Symbolic actions in written plan: {len(history)}")
+    print(f"Physical stack actions in written plan: {len(stack_actions)}")
     for below, above in stack_actions:
         print(f"  stack {above} on {below}")
 

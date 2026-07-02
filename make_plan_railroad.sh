@@ -14,6 +14,7 @@ loc="$(grep save: $1 | sed 's/^.*: //')"
 python recognize.py -opts "$1" -goal "$2"
 
 # Run Railroad planner (replaces mdpsim server + mini-gpt planner + parse_plan.py)
+# $RAILROAD_PYTHON make_plan_railroad_expected.py -opts "$1" -goal "$2"
 $RAILROAD_PYTHON make_plan_railroad.py -opts "$1" -goal "$2"
 
 # The plan is now in {savepath}/plan.txt, ready for execute_plan.py
