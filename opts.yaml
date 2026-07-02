@@ -19,4 +19,4 @@ size: 42
 
 device: cuda
 load: null
-save: save/myrun2
+save: save/stable1
