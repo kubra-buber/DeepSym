@@ -88,6 +88,18 @@ class RosNode:
         data = rospy.wait_for_message("/getObjectPosition", Float32MultiArray).data
         return list(data)
 
+    def getAllObjectPoses(self, timeout=1.0):
+        """Return all generated object poses from /getAllObjectPoses.
+
+        Expected simulator-side layout:
+            [x, y, z, qx, qy, qz, qw] repeated for each generated object
+
+        A 3-value-per-object layout [x, y, z] also works for the observer,
+        but 7 values are preferred because orientation helps later.
+        """
+        data = rospy.wait_for_message("/getAllObjectPoses", Float32MultiArray, timeout=timeout).data
+        return list(data)
+
     def wait(self, seconds=None):
         if seconds is None:
             seconds = self._wait_time

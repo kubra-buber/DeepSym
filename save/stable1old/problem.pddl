@@ -29,5 +29,5 @@
 		(H0)
 		(S0)
 	)
-	(:goal (and (H2) (S2) (not (stacked)) (not (inserted))))
+	(:goal (and (H1) (S2) (not (stacked)) (not (inserted))))
 )

@@ -241,8 +241,8 @@ def load_operators_from_json(json_path: str) -> List[Operator]:
 # Problem parsing
 # ---------------------------------------------------------------------------
 
-def parse_pddl_goal(goal_str: str):
-    """Parse a small PDDL-style goal string into a Railroad goal expression."""
+def parse_deepsym_goal(goal_str: str):
+    """Parse a small DeepSym goal string into a Railroad goal expression."""
     negative_tokens = set(re.findall(r"\(not\s*\((\w+)\)\)", goal_str))
 
     without_not_clauses = re.sub(r"\(not\s*\(\w+\)\)", " ", goal_str)
@@ -264,6 +264,10 @@ def parse_pddl_goal(goal_str: str):
     if not goals:
         raise ValueError(f"No goal fluents found in: {goal_str}")
     return goals[0] if len(goals) == 1 else AndGoal(goals)
+
+
+# Backward-compatible name for older imports.
+parse_pddl_goal = parse_deepsym_goal
 
 
 def _extract_parenthesized_section(content: str, start_token: str, end_token: str) -> str:
@@ -311,43 +315,90 @@ def parse_objects_txt(objects_path: str) -> Dict[str, Dict[str, float]]:
     return infos
 
 
-def parse_problem_pddl(problem_path: str, objects_path: Optional[str] = None):
-    """Parse DeepSym problem.pddl for objects, types, relations, and counters."""
-    with open(problem_path, "r") as f:
-        content = f.read()
+def parse_problem_railroad(scene_path: str, objects_path: Optional[str] = None):
+    """Parse DeepSym/Railroad scene JSON for objects, types, relations, counters.
 
-    object_infos = parse_objects_txt(objects_path) if objects_path else {}
+    This replaces the previous use of problem.pddl in the Railroad path.  The
+    JSON is written by recognize.py as save_dir/railroad_problem.json.
+
+    Expected format:
+        {
+          "objects": [
+             {"name": "O1", "type": "objtype3", "loc": [x, y], "size": s}, ...
+          ],
+          "relations": [
+             {"name": "relation0", "below": "O1", "above": "O2"}, ...
+          ],
+          "counters": {"H": "H0", "S": "S0"}
+        }
+    """
+    if not os.path.exists(scene_path):
+        raise FileNotFoundError(
+            f"Missing {scene_path}. Run recognize.py first; it should write railroad_problem.json."
+        )
+
+    with open(scene_path, "r") as f:
+        data = json.load(f)
+
+    raw_objects = data.get("objects", [])
+    if not raw_objects:
+        raise ValueError(f"{scene_path} has no objects")
 
     objects: List[str] = []
-    if object_infos:
-        objects = list(object_infos.keys())
-    else:
-        # Robustly parse only the :objects section, not the whole file.
-        m = re.search(r":objects\s+(.*?)\s*\)\s*\(:init", content, re.DOTALL | re.IGNORECASE)
-        if m:
-            objects = re.findall(r"\bO\d+\b", m.group(1))
-
-    init_block = _extract_parenthesized_section(content, ":init", "(:goal")
-
     obj_types: Dict[str, str] = {}
-    for typ, obj in re.findall(r"\((objtype\d+)\s+(O\d+)\)", init_block):
-        obj_types[obj] = typ
+    object_infos: Dict[str, Dict[str, float]] = {}
+
+    for obj in raw_objects:
+        name = str(obj["name"]).upper()
+        typ = str(obj["type"])
+        loc = obj.get("loc", obj.get("location", [0.0, 0.0]))
+        size = float(obj.get("size", 0.1))
+        objects.append(name)
+        obj_types[name] = typ
+        object_infos[name] = {"x": float(loc[0]), "y": float(loc[1]), "size": size}
+
+    # objects.txt is still allowed only as execution geometry fallback.  It is
+    # not a symbolic planning input and can be removed once plan writing uses
+    # railroad_problem.json directly everywhere.
+    if objects_path and os.path.exists(objects_path):
+        txt_infos = parse_objects_txt(objects_path)
+        if txt_infos:
+            object_infos.update({k.upper(): v for k, v in txt_infos.items()})
 
     relations: List[Tuple[str, str, str]] = []
-    for rel, obj1, obj2 in re.findall(r"\((relation\d+)\s+(O\d+)\s+(O\d+)\)", init_block):
-        relations.append((rel, obj1, obj2))
+    for rel in data.get("relations", []):
+        if isinstance(rel, dict):
+            r = str(rel.get("name", rel.get("relation")))
+            below = str(rel.get("below", rel.get("obj1"))).upper()
+            above = str(rel.get("above", rel.get("obj2"))).upper()
+        else:
+            r, below, above = rel
+            r = str(r)
+            below = str(below).upper()
+            above = str(above).upper()
+        relations.append((r, below, above))
 
-    counters = set(re.findall(r"\((H\d+|S\d+)\)", init_block))
-
-    if not objects:
-        # Fall back to any typed object names if the :objects section was absent.
-        objects = sorted(obj_types.keys())
+    counters_data = data.get("counters", {})
+    if isinstance(counters_data, dict):
+        counters = set(str(v) for v in counters_data.values())
+    else:
+        counters = set(str(c) for c in counters_data)
+    if not any(c.startswith("H") for c in counters):
+        counters.add("H0")
+    if not any(c.startswith("S") for c in counters):
+        counters.add("S0")
 
     missing_types = [obj for obj in objects if obj not in obj_types]
     if missing_types:
-        raise ValueError(f"Objects missing objtype predicates in problem.pddl: {missing_types}")
+        raise ValueError(f"Objects missing types in railroad_problem.json: {missing_types}")
 
     return objects, obj_types, relations, counters, object_infos
+
+
+# Backward-compatible name for older imports.  In the Railroad path this no
+# longer parses PDDL; it expects railroad_problem.json.
+def parse_problem_pddl(problem_path: str, objects_path: Optional[str] = None):
+    return parse_problem_railroad(problem_path, objects_path)
 
 
 def build_initial_state(objects: Sequence[str],
@@ -730,7 +781,7 @@ def debug_action(action_name: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser("Railroad expected-reachability planner for DeepSym.")
     parser.add_argument("-opts", type=str, required=True, help="option file")
-    parser.add_argument("-goal", type=str, default="(H3)", help="PDDL-style goal, e.g. '(H3)' or '(S4)'")
+    parser.add_argument("-goal", type=str, default="(H3)", help="DeepSym goal, e.g. '(H3)' or '(S4)'")
     parser.add_argument("-max-steps", type=int, default=25, help="finite-horizon planning depth in symbolic actions")
     parser.add_argument("--debug-actions", action="store_true", help="print chosen actions and learned distributions")
     parser.add_argument(
@@ -762,9 +813,9 @@ def main() -> None:
     all_operators = load_operators_from_json(operators_path)
     print(f"Loaded and reconstructed {len(all_operators)} probabilistic/auxiliary operators")
 
-    problem_path = os.path.join(save_dir, "problem.pddl")
+    scene_path = os.path.join(save_dir, "railroad_problem.json")
     objects_path = os.path.join(save_dir, "objects.txt")
-    objects, obj_types, relations, counters, object_infos = parse_problem_pddl(problem_path, objects_path)
+    objects, obj_types, relations, counters, object_infos = parse_problem_railroad(scene_path, objects_path)
 
     print(f"Objects: {objects}")
     print(f"Types: {obj_types}")
@@ -779,7 +830,7 @@ def main() -> None:
     all_actions.sort(key=lambda a: a.name)
     print(f"Grounded {len(all_actions)} actions from {len(all_operators)} operators")
 
-    goal = parse_pddl_goal(args.goal)
+    goal = parse_deepsym_goal(args.goal)
     print(f"Goal: {goal}")
 
     print("\n=== Starting Railroad expected-reachability planning ===")
