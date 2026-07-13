@@ -70,6 +70,7 @@ from make_plan_railroad_expected import (  # noqa: E402
     OPERATOR_EFFECT_DISTS,
     action_base_name,
     expected_reachability_plan,
+    max_probability_linear_plan,
     extract_stack_actions,
     is_stack_action,
     load_operators_from_json,
@@ -456,6 +457,25 @@ def main() -> None:
         help=argparse.SUPPRESS,
     )
     parser.add_argument("--debug-actions", action="store_true")
+    parser.add_argument(
+        "--initial-plan-file",
+        type=str,
+        default="initial_full_plan.txt",
+        help=(
+            "file name under opts['save'] where the first full max-probability "
+            "linear plan will be written before closed-loop execution starts"
+        ),
+    )
+    parser.add_argument(
+        "--preview-only",
+        action="store_true",
+        help="write the first full plan and exit before executing or replanning",
+    )
+    parser.add_argument(
+        "--confirm-initial-plan",
+        action="store_true",
+        help="ask for confirmation after writing the first full plan before continuing",
+    )
     args = parser.parse_args()
     if args.continue_after_base_failure and args.base_failure_policy == "stop":
         args.base_failure_policy = "continue-same-base"
@@ -467,6 +487,7 @@ def main() -> None:
     scene_path = os.path.join(save_dir, "railroad_problem.json")
     objects_path = os.path.join(save_dir, "objects.txt")
     plan_path = os.path.join(save_dir, "plan.txt")
+    initial_plan_path = os.path.join(save_dir, args.initial_plan_file)
     trace_path = os.path.join(save_dir, "closed_loop_trace.jsonl")
     executed_action_file = os.path.join(save_dir, "last_executed_action.json")
     observed_outcome_file = os.path.join(save_dir, "last_observed_outcome.json")
@@ -502,6 +523,46 @@ def main() -> None:
     print(f"Loaded {len(all_operators)} operators, grounded {len(all_actions)} actions")
     print(f"Objects: {objects}")
     print(f"Goal: {args.goal}")
+
+    # Before doing any physical execution, keep the first full open-loop plan
+    # produced from the initial recognised state. This is only a preview of the
+    # best single successful branch. Closed-loop execution below may diverge
+    # from it after observing real outcomes, but this file lets you inspect the
+    # initial VQ plan quickly before spending simulation time.
+    initial_plan_probability, initial_history, initial_final_state = max_probability_linear_plan(
+        current_state,
+        goal,
+        all_actions,
+        args.max_steps,
+    )
+    initial_reaches_goal = bool(goal.evaluate(initial_final_state.fluents))
+    initial_stack_actions = extract_stack_actions(initial_history)
+    write_plan(
+        initial_plan_path,
+        object_infos,
+        initial_plan_probability,
+        initial_stack_actions,
+        initial_reaches_goal,
+    )
+    print("\n=== Initial full plan preview written ===")
+    print(f"Initial full plan file: {initial_plan_path}")
+    print(f"Initial full plan reaches goal: {initial_reaches_goal}")
+    print(f"Initial full plan probability: {initial_plan_probability:.6f}")
+    print(f"Initial symbolic actions: {len(initial_history)}")
+    print(f"Initial physical stack actions: {len(initial_stack_actions)}")
+    for below0, above0 in initial_stack_actions:
+        print(f"  stack {above0} on {below0}")
+
+    if args.preview_only:
+        print("\n--preview-only set; stopping before closed-loop execution.")
+        return
+
+    if args.confirm_initial_plan:
+        answer = input("Continue with closed-loop execution/replanning? [y/N]: ").strip().lower()
+        if answer not in {"y", "yes"}:
+            print("Stopped by user after initial plan preview.")
+            return
+
     print("\n=== Starting closed-loop probabilistic Railroad planning ===")
 
     for loop_idx in range(args.max_loop_steps):

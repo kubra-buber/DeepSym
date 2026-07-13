@@ -1,0 +1,28 @@
+{
+  "encoding": "vq_onehot",
+  "order": "original_deepsym_save_cat",
+  "code1_dim": 2,
+  "code2_dim": 1,
+  "num_obj_codes": 4,
+  "num_rel_codes": 2,
+  "category_shape": [
+    2500,
+    10
+  ],
+  "feature_slices": {
+    "first_object_original_left_segment": [
+      0,
+      4
+    ],
+    "second_object_original_right_segment": [
+      4,
+      8
+    ],
+    "relation_segment": [
+      8,
+      10
+    ]
+  },
+  "role_convention": "This file preserves original DeepSym save_cat.py order: [left_object, right_object, relation]. learn_rules_railroad.py binds left_object to ?below and right_object to ?above to match original utils.tree_to_code / PDDL export.",
+  "note": "VQ indices are one-hot categorical labels. This is original-order, not role-swapped. Use this when comparing against original PDDL."
+}

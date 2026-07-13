@@ -1,13 +1,13 @@
 batch_norm: true
-batch_size1: 128
-batch_size2: 128
+batch_size1: 256
+batch_size2: 256
 cnn: true
 code1_dim: 2
 code2_dim: 1
 depth: 2
 device: cuda
-epoch1: 300
-epoch2: 300
+epoch1: 500
+epoch2: 500
 filters1:
 - 1
 - 32
@@ -21,9 +21,9 @@ filters2:
 - 128
 - 256
 hidden_dim: 128
-learning_rate1: 5.0e-05
+learning_rate1: 1.0e-05
 learning_rate2: 5.0e-05
 load: null
 save: save/myrun
 size: 42
-time: Thu May  7 18:19:20 2026
+time: Mon Jul 13 16:12:39 2026
