@@ -1,0 +1,69 @@
+{
+  "source_domain": "/home/kubra/DeepSym/railroad3_tools/domain_prob.pddl",
+  "domain_name": "blocks",
+  "selected_action": "o0_0_o1_0_i18_c929",
+  "selected_action_index": 18,
+  "binding": {
+    "?o0": "obj0",
+    "?o1": "obj1"
+  },
+  "controlled_types": [
+    "controlled_role0",
+    "controlled_role1"
+  ],
+  "expected_ground_action": "o0_0_o1_0_i18_c929 obj0 obj1",
+  "target_branch": 1,
+  "goal": [
+    "(r1 obj0 obj1)"
+  ],
+  "expected_one_step_goal_probability": 0.48901,
+  "nominal_branch": 0,
+  "outcomes": [
+    {
+      "branch": 0,
+      "probability": 0.51099,
+      "effects": [
+        "(not_z0 obj0)",
+        "(not (z0 obj0))",
+        "(not_r0 obj0 obj1)",
+        "(not_r0 obj1 obj0)",
+        "(r1 obj1 obj0)",
+        "(not_r2 obj0 obj1)",
+        "(z0 obj1)",
+        "(not_r0 obj0 obj0)",
+        "(not_r0 obj1 obj1)",
+        "(r1 obj0 obj0)",
+        "(r1 obj1 obj1)",
+        "(not_r2 obj0 obj0)",
+        "(not_r2 obj1 obj1)"
+      ],
+      "reaches_goal": false
+    },
+    {
+      "branch": 1,
+      "probability": 0.48901,
+      "effects": [
+        "(not_z0 obj0)",
+        "(not (z0 obj0))",
+        "(not_r0 obj1 obj0)",
+        "(not_r0 obj0 obj1)",
+        "(r1 obj1 obj0)",
+        "(r1 obj0 obj1)",
+        "(not_r2 obj0 obj1)",
+        "(z0 obj1)",
+        "(not_r0 obj0 obj0)",
+        "(not_r0 obj1 obj1)",
+        "(r1 obj0 obj0)",
+        "(r1 obj1 obj1)",
+        "(not_r2 obj0 obj0)",
+        "(not_r2 obj1 obj1)"
+      ],
+      "reaches_goal": true
+    }
+  ],
+  "files": {
+    "probabilistic_domain": "controlled_domain_prob.pddl",
+    "nominal_domain": "controlled_domain_nominal.pddl",
+    "problem": "controlled_problem.pddl"
+  }
+}

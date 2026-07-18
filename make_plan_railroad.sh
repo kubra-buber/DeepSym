@@ -1,22 +1,24 @@
 #!/bin/bash
-# Railroad planning wrapper with optional closed-loop probabilistic execution. Uses railroad_problem.json, not problem.pddl.
+# DeepSym Railroad planning wrapper.
 #
-# Open-loop nominal (default):
-#   ./make_plan_railroad.sh opts.yaml "(H3)"
+# Nominal deterministic Railroad:
+#   ./make_plan_railroad.sh opts.yaml "(H3)" --nominal
 #
-# Open-loop expected/maxprob:
-#   ./make_plan_railroad.sh opts.yaml "(H3)" --expected
+# Exact finite-horizon expected reachability:
+#   ./make_plan_railroad.sh opts.yaml "(H3)" --expected -max-steps 25
 #
-# Closed-loop probabilistic planning, dry-run/simulated outcomes:
-#   ./make_plan_railroad.sh opts.yaml "(H2) (S4)" --closed-loop --outcome-source argmax-progress
+# Railroad MCTS:
+#   ./make_plan_railroad.sh opts.yaml "(H3)" --mcts \
+#       --iterations 10000 --max-depth 25 --mcts-runs 10
 #
-# Closed-loop probabilistic planning with physical execution and manual outcome feedback:
-#   ./make_plan_railroad.sh opts.yaml "(H2) (S4)" --closed-loop --execute --outcome-source manual
+# Existing exact closed-loop implementation:
+#   ./make_plan_railroad.sh opts.yaml "(H3)" --closed-loop \
+#       --outcome-source argmax-progress
 
 set -euo pipefail
 
 if [ "$#" -lt 2 ]; then
-  echo "Usage: $0 opts.yaml \"(H3)\" [--expected|--nominal] [--closed-loop] [extra planner args...]" >&2
+  echo "Usage: $0 opts.yaml \"(H3)\" [--nominal|--expected|--mcts|--closed-loop] [planner args...]" >&2
   exit 2
 fi
 
@@ -24,16 +26,9 @@ OPTS="$1"
 GOAL="$2"
 shift 2
 
-# Railroad conda environment (Python 3.12 required for Railroad).
 RAILROAD_PYTHON="${RAILROAD_PYTHON:-/home/kubra/miniconda3/envs/deepsym_railroad/bin/python}"
-
-# Recognition uses the repo/.venv Python because it needs ROS + your DeepSym model stack.
 RECOGNIZE_PYTHON="${RECOGNIZE_PYTHON:-python}"
-# Use auto by default: recognize.py will try opts.yaml device and fall back to CPU if CUDA init fails.
 RECOGNIZE_DEVICE="${RECOGNIZE_DEVICE:-auto}"
-
-# Save location from opts.yaml. Keeps the original simple convention.
-loc="$(grep '^save:' "$OPTS" | sed 's/^.*: //')"
 
 PLANNER="nominal"
 CLOSED_LOOP=0
@@ -42,12 +37,16 @@ EXTRA_ARGS=()
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
+    --nominal)
+      PLANNER="nominal"
+      shift
+      ;;
     --expected)
       PLANNER="expected"
       shift
       ;;
-    --nominal)
-      PLANNER="nominal"
+    --mcts)
+      PLANNER="mcts"
       shift
       ;;
     --closed-loop)
@@ -67,16 +66,33 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ "$RECOGNIZE" -eq 1 ]; then
-  "$RECOGNIZE_PYTHON" recognize.py -opts "$OPTS" -goal "$GOAL" -device "$RECOGNIZE_DEVICE"
+  "$RECOGNIZE_PYTHON" recognize.py \
+    -opts "$OPTS" \
+    -goal "$GOAL" \
+    -device "$RECOGNIZE_DEVICE"
 fi
 
 if [ "$CLOSED_LOOP" -eq 1 ]; then
-  "$RAILROAD_PYTHON" closed_loop_railroad.py -opts "$OPTS" -goal "$GOAL" "${EXTRA_ARGS[@]}"
+  "$RAILROAD_PYTHON" closed_loop_railroad.py \
+    -opts "$OPTS" \
+    -goal "$GOAL" \
+    "${EXTRA_ARGS[@]}"
+elif [ "$PLANNER" = "expected" ]; then
+  "$RAILROAD_PYTHON" make_plan_railroad_expected.py \
+    -opts "$OPTS" \
+    -goal "$GOAL" \
+    "${EXTRA_ARGS[@]}"
+elif [ "$PLANNER" = "mcts" ]; then
+  "$RAILROAD_PYTHON" make_plan_railroad_mcts.py \
+    -opts "$OPTS" \
+    -goal "$GOAL" \
+    "${EXTRA_ARGS[@]}"
 else
-  if [ "$PLANNER" = "expected" ]; then
-    "$RAILROAD_PYTHON" make_plan_railroad_expected.py -opts "$OPTS" -goal "$GOAL" "${EXTRA_ARGS[@]}"
-  else
-    "$RAILROAD_PYTHON" make_plan_railroad.py -opts "$OPTS" -goal "$GOAL" "${EXTRA_ARGS[@]}"
-  fi
-  echo "Plan saved to $loc/plan.txt"
+  "$RAILROAD_PYTHON" make_plan_railroad.py \
+    -opts "$OPTS" \
+    -goal "$GOAL" \
+    "${EXTRA_ARGS[@]}"
 fi
+
+loc="$(grep '^save:' "$OPTS" | sed 's/^.*: //')"
+echo "Plan saved to $loc/plan.txt"

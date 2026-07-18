@@ -1,0 +1,13 @@
+config:
+  batch_size: 128
+  dataset_name: blocks
+  devices:
+  - 0
+  epoch: 4000
+  hidden_dim: 128
+  latent_dim: 1
+  lr: 0.0001
+  n_attention_heads: 3
+  n_hidden_layers: 2
+  name: symbolic
+  sigmoid: false

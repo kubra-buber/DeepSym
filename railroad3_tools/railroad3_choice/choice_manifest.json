@@ -1,0 +1,9 @@
+{
+  "domain": "choice_domain_prob.pddl",
+  "problem": "choice_problem.pddl",
+  "expected_action": "high_success obj0",
+  "goal_probabilities": {
+    "low_success obj0": 0.2,
+    "high_success obj0": 0.8
+  }
+}

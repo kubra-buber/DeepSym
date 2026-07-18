@@ -1,0 +1,11 @@
+{
+  "domain": "multistep_domain_prob.pddl",
+  "problem": "multistep_problem.pddl",
+  "horizon": 2,
+  "expected_action": "prepare_safe obj0",
+  "expected_value": 0.9,
+  "root_action_values": {
+    "risky_direct obj0": 0.55,
+    "prepare_safe obj0": 0.9
+  }
+}

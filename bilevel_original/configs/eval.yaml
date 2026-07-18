@@ -1,0 +1,24 @@
+mode: bilevel #Planning mode -- deterministic | probabilistic | continuous | bilevel
+
+# Models (folder names under logs/)
+symbolic_model: <symbolic_model_name>       
+dynamics_model: <dynamics_model_name>
+
+
+num_objects: 3
+num_tests: 50
+max_actions: 3
+seed: 0
+
+domain_path: save/<symbolic_model_name>/domain.pddl 
+prob_domain_path: save/<symbolic_model_name>/domain_prob.pddl 
+downward_path: /path/to/fast-downward.py
+
+num_sampled_domains: 100 # For probabilistic planning
+verification_threshold: 0.07
+
+cts_max_expansions: 6000
+cts_heuristic_weight: 1.5
+
+num_processes: 4
+process_timeout: 500
