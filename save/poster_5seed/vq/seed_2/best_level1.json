@@ -1,0 +1,9 @@
+{
+  "level": 1,
+  "epoch": 500,
+  "eval_effect": 0.1689767613261938,
+  "additional_metrics": {
+    "active_codes": 4.0,
+    "ema_used_codes": 4.0
+  }
+}
