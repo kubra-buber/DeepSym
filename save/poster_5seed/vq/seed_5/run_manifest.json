@@ -1,0 +1,8 @@
+{
+  "model": "vq",
+  "seed": 5,
+  "save_dir": "/home/kubra/DeepSym/save/poster_5seed/vq/seed_5",
+  "levels": "both",
+  "device": "cuda",
+  "deterministic": true
+}

@@ -1,0 +1,57 @@
+batch_norm: true
+cnn: true
+epoch1: 500
+batch_size1: 256
+learning_rate1: 1.0e-05
+code1_dim: 2
+filters1:
+- 1
+- 32
+- 64
+- 128
+- 256
+epoch2: 500
+batch_size2: 256
+learning_rate2: 5.0e-05
+code2_dim: 1
+filters2:
+- 2
+- 32
+- 64
+- 128
+- 256
+hidden_dim: 128
+depth: 2
+size: 42
+device: cuda
+load: null
+save: /home/kubra/DeepSym/save/poster_5seed/vq/seed_4
+source_opts: /home/kubra/DeepSym/opts.yaml
+source_save: save/stable1
+poster_model: vq
+seed: 4
+time: Sun Jul 19 13:08:23 2026
+effect_weights1:
+- 1.0
+- 1.0
+- 10.0
+effect_weights2:
+- 1.0
+- 1.0
+- 5.0
+- 1.0
+- 1.0
+- 1.0
+vq_commitment_cost: 0.25
+vq_decay: 0.99
+vq_epsilon: 1.0e-05
+vq_num_embeddings1: 4
+vq_num_embeddings2: 2
+dynamic_initial_embeddings: 1
+dynamic_warmup_steps: 200
+dynamic_growth_interval: 100
+dynamic_min_support: 8
+dynamic_min_support_fraction: 0.05
+dynamic_required_checks: 2
+surprise_threshold_1: 1.0
+surprise_threshold_2: 1.0
