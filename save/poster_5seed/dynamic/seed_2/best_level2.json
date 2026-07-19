@@ -1,0 +1,17 @@
+{
+  "level": 2,
+  "epoch": 498,
+  "eval_effect": 0.5433508975982666,
+  "additional_metrics": {
+    "active_codes": 2.0,
+    "ema_used_codes": 2.0,
+    "step_counter": 4980.0,
+    "last_check_step": 1301.0,
+    "surprise_streak": 0.0,
+    "distance_mean": 0.2779449224472046,
+    "distance_p90": 0.7719104290008545,
+    "distance_p95": 1.2848467826843262,
+    "distance_max": 5.19438362121582,
+    "surprise_support": 20.0
+  }
+}
