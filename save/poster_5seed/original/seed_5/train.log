@@ -1,0 +1,1274 @@
+Copied shared label.pt from save/stable1/label.pt
+Copied shared effect_names.npy from save/stable1/effect_names.npy
+batch_norm: true
+cnn: true
+epoch1: 500
+batch_size1: 256
+learning_rate1: 1.0e-05
+code1_dim: 2
+filters1:
+- 1
+- 32
+- 64
+- 128
+- 256
+epoch2: 500
+batch_size2: 256
+learning_rate2: 5.0e-05
+code2_dim: 1
+filters2:
+- 2
+- 32
+- 64
+- 128
+- 256
+hidden_dim: 128
+depth: 2
+size: 42
+device: cuda
+load: null
+save: /home/kubra/DeepSym/save/poster_5seed/original/seed_5
+source_opts: /home/kubra/DeepSym/opts.yaml
+source_save: save/stable1
+poster_model: original
+seed: 5
+time: Sun Jul 19 10:32:36 2026
+effect_weights1:
+- 1.0
+- 1.0
+- 10.0
+effect_weights2:
+- 1.0
+- 1.0
+- 5.0
+- 1.0
+- 1.0
+- 1.0
+vq_commitment_cost: 0.25
+vq_decay: 0.99
+vq_epsilon: 1.0e-05
+vq_num_embeddings1: 4
+vq_num_embeddings2: 2
+dynamic_initial_embeddings: 1
+dynamic_warmup_steps: 200
+dynamic_growth_interval: 100
+dynamic_min_support: 8
+dynamic_min_support_fraction: 0.05
+dynamic_required_checks: 2
+surprise_threshold_1: 1.0
+surprise_threshold_2: 1.0
+
+
+=== original | seed=5 | level=1 | epochs=500 ===
+========== ENCODER ==========
+Sequential(
+  (0): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (1): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (2): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (3): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (4): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (5): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (6): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (7): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (8): Avg(dims=[2, 3])
+  (9): MLP(
+    (layers): Sequential(
+      (0): Linear(in_features=256, out_features=2)
+    )
+  )
+  (10): STLayer()
+)
+parameter count: 1174114
+=============================
+========== DECODER ==========
+MLP(
+  (layers): Sequential(
+    (0): Linear(in_features=5, out_features=128)
+    (1): ReLU()
+    (2): Linear(in_features=128, out_features=128)
+    (3): ReLU()
+    (4): Linear(in_features=128, out_features=3)
+  )
+)
+parameter count: 17667
+=============================
+level=1 epoch=1/500 train_effect=8.792686 eval_effect=9.554353 train_vq=0.000000 
+level=1 epoch=2/500 train_effect=8.238456 eval_effect=8.260306 train_vq=0.000000 
+level=1 epoch=3/500 train_effect=7.888981 eval_effect=6.350284 train_vq=0.000000 
+level=1 epoch=4/500 train_effect=7.639823 eval_effect=6.948476 train_vq=0.000000 
+level=1 epoch=5/500 train_effect=7.388814 eval_effect=6.924523 train_vq=0.000000 
+level=1 epoch=6/500 train_effect=7.189712 eval_effect=7.049531 train_vq=0.000000 
+level=1 epoch=7/500 train_effect=6.854683 eval_effect=6.816161 train_vq=0.000000 
+level=1 epoch=8/500 train_effect=6.769452 eval_effect=6.532194 train_vq=0.000000 
+level=1 epoch=9/500 train_effect=6.357276 eval_effect=6.397110 train_vq=0.000000 
+level=1 epoch=10/500 train_effect=6.243119 eval_effect=6.149548 train_vq=0.000000 
+level=1 epoch=11/500 train_effect=5.969647 eval_effect=6.072989 train_vq=0.000000 
+level=1 epoch=12/500 train_effect=5.832822 eval_effect=5.767341 train_vq=0.000000 
+level=1 epoch=13/500 train_effect=5.592779 eval_effect=5.613819 train_vq=0.000000 
+level=1 epoch=14/500 train_effect=5.412291 eval_effect=5.169824 train_vq=0.000000 
+level=1 epoch=15/500 train_effect=5.279003 eval_effect=5.115642 train_vq=0.000000 
+level=1 epoch=16/500 train_effect=4.982671 eval_effect=4.681115 train_vq=0.000000 
+level=1 epoch=17/500 train_effect=4.837117 eval_effect=4.635488 train_vq=0.000000 
+level=1 epoch=18/500 train_effect=4.553311 eval_effect=4.347474 train_vq=0.000000 
+level=1 epoch=19/500 train_effect=4.517379 eval_effect=4.195729 train_vq=0.000000 
+level=1 epoch=20/500 train_effect=4.201707 eval_effect=3.994711 train_vq=0.000000 
+level=1 epoch=21/500 train_effect=4.014933 eval_effect=3.858447 train_vq=0.000000 
+level=1 epoch=22/500 train_effect=3.930288 eval_effect=3.731962 train_vq=0.000000 
+level=1 epoch=23/500 train_effect=3.845659 eval_effect=3.609158 train_vq=0.000000 
+level=1 epoch=24/500 train_effect=3.498011 eval_effect=3.424094 train_vq=0.000000 
+level=1 epoch=25/500 train_effect=3.431553 eval_effect=3.221952 train_vq=0.000000 
+level=1 epoch=26/500 train_effect=3.274909 eval_effect=3.234125 train_vq=0.000000 
+level=1 epoch=27/500 train_effect=3.128938 eval_effect=3.079374 train_vq=0.000000 
+level=1 epoch=28/500 train_effect=2.928754 eval_effect=2.957000 train_vq=0.000000 
+level=1 epoch=29/500 train_effect=2.818778 eval_effect=2.651409 train_vq=0.000000 
+level=1 epoch=30/500 train_effect=2.658351 eval_effect=2.614145 train_vq=0.000000 
+level=1 epoch=31/500 train_effect=2.558734 eval_effect=2.557125 train_vq=0.000000 
+level=1 epoch=32/500 train_effect=2.400490 eval_effect=2.400817 train_vq=0.000000 
+level=1 epoch=33/500 train_effect=2.378659 eval_effect=2.367615 train_vq=0.000000 
+level=1 epoch=34/500 train_effect=2.286042 eval_effect=2.173074 train_vq=0.000000 
+level=1 epoch=35/500 train_effect=2.069290 eval_effect=2.137088 train_vq=0.000000 
+level=1 epoch=36/500 train_effect=2.066455 eval_effect=2.174045 train_vq=0.000000 
+level=1 epoch=37/500 train_effect=2.053463 eval_effect=1.867725 train_vq=0.000000 
+level=1 epoch=38/500 train_effect=1.883470 eval_effect=1.895458 train_vq=0.000000 
+level=1 epoch=39/500 train_effect=1.808145 eval_effect=1.933816 train_vq=0.000000 
+level=1 epoch=40/500 train_effect=1.737725 eval_effect=1.781575 train_vq=0.000000 
+level=1 epoch=41/500 train_effect=1.717932 eval_effect=1.790929 train_vq=0.000000 
+level=1 epoch=42/500 train_effect=1.635638 eval_effect=1.796699 train_vq=0.000000 
+level=1 epoch=43/500 train_effect=1.579350 eval_effect=1.590723 train_vq=0.000000 
+level=1 epoch=44/500 train_effect=1.523891 eval_effect=1.596539 train_vq=0.000000 
+level=1 epoch=45/500 train_effect=1.473275 eval_effect=1.512896 train_vq=0.000000 
+level=1 epoch=46/500 train_effect=1.448254 eval_effect=1.463439 train_vq=0.000000 
+level=1 epoch=47/500 train_effect=1.434679 eval_effect=1.509955 train_vq=0.000000 
+level=1 epoch=48/500 train_effect=1.394437 eval_effect=1.399410 train_vq=0.000000 
+level=1 epoch=49/500 train_effect=1.315232 eval_effect=1.319600 train_vq=0.000000 
+level=1 epoch=50/500 train_effect=1.293156 eval_effect=1.303305 train_vq=0.000000 
+level=1 epoch=51/500 train_effect=1.312101 eval_effect=1.307611 train_vq=0.000000 
+level=1 epoch=52/500 train_effect=1.276227 eval_effect=1.262151 train_vq=0.000000 
+level=1 epoch=53/500 train_effect=1.233978 eval_effect=1.235940 train_vq=0.000000 
+level=1 epoch=54/500 train_effect=1.224009 eval_effect=1.268353 train_vq=0.000000 
+level=1 epoch=55/500 train_effect=1.235064 eval_effect=1.143969 train_vq=0.000000 
+level=1 epoch=56/500 train_effect=1.191465 eval_effect=1.135949 train_vq=0.000000 
+level=1 epoch=57/500 train_effect=1.154771 eval_effect=1.130305 train_vq=0.000000 
+level=1 epoch=58/500 train_effect=1.123856 eval_effect=1.160671 train_vq=0.000000 
+level=1 epoch=59/500 train_effect=1.130082 eval_effect=1.106761 train_vq=0.000000 
+level=1 epoch=60/500 train_effect=1.183617 eval_effect=1.095280 train_vq=0.000000 
+level=1 epoch=61/500 train_effect=1.081342 eval_effect=1.086459 train_vq=0.000000 
+level=1 epoch=62/500 train_effect=1.107945 eval_effect=1.041224 train_vq=0.000000 
+level=1 epoch=63/500 train_effect=1.088237 eval_effect=1.024289 train_vq=0.000000 
+level=1 epoch=64/500 train_effect=1.062286 eval_effect=1.026258 train_vq=0.000000 
+level=1 epoch=65/500 train_effect=1.030722 eval_effect=1.010325 train_vq=0.000000 
+level=1 epoch=66/500 train_effect=1.063040 eval_effect=0.995727 train_vq=0.000000 
+level=1 epoch=67/500 train_effect=1.033092 eval_effect=0.983986 train_vq=0.000000 
+level=1 epoch=68/500 train_effect=0.991485 eval_effect=0.964287 train_vq=0.000000 
+level=1 epoch=69/500 train_effect=0.989122 eval_effect=0.958288 train_vq=0.000000 
+level=1 epoch=70/500 train_effect=0.996737 eval_effect=0.970864 train_vq=0.000000 
+level=1 epoch=71/500 train_effect=1.017202 eval_effect=0.971886 train_vq=0.000000 
+level=1 epoch=72/500 train_effect=1.000194 eval_effect=0.984755 train_vq=0.000000 
+level=1 epoch=73/500 train_effect=0.966156 eval_effect=0.923860 train_vq=0.000000 
+level=1 epoch=74/500 train_effect=0.960759 eval_effect=0.917900 train_vq=0.000000 
+level=1 epoch=75/500 train_effect=0.967566 eval_effect=0.922718 train_vq=0.000000 
+level=1 epoch=76/500 train_effect=0.950501 eval_effect=0.914706 train_vq=0.000000 
+level=1 epoch=77/500 train_effect=1.008663 eval_effect=0.900958 train_vq=0.000000 
+level=1 epoch=78/500 train_effect=0.962712 eval_effect=0.888459 train_vq=0.000000 
+level=1 epoch=79/500 train_effect=0.946611 eval_effect=0.881637 train_vq=0.000000 
+level=1 epoch=80/500 train_effect=0.954713 eval_effect=0.907517 train_vq=0.000000 
+level=1 epoch=81/500 train_effect=0.924571 eval_effect=0.866106 train_vq=0.000000 
+level=1 epoch=82/500 train_effect=0.932626 eval_effect=0.871517 train_vq=0.000000 
+level=1 epoch=83/500 train_effect=0.913060 eval_effect=0.863575 train_vq=0.000000 
+level=1 epoch=84/500 train_effect=0.939868 eval_effect=0.869708 train_vq=0.000000 
+level=1 epoch=85/500 train_effect=0.946611 eval_effect=0.885913 train_vq=0.000000 
+level=1 epoch=86/500 train_effect=0.950106 eval_effect=0.869304 train_vq=0.000000 
+level=1 epoch=87/500 train_effect=0.918139 eval_effect=0.863190 train_vq=0.000000 
+level=1 epoch=88/500 train_effect=0.963469 eval_effect=0.867358 train_vq=0.000000 
+level=1 epoch=89/500 train_effect=0.885171 eval_effect=0.860680 train_vq=0.000000 
+level=1 epoch=90/500 train_effect=0.876830 eval_effect=0.863014 train_vq=0.000000 
+level=1 epoch=91/500 train_effect=0.945067 eval_effect=0.856171 train_vq=0.000000 
+level=1 epoch=92/500 train_effect=0.888205 eval_effect=0.832906 train_vq=0.000000 
+level=1 epoch=93/500 train_effect=0.893102 eval_effect=0.824289 train_vq=0.000000 
+level=1 epoch=94/500 train_effect=0.884358 eval_effect=0.818645 train_vq=0.000000 
+level=1 epoch=95/500 train_effect=0.967196 eval_effect=0.832390 train_vq=0.000000 
+level=1 epoch=96/500 train_effect=0.965133 eval_effect=0.848503 train_vq=0.000000 
+level=1 epoch=97/500 train_effect=0.909437 eval_effect=0.818810 train_vq=0.000000 
+level=1 epoch=98/500 train_effect=0.889064 eval_effect=0.815395 train_vq=0.000000 
+level=1 epoch=99/500 train_effect=0.916564 eval_effect=0.823937 train_vq=0.000000 
+level=1 epoch=100/500 train_effect=0.899490 eval_effect=0.827832 train_vq=0.000000 
+level=1 epoch=101/500 train_effect=0.912391 eval_effect=0.811630 train_vq=0.000000 
+level=1 epoch=102/500 train_effect=0.886031 eval_effect=0.800255 train_vq=0.000000 
+level=1 epoch=103/500 train_effect=0.883767 eval_effect=0.801658 train_vq=0.000000 
+level=1 epoch=104/500 train_effect=0.903833 eval_effect=0.829685 train_vq=0.000000 
+level=1 epoch=105/500 train_effect=0.902090 eval_effect=0.808664 train_vq=0.000000 
+level=1 epoch=106/500 train_effect=0.866523 eval_effect=0.809974 train_vq=0.000000 
+level=1 epoch=107/500 train_effect=0.881642 eval_effect=0.791794 train_vq=0.000000 
+level=1 epoch=108/500 train_effect=0.888457 eval_effect=0.778566 train_vq=0.000000 
+level=1 epoch=109/500 train_effect=0.912244 eval_effect=0.808741 train_vq=0.000000 
+level=1 epoch=110/500 train_effect=0.910392 eval_effect=0.830772 train_vq=0.000000 
+level=1 epoch=111/500 train_effect=0.865279 eval_effect=0.800798 train_vq=0.000000 
+level=1 epoch=112/500 train_effect=0.870302 eval_effect=0.799358 train_vq=0.000000 
+level=1 epoch=113/500 train_effect=0.915989 eval_effect=0.787717 train_vq=0.000000 
+level=1 epoch=114/500 train_effect=0.841364 eval_effect=0.770829 train_vq=0.000000 
+level=1 epoch=115/500 train_effect=0.883110 eval_effect=0.770267 train_vq=0.000000 
+level=1 epoch=116/500 train_effect=0.853151 eval_effect=0.771022 train_vq=0.000000 
+level=1 epoch=117/500 train_effect=0.897937 eval_effect=0.766931 train_vq=0.000000 
+level=1 epoch=118/500 train_effect=0.890385 eval_effect=0.787256 train_vq=0.000000 
+level=1 epoch=119/500 train_effect=0.879113 eval_effect=0.767892 train_vq=0.000000 
+level=1 epoch=120/500 train_effect=0.850063 eval_effect=0.757858 train_vq=0.000000 
+level=1 epoch=121/500 train_effect=0.849376 eval_effect=0.756179 train_vq=0.000000 
+level=1 epoch=122/500 train_effect=0.845462 eval_effect=0.754483 train_vq=0.000000 
+level=1 epoch=123/500 train_effect=0.838648 eval_effect=0.770005 train_vq=0.000000 
+level=1 epoch=124/500 train_effect=0.852726 eval_effect=0.755266 train_vq=0.000000 
+level=1 epoch=125/500 train_effect=0.976343 eval_effect=0.758531 train_vq=0.000000 
+level=1 epoch=126/500 train_effect=0.837781 eval_effect=0.773918 train_vq=0.000000 
+level=1 epoch=127/500 train_effect=0.814105 eval_effect=0.746391 train_vq=0.000000 
+level=1 epoch=128/500 train_effect=0.846700 eval_effect=0.741062 train_vq=0.000000 
+level=1 epoch=129/500 train_effect=0.859974 eval_effect=0.735878 train_vq=0.000000 
+level=1 epoch=130/500 train_effect=0.871472 eval_effect=0.740564 train_vq=0.000000 
+level=1 epoch=131/500 train_effect=0.867513 eval_effect=0.741448 train_vq=0.000000 
+level=1 epoch=132/500 train_effect=0.841232 eval_effect=0.753305 train_vq=0.000000 
+level=1 epoch=133/500 train_effect=0.865908 eval_effect=0.756045 train_vq=0.000000 
+level=1 epoch=134/500 train_effect=0.859149 eval_effect=0.750760 train_vq=0.000000 
+level=1 epoch=135/500 train_effect=0.864711 eval_effect=0.745937 train_vq=0.000000 
+level=1 epoch=136/500 train_effect=0.799362 eval_effect=0.744559 train_vq=0.000000 
+level=1 epoch=137/500 train_effect=0.820967 eval_effect=0.743387 train_vq=0.000000 
+level=1 epoch=138/500 train_effect=0.839912 eval_effect=0.746100 train_vq=0.000000 
+level=1 epoch=139/500 train_effect=0.804542 eval_effect=0.765877 train_vq=0.000000 
+level=1 epoch=140/500 train_effect=0.840479 eval_effect=0.755860 train_vq=0.000000 
+level=1 epoch=141/500 train_effect=0.892731 eval_effect=0.757554 train_vq=0.000000 
+level=1 epoch=142/500 train_effect=0.828719 eval_effect=0.790269 train_vq=0.000000 
+level=1 epoch=143/500 train_effect=0.923198 eval_effect=0.884911 train_vq=0.000000 
+level=1 epoch=144/500 train_effect=0.775143 eval_effect=0.792749 train_vq=0.000000 
+level=1 epoch=145/500 train_effect=0.774691 eval_effect=0.735112 train_vq=0.000000 
+level=1 epoch=146/500 train_effect=0.828999 eval_effect=0.726535 train_vq=0.000000 
+level=1 epoch=147/500 train_effect=0.806493 eval_effect=0.726389 train_vq=0.000000 
+level=1 epoch=148/500 train_effect=0.878375 eval_effect=0.725538 train_vq=0.000000 
+level=1 epoch=149/500 train_effect=0.817781 eval_effect=0.728246 train_vq=0.000000 
+level=1 epoch=150/500 train_effect=0.839693 eval_effect=0.727383 train_vq=0.000000 
+level=1 epoch=151/500 train_effect=0.884097 eval_effect=0.730581 train_vq=0.000000 
+level=1 epoch=152/500 train_effect=0.818389 eval_effect=0.737562 train_vq=0.000000 
+level=1 epoch=153/500 train_effect=0.791524 eval_effect=0.736971 train_vq=0.000000 
+level=1 epoch=154/500 train_effect=0.828392 eval_effect=0.732453 train_vq=0.000000 
+level=1 epoch=155/500 train_effect=0.848575 eval_effect=0.724335 train_vq=0.000000 
+level=1 epoch=156/500 train_effect=0.818123 eval_effect=0.726855 train_vq=0.000000 
+level=1 epoch=157/500 train_effect=0.797498 eval_effect=0.729599 train_vq=0.000000 
+level=1 epoch=158/500 train_effect=0.801802 eval_effect=0.758940 train_vq=0.000000 
+level=1 epoch=159/500 train_effect=0.833877 eval_effect=0.740156 train_vq=0.000000 
+level=1 epoch=160/500 train_effect=0.890865 eval_effect=0.741823 train_vq=0.000000 
+level=1 epoch=161/500 train_effect=0.797606 eval_effect=0.726741 train_vq=0.000000 
+level=1 epoch=162/500 train_effect=0.821525 eval_effect=0.737263 train_vq=0.000000 
+level=1 epoch=163/500 train_effect=0.792357 eval_effect=0.735181 train_vq=0.000000 
+level=1 epoch=164/500 train_effect=0.808036 eval_effect=0.727967 train_vq=0.000000 
+level=1 epoch=165/500 train_effect=0.857654 eval_effect=0.740247 train_vq=0.000000 
+level=1 epoch=166/500 train_effect=0.845746 eval_effect=0.750172 train_vq=0.000000 
+level=1 epoch=167/500 train_effect=0.818203 eval_effect=0.771200 train_vq=0.000000 
+level=1 epoch=168/500 train_effect=0.837252 eval_effect=0.738575 train_vq=0.000000 
+level=1 epoch=169/500 train_effect=0.839846 eval_effect=0.729727 train_vq=0.000000 
+level=1 epoch=170/500 train_effect=0.847001 eval_effect=0.763434 train_vq=0.000000 
+level=1 epoch=171/500 train_effect=0.902313 eval_effect=0.764040 train_vq=0.000000 
+level=1 epoch=172/500 train_effect=0.880736 eval_effect=0.776821 train_vq=0.000000 
+level=1 epoch=173/500 train_effect=0.896653 eval_effect=0.796524 train_vq=0.000000 
+level=1 epoch=174/500 train_effect=0.874011 eval_effect=0.818038 train_vq=0.000000 
+level=1 epoch=175/500 train_effect=0.849428 eval_effect=0.782011 train_vq=0.000000 
+level=1 epoch=176/500 train_effect=0.855115 eval_effect=0.789225 train_vq=0.000000 
+level=1 epoch=177/500 train_effect=0.879804 eval_effect=0.819054 train_vq=0.000000 
+level=1 epoch=178/500 train_effect=0.857946 eval_effect=0.820943 train_vq=0.000000 
+level=1 epoch=179/500 train_effect=0.872856 eval_effect=0.827332 train_vq=0.000000 
+level=1 epoch=180/500 train_effect=0.888341 eval_effect=0.880533 train_vq=0.000000 
+level=1 epoch=181/500 train_effect=0.932490 eval_effect=0.883779 train_vq=0.000000 
+level=1 epoch=182/500 train_effect=0.877444 eval_effect=0.884077 train_vq=0.000000 
+level=1 epoch=183/500 train_effect=0.877136 eval_effect=0.867197 train_vq=0.000000 
+level=1 epoch=184/500 train_effect=0.884910 eval_effect=0.845491 train_vq=0.000000 
+level=1 epoch=185/500 train_effect=0.872185 eval_effect=0.845966 train_vq=0.000000 
+level=1 epoch=186/500 train_effect=0.874268 eval_effect=0.822198 train_vq=0.000000 
+level=1 epoch=187/500 train_effect=0.898514 eval_effect=0.817075 train_vq=0.000000 
+level=1 epoch=188/500 train_effect=0.904970 eval_effect=0.842808 train_vq=0.000000 
+level=1 epoch=189/500 train_effect=0.905468 eval_effect=0.849032 train_vq=0.000000 
+level=1 epoch=190/500 train_effect=0.919799 eval_effect=0.850167 train_vq=0.000000 
+level=1 epoch=191/500 train_effect=0.953719 eval_effect=0.885469 train_vq=0.000000 
+level=1 epoch=192/500 train_effect=0.920037 eval_effect=0.892783 train_vq=0.000000 
+level=1 epoch=193/500 train_effect=1.014921 eval_effect=0.947685 train_vq=0.000000 
+level=1 epoch=194/500 train_effect=0.958965 eval_effect=0.970884 train_vq=0.000000 
+level=1 epoch=195/500 train_effect=0.960907 eval_effect=0.964679 train_vq=0.000000 
+level=1 epoch=196/500 train_effect=0.951428 eval_effect=0.960172 train_vq=0.000000 
+level=1 epoch=197/500 train_effect=0.986746 eval_effect=0.957475 train_vq=0.000000 
+level=1 epoch=198/500 train_effect=0.940847 eval_effect=0.950510 train_vq=0.000000 
+level=1 epoch=199/500 train_effect=0.969097 eval_effect=0.935561 train_vq=0.000000 
+level=1 epoch=200/500 train_effect=0.947557 eval_effect=0.951515 train_vq=0.000000 
+level=1 epoch=201/500 train_effect=0.934640 eval_effect=0.937414 train_vq=0.000000 
+level=1 epoch=202/500 train_effect=0.958309 eval_effect=0.918737 train_vq=0.000000 
+level=1 epoch=203/500 train_effect=0.899023 eval_effect=0.915549 train_vq=0.000000 
+level=1 epoch=204/500 train_effect=0.902803 eval_effect=0.907778 train_vq=0.000000 
+level=1 epoch=205/500 train_effect=0.912500 eval_effect=0.901074 train_vq=0.000000 
+level=1 epoch=206/500 train_effect=0.881041 eval_effect=0.892023 train_vq=0.000000 
+level=1 epoch=207/500 train_effect=0.891601 eval_effect=0.881924 train_vq=0.000000 
+level=1 epoch=208/500 train_effect=0.911147 eval_effect=0.870039 train_vq=0.000000 
+level=1 epoch=209/500 train_effect=0.861962 eval_effect=0.862099 train_vq=0.000000 
+level=1 epoch=210/500 train_effect=0.878965 eval_effect=0.848784 train_vq=0.000000 
+level=1 epoch=211/500 train_effect=0.855010 eval_effect=0.840812 train_vq=0.000000 
+level=1 epoch=212/500 train_effect=0.836461 eval_effect=0.831637 train_vq=0.000000 
+level=1 epoch=213/500 train_effect=0.835120 eval_effect=0.824232 train_vq=0.000000 
+level=1 epoch=214/500 train_effect=0.832452 eval_effect=0.815912 train_vq=0.000000 
+level=1 epoch=215/500 train_effect=0.829359 eval_effect=0.810214 train_vq=0.000000 
+level=1 epoch=216/500 train_effect=0.823201 eval_effect=0.798988 train_vq=0.000000 
+level=1 epoch=217/500 train_effect=0.804342 eval_effect=0.791792 train_vq=0.000000 
+level=1 epoch=218/500 train_effect=0.793869 eval_effect=0.784446 train_vq=0.000000 
+level=1 epoch=219/500 train_effect=0.812406 eval_effect=0.781182 train_vq=0.000000 
+level=1 epoch=220/500 train_effect=0.803122 eval_effect=0.778191 train_vq=0.000000 
+level=1 epoch=221/500 train_effect=0.796445 eval_effect=0.769452 train_vq=0.000000 
+level=1 epoch=222/500 train_effect=0.767981 eval_effect=0.760476 train_vq=0.000000 
+level=1 epoch=223/500 train_effect=0.765280 eval_effect=0.755088 train_vq=0.000000 
+level=1 epoch=224/500 train_effect=0.763140 eval_effect=0.749463 train_vq=0.000000 
+level=1 epoch=225/500 train_effect=0.751380 eval_effect=0.745395 train_vq=0.000000 
+level=1 epoch=226/500 train_effect=0.745573 eval_effect=0.740113 train_vq=0.000000 
+level=1 epoch=227/500 train_effect=0.761309 eval_effect=0.734856 train_vq=0.000000 
+level=1 epoch=228/500 train_effect=0.734130 eval_effect=0.727369 train_vq=0.000000 
+level=1 epoch=229/500 train_effect=0.731462 eval_effect=0.720600 train_vq=0.000000 
+level=1 epoch=230/500 train_effect=0.721787 eval_effect=0.714248 train_vq=0.000000 
+level=1 epoch=231/500 train_effect=0.722758 eval_effect=0.713151 train_vq=0.000000 
+level=1 epoch=232/500 train_effect=0.719237 eval_effect=0.706423 train_vq=0.000000 
+level=1 epoch=233/500 train_effect=0.719935 eval_effect=0.702129 train_vq=0.000000 
+level=1 epoch=234/500 train_effect=0.717895 eval_effect=0.698064 train_vq=0.000000 
+level=1 epoch=235/500 train_effect=0.704593 eval_effect=0.695032 train_vq=0.000000 
+level=1 epoch=236/500 train_effect=0.692997 eval_effect=0.687388 train_vq=0.000000 
+level=1 epoch=237/500 train_effect=0.707629 eval_effect=0.684200 train_vq=0.000000 
+level=1 epoch=238/500 train_effect=0.685337 eval_effect=0.680412 train_vq=0.000000 
+level=1 epoch=239/500 train_effect=0.681979 eval_effect=0.679707 train_vq=0.000000 
+level=1 epoch=240/500 train_effect=0.682670 eval_effect=0.675259 train_vq=0.000000 
+level=1 epoch=241/500 train_effect=0.677466 eval_effect=0.673261 train_vq=0.000000 
+level=1 epoch=242/500 train_effect=0.678770 eval_effect=0.665319 train_vq=0.000000 
+level=1 epoch=243/500 train_effect=0.673021 eval_effect=0.665162 train_vq=0.000000 
+level=1 epoch=244/500 train_effect=0.671128 eval_effect=0.657323 train_vq=0.000000 
+level=1 epoch=245/500 train_effect=0.671872 eval_effect=0.656135 train_vq=0.000000 
+level=1 epoch=246/500 train_effect=0.660233 eval_effect=0.651966 train_vq=0.000000 
+level=1 epoch=247/500 train_effect=0.666043 eval_effect=0.648484 train_vq=0.000000 
+level=1 epoch=248/500 train_effect=0.660982 eval_effect=0.648516 train_vq=0.000000 
+level=1 epoch=249/500 train_effect=0.668343 eval_effect=0.641125 train_vq=0.000000 
+level=1 epoch=250/500 train_effect=0.662232 eval_effect=0.637912 train_vq=0.000000 
+level=1 epoch=251/500 train_effect=0.643139 eval_effect=0.635981 train_vq=0.000000 
+level=1 epoch=252/500 train_effect=0.641040 eval_effect=0.633959 train_vq=0.000000 
+level=1 epoch=253/500 train_effect=0.632765 eval_effect=0.633627 train_vq=0.000000 
+level=1 epoch=254/500 train_effect=0.638405 eval_effect=0.631125 train_vq=0.000000 
+level=1 epoch=255/500 train_effect=0.639304 eval_effect=0.625061 train_vq=0.000000 
+level=1 epoch=256/500 train_effect=0.634161 eval_effect=0.621765 train_vq=0.000000 
+level=1 epoch=257/500 train_effect=0.627148 eval_effect=0.621125 train_vq=0.000000 
+level=1 epoch=258/500 train_effect=0.628797 eval_effect=0.619162 train_vq=0.000000 
+level=1 epoch=259/500 train_effect=0.623721 eval_effect=0.618993 train_vq=0.000000 
+level=1 epoch=260/500 train_effect=0.626826 eval_effect=0.616796 train_vq=0.000000 
+level=1 epoch=261/500 train_effect=0.626400 eval_effect=0.611700 train_vq=0.000000 
+level=1 epoch=262/500 train_effect=0.631993 eval_effect=0.610006 train_vq=0.000000 
+level=1 epoch=263/500 train_effect=0.626999 eval_effect=0.607154 train_vq=0.000000 
+level=1 epoch=264/500 train_effect=0.615074 eval_effect=0.605899 train_vq=0.000000 
+level=1 epoch=265/500 train_effect=0.641614 eval_effect=0.602126 train_vq=0.000000 
+level=1 epoch=266/500 train_effect=0.611662 eval_effect=0.602316 train_vq=0.000000 
+level=1 epoch=267/500 train_effect=0.610907 eval_effect=0.601775 train_vq=0.000000 
+level=1 epoch=268/500 train_effect=0.611194 eval_effect=0.600446 train_vq=0.000000 
+level=1 epoch=269/500 train_effect=0.618140 eval_effect=0.598204 train_vq=0.000000 
+level=1 epoch=270/500 train_effect=0.622785 eval_effect=0.591714 train_vq=0.000000 
+level=1 epoch=271/500 train_effect=0.597051 eval_effect=0.592180 train_vq=0.000000 
+level=1 epoch=272/500 train_effect=0.600166 eval_effect=0.595955 train_vq=0.000000 
+level=1 epoch=273/500 train_effect=0.610532 eval_effect=0.592095 train_vq=0.000000 
+level=1 epoch=274/500 train_effect=0.593680 eval_effect=0.591361 train_vq=0.000000 
+level=1 epoch=275/500 train_effect=0.606644 eval_effect=0.583318 train_vq=0.000000 
+level=1 epoch=276/500 train_effect=0.590918 eval_effect=0.586882 train_vq=0.000000 
+level=1 epoch=277/500 train_effect=0.594682 eval_effect=0.586913 train_vq=0.000000 
+level=1 epoch=278/500 train_effect=0.585254 eval_effect=0.588047 train_vq=0.000000 
+level=1 epoch=279/500 train_effect=0.593215 eval_effect=0.587747 train_vq=0.000000 
+level=1 epoch=280/500 train_effect=0.598074 eval_effect=0.579271 train_vq=0.000000 
+level=1 epoch=281/500 train_effect=0.606617 eval_effect=0.574752 train_vq=0.000000 
+level=1 epoch=282/500 train_effect=0.611897 eval_effect=0.574859 train_vq=0.000000 
+level=1 epoch=283/500 train_effect=0.585510 eval_effect=0.572424 train_vq=0.000000 
+level=1 epoch=284/500 train_effect=0.581029 eval_effect=0.572209 train_vq=0.000000 
+level=1 epoch=285/500 train_effect=0.583262 eval_effect=0.572688 train_vq=0.000000 
+level=1 epoch=286/500 train_effect=0.581994 eval_effect=0.577842 train_vq=0.000000 
+level=1 epoch=287/500 train_effect=0.585312 eval_effect=0.571169 train_vq=0.000000 
+level=1 epoch=288/500 train_effect=0.597291 eval_effect=0.569007 train_vq=0.000000 
+level=1 epoch=289/500 train_effect=0.582818 eval_effect=0.570000 train_vq=0.000000 
+level=1 epoch=290/500 train_effect=0.591749 eval_effect=0.571440 train_vq=0.000000 
+level=1 epoch=291/500 train_effect=0.575738 eval_effect=0.575944 train_vq=0.000000 
+level=1 epoch=292/500 train_effect=0.596736 eval_effect=0.565823 train_vq=0.000000 
+level=1 epoch=293/500 train_effect=0.590676 eval_effect=0.565882 train_vq=0.000000 
+level=1 epoch=294/500 train_effect=0.589806 eval_effect=0.563584 train_vq=0.000000 
+level=1 epoch=295/500 train_effect=0.579729 eval_effect=0.548797 train_vq=0.000000 
+level=1 epoch=296/500 train_effect=0.570826 eval_effect=0.555467 train_vq=0.000000 
+level=1 epoch=297/500 train_effect=0.567164 eval_effect=0.555005 train_vq=0.000000 
+level=1 epoch=298/500 train_effect=0.572101 eval_effect=0.556800 train_vq=0.000000 
+level=1 epoch=299/500 train_effect=0.568956 eval_effect=0.554770 train_vq=0.000000 
+level=1 epoch=300/500 train_effect=0.583544 eval_effect=0.558229 train_vq=0.000000 
+level=1 epoch=301/500 train_effect=0.564042 eval_effect=0.557272 train_vq=0.000000 
+level=1 epoch=302/500 train_effect=0.567290 eval_effect=0.560734 train_vq=0.000000 
+level=1 epoch=303/500 train_effect=0.580146 eval_effect=0.560349 train_vq=0.000000 
+level=1 epoch=304/500 train_effect=0.560284 eval_effect=0.567756 train_vq=0.000000 
+level=1 epoch=305/500 train_effect=0.590788 eval_effect=0.542277 train_vq=0.000000 
+level=1 epoch=306/500 train_effect=0.562844 eval_effect=0.553563 train_vq=0.000000 
+level=1 epoch=307/500 train_effect=0.559661 eval_effect=0.550208 train_vq=0.000000 
+level=1 epoch=308/500 train_effect=0.555596 eval_effect=0.557490 train_vq=0.000000 
+level=1 epoch=309/500 train_effect=0.570723 eval_effect=0.549614 train_vq=0.000000 
+level=1 epoch=310/500 train_effect=0.574648 eval_effect=0.537498 train_vq=0.000000 
+level=1 epoch=311/500 train_effect=0.581192 eval_effect=0.541603 train_vq=0.000000 
+level=1 epoch=312/500 train_effect=0.561591 eval_effect=0.541744 train_vq=0.000000 
+level=1 epoch=313/500 train_effect=0.547543 eval_effect=0.546683 train_vq=0.000000 
+level=1 epoch=314/500 train_effect=0.580352 eval_effect=0.542143 train_vq=0.000000 
+level=1 epoch=315/500 train_effect=0.559683 eval_effect=0.535405 train_vq=0.000000 
+level=1 epoch=316/500 train_effect=0.569050 eval_effect=0.538923 train_vq=0.000000 
+level=1 epoch=317/500 train_effect=0.550374 eval_effect=0.533925 train_vq=0.000000 
+level=1 epoch=318/500 train_effect=0.562166 eval_effect=0.530492 train_vq=0.000000 
+level=1 epoch=319/500 train_effect=0.549053 eval_effect=0.527088 train_vq=0.000000 
+level=1 epoch=320/500 train_effect=0.567421 eval_effect=0.537037 train_vq=0.000000 
+level=1 epoch=321/500 train_effect=0.563657 eval_effect=0.522200 train_vq=0.000000 
+level=1 epoch=322/500 train_effect=0.532971 eval_effect=0.528368 train_vq=0.000000 
+level=1 epoch=323/500 train_effect=0.549787 eval_effect=0.535521 train_vq=0.000000 
+level=1 epoch=324/500 train_effect=0.558100 eval_effect=0.535963 train_vq=0.000000 
+level=1 epoch=325/500 train_effect=0.543589 eval_effect=0.535675 train_vq=0.000000 
+level=1 epoch=326/500 train_effect=0.535198 eval_effect=0.540247 train_vq=0.000000 
+level=1 epoch=327/500 train_effect=0.538564 eval_effect=0.548184 train_vq=0.000000 
+level=1 epoch=328/500 train_effect=0.556208 eval_effect=0.539426 train_vq=0.000000 
+level=1 epoch=329/500 train_effect=0.551936 eval_effect=0.530697 train_vq=0.000000 
+level=1 epoch=330/500 train_effect=0.544244 eval_effect=0.532993 train_vq=0.000000 
+level=1 epoch=331/500 train_effect=0.580782 eval_effect=0.517591 train_vq=0.000000 
+level=1 epoch=332/500 train_effect=0.541207 eval_effect=0.512158 train_vq=0.000000 
+level=1 epoch=333/500 train_effect=0.538736 eval_effect=0.520738 train_vq=0.000000 
+level=1 epoch=334/500 train_effect=0.556023 eval_effect=0.531543 train_vq=0.000000 
+level=1 epoch=335/500 train_effect=0.539895 eval_effect=0.516946 train_vq=0.000000 
+level=1 epoch=336/500 train_effect=0.554631 eval_effect=0.513995 train_vq=0.000000 
+level=1 epoch=337/500 train_effect=0.543082 eval_effect=0.516929 train_vq=0.000000 
+level=1 epoch=338/500 train_effect=0.525417 eval_effect=0.512622 train_vq=0.000000 
+level=1 epoch=339/500 train_effect=0.538818 eval_effect=0.534024 train_vq=0.000000 
+level=1 epoch=340/500 train_effect=0.546511 eval_effect=0.519544 train_vq=0.000000 
+level=1 epoch=341/500 train_effect=0.543312 eval_effect=0.509669 train_vq=0.000000 
+level=1 epoch=342/500 train_effect=0.540781 eval_effect=0.499393 train_vq=0.000000 
+level=1 epoch=343/500 train_effect=0.521720 eval_effect=0.502908 train_vq=0.000000 
+level=1 epoch=344/500 train_effect=0.525861 eval_effect=0.516187 train_vq=0.000000 
+level=1 epoch=345/500 train_effect=0.564194 eval_effect=0.511191 train_vq=0.000000 
+level=1 epoch=346/500 train_effect=0.560149 eval_effect=0.503086 train_vq=0.000000 
+level=1 epoch=347/500 train_effect=0.548306 eval_effect=0.500525 train_vq=0.000000 
+level=1 epoch=348/500 train_effect=0.520434 eval_effect=0.506716 train_vq=0.000000 
+level=1 epoch=349/500 train_effect=0.546157 eval_effect=0.504467 train_vq=0.000000 
+level=1 epoch=350/500 train_effect=0.529280 eval_effect=0.513408 train_vq=0.000000 
+level=1 epoch=351/500 train_effect=0.520660 eval_effect=0.504554 train_vq=0.000000 
+level=1 epoch=352/500 train_effect=0.511791 eval_effect=0.511812 train_vq=0.000000 
+level=1 epoch=353/500 train_effect=0.543317 eval_effect=0.514333 train_vq=0.000000 
+level=1 epoch=354/500 train_effect=0.542918 eval_effect=0.506253 train_vq=0.000000 
+level=1 epoch=355/500 train_effect=0.538763 eval_effect=0.500168 train_vq=0.000000 
+level=1 epoch=356/500 train_effect=0.509671 eval_effect=0.495885 train_vq=0.000000 
+level=1 epoch=357/500 train_effect=0.533549 eval_effect=0.496768 train_vq=0.000000 
+level=1 epoch=358/500 train_effect=0.538692 eval_effect=0.503726 train_vq=0.000000 
+level=1 epoch=359/500 train_effect=0.508098 eval_effect=0.507906 train_vq=0.000000 
+level=1 epoch=360/500 train_effect=0.501494 eval_effect=0.509446 train_vq=0.000000 
+level=1 epoch=361/500 train_effect=0.522380 eval_effect=0.512504 train_vq=0.000000 
+level=1 epoch=362/500 train_effect=0.528585 eval_effect=0.516838 train_vq=0.000000 
+level=1 epoch=363/500 train_effect=0.544067 eval_effect=0.497418 train_vq=0.000000 
+level=1 epoch=364/500 train_effect=0.541949 eval_effect=0.497091 train_vq=0.000000 
+level=1 epoch=365/500 train_effect=0.515569 eval_effect=0.489677 train_vq=0.000000 
+level=1 epoch=366/500 train_effect=0.513648 eval_effect=0.501141 train_vq=0.000000 
+level=1 epoch=367/500 train_effect=0.522151 eval_effect=0.499247 train_vq=0.000000 
+level=1 epoch=368/500 train_effect=0.511019 eval_effect=0.504395 train_vq=0.000000 
+level=1 epoch=369/500 train_effect=0.558943 eval_effect=0.496490 train_vq=0.000000 
+level=1 epoch=370/500 train_effect=0.515525 eval_effect=0.496208 train_vq=0.000000 
+level=1 epoch=371/500 train_effect=0.521836 eval_effect=0.504565 train_vq=0.000000 
+level=1 epoch=372/500 train_effect=0.531592 eval_effect=0.503249 train_vq=0.000000 
+level=1 epoch=373/500 train_effect=0.516876 eval_effect=0.504968 train_vq=0.000000 
+level=1 epoch=374/500 train_effect=0.518664 eval_effect=0.522795 train_vq=0.000000 
+level=1 epoch=375/500 train_effect=0.519716 eval_effect=0.501977 train_vq=0.000000 
+level=1 epoch=376/500 train_effect=0.529748 eval_effect=0.499748 train_vq=0.000000 
+level=1 epoch=377/500 train_effect=0.508134 eval_effect=0.502793 train_vq=0.000000 
+level=1 epoch=378/500 train_effect=0.516403 eval_effect=0.519756 train_vq=0.000000 
+level=1 epoch=379/500 train_effect=0.539749 eval_effect=0.498394 train_vq=0.000000 
+level=1 epoch=380/500 train_effect=0.509688 eval_effect=0.495339 train_vq=0.000000 
+level=1 epoch=381/500 train_effect=0.540745 eval_effect=0.491231 train_vq=0.000000 
+level=1 epoch=382/500 train_effect=0.507776 eval_effect=0.498398 train_vq=0.000000 
+level=1 epoch=383/500 train_effect=0.536765 eval_effect=0.501388 train_vq=0.000000 
+level=1 epoch=384/500 train_effect=0.506704 eval_effect=0.485340 train_vq=0.000000 
+level=1 epoch=385/500 train_effect=0.541039 eval_effect=0.489845 train_vq=0.000000 
+level=1 epoch=386/500 train_effect=0.518413 eval_effect=0.488984 train_vq=0.000000 
+level=1 epoch=387/500 train_effect=0.530389 eval_effect=0.477595 train_vq=0.000000 
+level=1 epoch=388/500 train_effect=0.511150 eval_effect=0.488782 train_vq=0.000000 
+level=1 epoch=389/500 train_effect=0.494925 eval_effect=0.505677 train_vq=0.000000 
+level=1 epoch=390/500 train_effect=0.502387 eval_effect=0.492208 train_vq=0.000000 
+level=1 epoch=391/500 train_effect=0.527688 eval_effect=0.489903 train_vq=0.000000 
+level=1 epoch=392/500 train_effect=0.488554 eval_effect=0.483400 train_vq=0.000000 
+level=1 epoch=393/500 train_effect=0.495326 eval_effect=0.498669 train_vq=0.000000 
+level=1 epoch=394/500 train_effect=0.547078 eval_effect=0.504455 train_vq=0.000000 
+level=1 epoch=395/500 train_effect=0.510068 eval_effect=0.502448 train_vq=0.000000 
+level=1 epoch=396/500 train_effect=0.557762 eval_effect=0.489401 train_vq=0.000000 
+level=1 epoch=397/500 train_effect=0.502479 eval_effect=0.496795 train_vq=0.000000 
+level=1 epoch=398/500 train_effect=0.491429 eval_effect=0.499751 train_vq=0.000000 
+level=1 epoch=399/500 train_effect=0.484511 eval_effect=0.503924 train_vq=0.000000 
+level=1 epoch=400/500 train_effect=0.507862 eval_effect=0.502120 train_vq=0.000000 
+level=1 epoch=401/500 train_effect=0.498021 eval_effect=0.503090 train_vq=0.000000 
+level=1 epoch=402/500 train_effect=0.510572 eval_effect=0.490812 train_vq=0.000000 
+level=1 epoch=403/500 train_effect=0.497607 eval_effect=0.498332 train_vq=0.000000 
+level=1 epoch=404/500 train_effect=0.506194 eval_effect=0.494056 train_vq=0.000000 
+level=1 epoch=405/500 train_effect=0.515192 eval_effect=0.499712 train_vq=0.000000 
+level=1 epoch=406/500 train_effect=0.541489 eval_effect=0.494297 train_vq=0.000000 
+level=1 epoch=407/500 train_effect=0.486080 eval_effect=0.487493 train_vq=0.000000 
+level=1 epoch=408/500 train_effect=0.511942 eval_effect=0.492299 train_vq=0.000000 
+level=1 epoch=409/500 train_effect=0.480622 eval_effect=0.490041 train_vq=0.000000 
+level=1 epoch=410/500 train_effect=0.495617 eval_effect=0.490916 train_vq=0.000000 
+level=1 epoch=411/500 train_effect=0.500633 eval_effect=0.492931 train_vq=0.000000 
+level=1 epoch=412/500 train_effect=0.488518 eval_effect=0.479995 train_vq=0.000000 
+level=1 epoch=413/500 train_effect=0.481367 eval_effect=0.481212 train_vq=0.000000 
+level=1 epoch=414/500 train_effect=0.486192 eval_effect=0.487890 train_vq=0.000000 
+level=1 epoch=415/500 train_effect=0.500757 eval_effect=0.482728 train_vq=0.000000 
+level=1 epoch=416/500 train_effect=0.502724 eval_effect=0.488005 train_vq=0.000000 
+level=1 epoch=417/500 train_effect=0.523929 eval_effect=0.479115 train_vq=0.000000 
+level=1 epoch=418/500 train_effect=0.488891 eval_effect=0.482213 train_vq=0.000000 
+level=1 epoch=419/500 train_effect=0.496719 eval_effect=0.501445 train_vq=0.000000 
+level=1 epoch=420/500 train_effect=0.495514 eval_effect=0.492866 train_vq=0.000000 
+level=1 epoch=421/500 train_effect=0.483419 eval_effect=0.500958 train_vq=0.000000 
+level=1 epoch=422/500 train_effect=0.492684 eval_effect=0.499575 train_vq=0.000000 
+level=1 epoch=423/500 train_effect=0.481928 eval_effect=0.487395 train_vq=0.000000 
+level=1 epoch=424/500 train_effect=0.507932 eval_effect=0.488814 train_vq=0.000000 
+level=1 epoch=425/500 train_effect=0.521382 eval_effect=0.492334 train_vq=0.000000 
+level=1 epoch=426/500 train_effect=0.511876 eval_effect=0.470263 train_vq=0.000000 
+level=1 epoch=427/500 train_effect=0.489162 eval_effect=0.476261 train_vq=0.000000 
+level=1 epoch=428/500 train_effect=0.487661 eval_effect=0.487203 train_vq=0.000000 
+level=1 epoch=429/500 train_effect=0.496938 eval_effect=0.492199 train_vq=0.000000 
+level=1 epoch=430/500 train_effect=0.494419 eval_effect=0.490032 train_vq=0.000000 
+level=1 epoch=431/500 train_effect=0.515221 eval_effect=0.472320 train_vq=0.000000 
+level=1 epoch=432/500 train_effect=0.499402 eval_effect=0.482742 train_vq=0.000000 
+level=1 epoch=433/500 train_effect=0.508814 eval_effect=0.475601 train_vq=0.000000 
+level=1 epoch=434/500 train_effect=0.494692 eval_effect=0.491099 train_vq=0.000000 
+level=1 epoch=435/500 train_effect=0.486970 eval_effect=0.487836 train_vq=0.000000 
+level=1 epoch=436/500 train_effect=0.543469 eval_effect=0.476340 train_vq=0.000000 
+level=1 epoch=437/500 train_effect=0.492564 eval_effect=0.474786 train_vq=0.000000 
+level=1 epoch=438/500 train_effect=0.501236 eval_effect=0.506377 train_vq=0.000000 
+level=1 epoch=439/500 train_effect=0.500000 eval_effect=0.497317 train_vq=0.000000 
+level=1 epoch=440/500 train_effect=0.477178 eval_effect=0.495651 train_vq=0.000000 
+level=1 epoch=441/500 train_effect=0.509238 eval_effect=0.490383 train_vq=0.000000 
+level=1 epoch=442/500 train_effect=0.493328 eval_effect=0.487404 train_vq=0.000000 
+level=1 epoch=443/500 train_effect=0.478600 eval_effect=0.479079 train_vq=0.000000 
+level=1 epoch=444/500 train_effect=0.505304 eval_effect=0.493626 train_vq=0.000000 
+level=1 epoch=445/500 train_effect=0.482355 eval_effect=0.486395 train_vq=0.000000 
+level=1 epoch=446/500 train_effect=0.494132 eval_effect=0.486069 train_vq=0.000000 
+level=1 epoch=447/500 train_effect=0.488040 eval_effect=0.486742 train_vq=0.000000 
+level=1 epoch=448/500 train_effect=0.480977 eval_effect=0.500189 train_vq=0.000000 
+level=1 epoch=449/500 train_effect=0.499543 eval_effect=0.496743 train_vq=0.000000 
+level=1 epoch=450/500 train_effect=0.482013 eval_effect=0.500377 train_vq=0.000000 
+level=1 epoch=451/500 train_effect=0.502014 eval_effect=0.505118 train_vq=0.000000 
+level=1 epoch=452/500 train_effect=0.485888 eval_effect=0.492928 train_vq=0.000000 
+level=1 epoch=453/500 train_effect=0.494605 eval_effect=0.500869 train_vq=0.000000 
+level=1 epoch=454/500 train_effect=0.488296 eval_effect=0.489022 train_vq=0.000000 
+level=1 epoch=455/500 train_effect=0.499234 eval_effect=0.487633 train_vq=0.000000 
+level=1 epoch=456/500 train_effect=0.497800 eval_effect=0.491605 train_vq=0.000000 
+level=1 epoch=457/500 train_effect=0.484387 eval_effect=0.498895 train_vq=0.000000 
+level=1 epoch=458/500 train_effect=0.515262 eval_effect=0.481416 train_vq=0.000000 
+level=1 epoch=459/500 train_effect=0.495813 eval_effect=0.480053 train_vq=0.000000 
+level=1 epoch=460/500 train_effect=0.498537 eval_effect=0.484604 train_vq=0.000000 
+level=1 epoch=461/500 train_effect=0.517038 eval_effect=0.482486 train_vq=0.000000 
+level=1 epoch=462/500 train_effect=0.515406 eval_effect=0.482851 train_vq=0.000000 
+level=1 epoch=463/500 train_effect=0.475433 eval_effect=0.487240 train_vq=0.000000 
+level=1 epoch=464/500 train_effect=0.492409 eval_effect=0.483746 train_vq=0.000000 
+level=1 epoch=465/500 train_effect=0.482654 eval_effect=0.482105 train_vq=0.000000 
+level=1 epoch=466/500 train_effect=0.495355 eval_effect=0.479579 train_vq=0.000000 
+level=1 epoch=467/500 train_effect=0.489308 eval_effect=0.473871 train_vq=0.000000 
+level=1 epoch=468/500 train_effect=0.486938 eval_effect=0.478872 train_vq=0.000000 
+level=1 epoch=469/500 train_effect=0.487268 eval_effect=0.486968 train_vq=0.000000 
+level=1 epoch=470/500 train_effect=0.510442 eval_effect=0.491540 train_vq=0.000000 
+level=1 epoch=471/500 train_effect=0.519576 eval_effect=0.483848 train_vq=0.000000 
+level=1 epoch=472/500 train_effect=0.480468 eval_effect=0.486875 train_vq=0.000000 
+level=1 epoch=473/500 train_effect=0.493914 eval_effect=0.493744 train_vq=0.000000 
+level=1 epoch=474/500 train_effect=0.489265 eval_effect=0.491655 train_vq=0.000000 
+level=1 epoch=475/500 train_effect=0.522981 eval_effect=0.486547 train_vq=0.000000 
+level=1 epoch=476/500 train_effect=0.497603 eval_effect=0.516759 train_vq=0.000000 
+level=1 epoch=477/500 train_effect=0.493580 eval_effect=0.493228 train_vq=0.000000 
+level=1 epoch=478/500 train_effect=0.512128 eval_effect=0.498588 train_vq=0.000000 
+level=1 epoch=479/500 train_effect=0.509817 eval_effect=0.508000 train_vq=0.000000 
+level=1 epoch=480/500 train_effect=0.505210 eval_effect=0.489453 train_vq=0.000000 
+level=1 epoch=481/500 train_effect=0.501560 eval_effect=0.496232 train_vq=0.000000 
+level=1 epoch=482/500 train_effect=0.514083 eval_effect=0.519594 train_vq=0.000000 
+level=1 epoch=483/500 train_effect=0.521920 eval_effect=0.509024 train_vq=0.000000 
+level=1 epoch=484/500 train_effect=0.489693 eval_effect=0.523520 train_vq=0.000000 
+level=1 epoch=485/500 train_effect=0.502907 eval_effect=0.515460 train_vq=0.000000 
+level=1 epoch=486/500 train_effect=0.503116 eval_effect=0.516959 train_vq=0.000000 
+level=1 epoch=487/500 train_effect=0.535817 eval_effect=0.520349 train_vq=0.000000 
+level=1 epoch=488/500 train_effect=0.518358 eval_effect=0.513556 train_vq=0.000000 
+level=1 epoch=489/500 train_effect=0.508982 eval_effect=0.504266 train_vq=0.000000 
+level=1 epoch=490/500 train_effect=0.503795 eval_effect=0.519437 train_vq=0.000000 
+level=1 epoch=491/500 train_effect=0.544985 eval_effect=0.531074 train_vq=0.000000 
+level=1 epoch=492/500 train_effect=0.531778 eval_effect=0.511566 train_vq=0.000000 
+level=1 epoch=493/500 train_effect=0.524621 eval_effect=0.532927 train_vq=0.000000 
+level=1 epoch=494/500 train_effect=0.562978 eval_effect=0.528404 train_vq=0.000000 
+level=1 epoch=495/500 train_effect=0.558813 eval_effect=0.522910 train_vq=0.000000 
+level=1 epoch=496/500 train_effect=0.565350 eval_effect=0.516965 train_vq=0.000000 
+level=1 epoch=497/500 train_effect=0.540806 eval_effect=0.510530 train_vq=0.000000 
+level=1 epoch=498/500 train_effect=0.547259 eval_effect=0.516256 train_vq=0.000000 
+level=1 epoch=499/500 train_effect=0.524385 eval_effect=0.505176 train_vq=0.000000 
+level=1 epoch=500/500 train_effect=0.548250 eval_effect=0.519260 train_vq=0.000000 
+Best level-1 deterministic weighted MSE: 0.47026294
+
+=== original | seed=5 | level=2 | epochs=500 ===
+========== ENCODER ==========
+Sequential(
+  (0): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(2, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (1): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (2): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (3): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (4): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (5): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (6): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (7): ConvBlock(
+    (block): Sequential(
+      (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+    )
+  )
+  (8): Avg(dims=[2, 3])
+  (9): MLP(
+    (layers): Sequential(
+      (0): Linear(in_features=256, out_features=1)
+    )
+  )
+  (10): STLayer()
+)
+parameter count: 1174145
+=============================
+========== DECODER ==========
+MLP(
+  (layers): Sequential(
+    (0): Linear(in_features=5, out_features=128)
+    (1): ReLU()
+    (2): Linear(in_features=128, out_features=128)
+    (3): ReLU()
+    (4): Linear(in_features=128, out_features=6)
+  )
+)
+parameter count: 18054
+=============================
+level=2 epoch=1/500 train_effect=2.296973 eval_effect=2.276958 train_vq=0.000000 
+level=2 epoch=2/500 train_effect=2.052321 eval_effect=2.122460 train_vq=0.000000 
+level=2 epoch=3/500 train_effect=1.937434 eval_effect=1.917658 train_vq=0.000000 
+level=2 epoch=4/500 train_effect=1.799011 eval_effect=1.719019 train_vq=0.000000 
+level=2 epoch=5/500 train_effect=1.742088 eval_effect=1.668320 train_vq=0.000000 
+level=2 epoch=6/500 train_effect=1.682716 eval_effect=1.617738 train_vq=0.000000 
+level=2 epoch=7/500 train_effect=1.617738 eval_effect=1.567283 train_vq=0.000000 
+level=2 epoch=8/500 train_effect=1.571849 eval_effect=1.517313 train_vq=0.000000 
+level=2 epoch=9/500 train_effect=1.505132 eval_effect=1.469029 train_vq=0.000000 
+level=2 epoch=10/500 train_effect=1.478044 eval_effect=1.451159 train_vq=0.000000 
+level=2 epoch=11/500 train_effect=1.434927 eval_effect=1.430844 train_vq=0.000000 
+level=2 epoch=12/500 train_effect=1.424820 eval_effect=1.404997 train_vq=0.000000 
+level=2 epoch=13/500 train_effect=1.384003 eval_effect=1.349841 train_vq=0.000000 
+level=2 epoch=14/500 train_effect=1.344929 eval_effect=1.327243 train_vq=0.000000 
+level=2 epoch=15/500 train_effect=1.311385 eval_effect=1.305662 train_vq=0.000000 
+level=2 epoch=16/500 train_effect=1.267483 eval_effect=1.250293 train_vq=0.000000 
+level=2 epoch=17/500 train_effect=1.250795 eval_effect=1.277001 train_vq=0.000000 
+level=2 epoch=18/500 train_effect=1.228827 eval_effect=1.211666 train_vq=0.000000 
+level=2 epoch=19/500 train_effect=1.210558 eval_effect=1.217031 train_vq=0.000000 
+level=2 epoch=20/500 train_effect=1.206808 eval_effect=1.161440 train_vq=0.000000 
+level=2 epoch=21/500 train_effect=1.160366 eval_effect=1.156511 train_vq=0.000000 
+level=2 epoch=22/500 train_effect=1.142897 eval_effect=1.155241 train_vq=0.000000 
+level=2 epoch=23/500 train_effect=1.134699 eval_effect=1.156986 train_vq=0.000000 
+level=2 epoch=24/500 train_effect=1.123627 eval_effect=1.079942 train_vq=0.000000 
+level=2 epoch=25/500 train_effect=1.104622 eval_effect=1.076067 train_vq=0.000000 
+level=2 epoch=26/500 train_effect=1.105792 eval_effect=1.072840 train_vq=0.000000 
+level=2 epoch=27/500 train_effect=1.089975 eval_effect=1.007472 train_vq=0.000000 
+level=2 epoch=28/500 train_effect=1.062150 eval_effect=1.043369 train_vq=0.000000 
+level=2 epoch=29/500 train_effect=1.074750 eval_effect=1.036223 train_vq=0.000000 
+level=2 epoch=30/500 train_effect=1.048804 eval_effect=1.028176 train_vq=0.000000 
+level=2 epoch=31/500 train_effect=1.050231 eval_effect=0.996276 train_vq=0.000000 
+level=2 epoch=32/500 train_effect=1.029017 eval_effect=0.983702 train_vq=0.000000 
+level=2 epoch=33/500 train_effect=1.056030 eval_effect=0.987567 train_vq=0.000000 
+level=2 epoch=34/500 train_effect=1.045443 eval_effect=0.991795 train_vq=0.000000 
+level=2 epoch=35/500 train_effect=1.027582 eval_effect=1.019062 train_vq=0.000000 
+level=2 epoch=36/500 train_effect=1.000597 eval_effect=0.957955 train_vq=0.000000 
+level=2 epoch=37/500 train_effect=0.992581 eval_effect=0.970600 train_vq=0.000000 
+level=2 epoch=38/500 train_effect=0.998723 eval_effect=1.001642 train_vq=0.000000 
+level=2 epoch=39/500 train_effect=1.012851 eval_effect=0.956830 train_vq=0.000000 
+level=2 epoch=40/500 train_effect=1.016225 eval_effect=0.952542 train_vq=0.000000 
+level=2 epoch=41/500 train_effect=0.996017 eval_effect=0.960319 train_vq=0.000000 
+level=2 epoch=42/500 train_effect=0.998689 eval_effect=0.943918 train_vq=0.000000 
+level=2 epoch=43/500 train_effect=1.004663 eval_effect=0.933308 train_vq=0.000000 
+level=2 epoch=44/500 train_effect=0.985673 eval_effect=0.949719 train_vq=0.000000 
+level=2 epoch=45/500 train_effect=0.965347 eval_effect=0.953433 train_vq=0.000000 
+level=2 epoch=46/500 train_effect=0.987348 eval_effect=0.951268 train_vq=0.000000 
+level=2 epoch=47/500 train_effect=0.965582 eval_effect=0.920141 train_vq=0.000000 
+level=2 epoch=48/500 train_effect=1.002542 eval_effect=0.937356 train_vq=0.000000 
+level=2 epoch=49/500 train_effect=0.973144 eval_effect=0.924297 train_vq=0.000000 
+level=2 epoch=50/500 train_effect=0.963967 eval_effect=0.934837 train_vq=0.000000 
+level=2 epoch=51/500 train_effect=0.970089 eval_effect=0.933358 train_vq=0.000000 
+level=2 epoch=52/500 train_effect=0.976720 eval_effect=0.936511 train_vq=0.000000 
+level=2 epoch=53/500 train_effect=0.968353 eval_effect=0.970682 train_vq=0.000000 
+level=2 epoch=54/500 train_effect=0.975600 eval_effect=0.950827 train_vq=0.000000 
+level=2 epoch=55/500 train_effect=0.942650 eval_effect=0.956478 train_vq=0.000000 
+level=2 epoch=56/500 train_effect=0.944888 eval_effect=0.997936 train_vq=0.000000 
+level=2 epoch=57/500 train_effect=0.956184 eval_effect=0.908370 train_vq=0.000000 
+level=2 epoch=58/500 train_effect=0.951005 eval_effect=0.891105 train_vq=0.000000 
+level=2 epoch=59/500 train_effect=0.929775 eval_effect=0.942180 train_vq=0.000000 
+level=2 epoch=60/500 train_effect=0.960089 eval_effect=0.908584 train_vq=0.000000 
+level=2 epoch=61/500 train_effect=0.921834 eval_effect=0.908251 train_vq=0.000000 
+level=2 epoch=62/500 train_effect=0.954193 eval_effect=0.971709 train_vq=0.000000 
+level=2 epoch=63/500 train_effect=0.931362 eval_effect=0.954260 train_vq=0.000000 
+level=2 epoch=64/500 train_effect=0.946471 eval_effect=0.906424 train_vq=0.000000 
+level=2 epoch=65/500 train_effect=0.964264 eval_effect=0.907630 train_vq=0.000000 
+level=2 epoch=66/500 train_effect=0.937680 eval_effect=0.956442 train_vq=0.000000 
+level=2 epoch=67/500 train_effect=0.947032 eval_effect=0.909773 train_vq=0.000000 
+level=2 epoch=68/500 train_effect=0.938638 eval_effect=0.905442 train_vq=0.000000 
+level=2 epoch=69/500 train_effect=0.919398 eval_effect=0.903239 train_vq=0.000000 
+level=2 epoch=70/500 train_effect=0.931254 eval_effect=0.910075 train_vq=0.000000 
+level=2 epoch=71/500 train_effect=0.922969 eval_effect=0.888261 train_vq=0.000000 
+level=2 epoch=72/500 train_effect=0.933543 eval_effect=0.951253 train_vq=0.000000 
+level=2 epoch=73/500 train_effect=0.920395 eval_effect=0.897708 train_vq=0.000000 
+level=2 epoch=74/500 train_effect=0.958459 eval_effect=0.901533 train_vq=0.000000 
+level=2 epoch=75/500 train_effect=0.914276 eval_effect=0.909642 train_vq=0.000000 
+level=2 epoch=76/500 train_effect=0.924462 eval_effect=0.887013 train_vq=0.000000 
+level=2 epoch=77/500 train_effect=0.933351 eval_effect=0.934698 train_vq=0.000000 
+level=2 epoch=78/500 train_effect=0.930245 eval_effect=0.860915 train_vq=0.000000 
+level=2 epoch=79/500 train_effect=0.931734 eval_effect=0.905352 train_vq=0.000000 
+level=2 epoch=80/500 train_effect=0.912072 eval_effect=0.911766 train_vq=0.000000 
+level=2 epoch=81/500 train_effect=0.902662 eval_effect=0.905560 train_vq=0.000000 
+level=2 epoch=82/500 train_effect=0.907598 eval_effect=0.938528 train_vq=0.000000 
+level=2 epoch=83/500 train_effect=0.928146 eval_effect=0.898824 train_vq=0.000000 
+level=2 epoch=84/500 train_effect=0.903950 eval_effect=0.939390 train_vq=0.000000 
+level=2 epoch=85/500 train_effect=0.907118 eval_effect=0.906033 train_vq=0.000000 
+level=2 epoch=86/500 train_effect=0.935267 eval_effect=0.893962 train_vq=0.000000 
+level=2 epoch=87/500 train_effect=0.925229 eval_effect=0.914882 train_vq=0.000000 
+level=2 epoch=88/500 train_effect=0.919336 eval_effect=0.918971 train_vq=0.000000 
+level=2 epoch=89/500 train_effect=0.915046 eval_effect=0.883386 train_vq=0.000000 
+level=2 epoch=90/500 train_effect=0.907603 eval_effect=0.890802 train_vq=0.000000 
+level=2 epoch=91/500 train_effect=0.927673 eval_effect=0.917082 train_vq=0.000000 
+level=2 epoch=92/500 train_effect=0.926608 eval_effect=0.932906 train_vq=0.000000 
+level=2 epoch=93/500 train_effect=0.948607 eval_effect=0.887790 train_vq=0.000000 
+level=2 epoch=94/500 train_effect=0.907858 eval_effect=0.888547 train_vq=0.000000 
+level=2 epoch=95/500 train_effect=0.901791 eval_effect=0.889989 train_vq=0.000000 
+level=2 epoch=96/500 train_effect=0.909323 eval_effect=0.895534 train_vq=0.000000 
+level=2 epoch=97/500 train_effect=0.929151 eval_effect=0.923568 train_vq=0.000000 
+level=2 epoch=98/500 train_effect=0.916238 eval_effect=0.877030 train_vq=0.000000 
+level=2 epoch=99/500 train_effect=0.914026 eval_effect=0.903194 train_vq=0.000000 
+level=2 epoch=100/500 train_effect=0.912594 eval_effect=0.967320 train_vq=0.000000 
+level=2 epoch=101/500 train_effect=0.898921 eval_effect=0.891198 train_vq=0.000000 
+level=2 epoch=102/500 train_effect=0.908215 eval_effect=0.917093 train_vq=0.000000 
+level=2 epoch=103/500 train_effect=0.910541 eval_effect=0.914827 train_vq=0.000000 
+level=2 epoch=104/500 train_effect=0.916128 eval_effect=0.920281 train_vq=0.000000 
+level=2 epoch=105/500 train_effect=0.916693 eval_effect=0.896275 train_vq=0.000000 
+level=2 epoch=106/500 train_effect=0.927233 eval_effect=0.883986 train_vq=0.000000 
+level=2 epoch=107/500 train_effect=0.906398 eval_effect=0.903189 train_vq=0.000000 
+level=2 epoch=108/500 train_effect=0.912582 eval_effect=0.918610 train_vq=0.000000 
+level=2 epoch=109/500 train_effect=0.878719 eval_effect=0.898354 train_vq=0.000000 
+level=2 epoch=110/500 train_effect=0.888866 eval_effect=0.888377 train_vq=0.000000 
+level=2 epoch=111/500 train_effect=0.931159 eval_effect=0.891860 train_vq=0.000000 
+level=2 epoch=112/500 train_effect=0.894972 eval_effect=0.940293 train_vq=0.000000 
+level=2 epoch=113/500 train_effect=0.911968 eval_effect=0.935923 train_vq=0.000000 
+level=2 epoch=114/500 train_effect=0.922669 eval_effect=0.896439 train_vq=0.000000 
+level=2 epoch=115/500 train_effect=0.935706 eval_effect=0.886978 train_vq=0.000000 
+level=2 epoch=116/500 train_effect=0.915750 eval_effect=0.924449 train_vq=0.000000 
+level=2 epoch=117/500 train_effect=0.932162 eval_effect=0.909830 train_vq=0.000000 
+level=2 epoch=118/500 train_effect=0.928847 eval_effect=0.921754 train_vq=0.000000 
+level=2 epoch=119/500 train_effect=0.905953 eval_effect=0.902611 train_vq=0.000000 
+level=2 epoch=120/500 train_effect=0.907654 eval_effect=0.905265 train_vq=0.000000 
+level=2 epoch=121/500 train_effect=0.917132 eval_effect=0.894102 train_vq=0.000000 
+level=2 epoch=122/500 train_effect=0.894126 eval_effect=0.940445 train_vq=0.000000 
+level=2 epoch=123/500 train_effect=0.903420 eval_effect=0.914518 train_vq=0.000000 
+level=2 epoch=124/500 train_effect=0.921632 eval_effect=0.934519 train_vq=0.000000 
+level=2 epoch=125/500 train_effect=0.908363 eval_effect=0.935416 train_vq=0.000000 
+level=2 epoch=126/500 train_effect=0.914730 eval_effect=0.915111 train_vq=0.000000 
+level=2 epoch=127/500 train_effect=0.925596 eval_effect=0.948567 train_vq=0.000000 
+level=2 epoch=128/500 train_effect=0.926964 eval_effect=0.917640 train_vq=0.000000 
+level=2 epoch=129/500 train_effect=0.907860 eval_effect=0.957499 train_vq=0.000000 
+level=2 epoch=130/500 train_effect=0.935127 eval_effect=0.935681 train_vq=0.000000 
+level=2 epoch=131/500 train_effect=0.925776 eval_effect=0.887584 train_vq=0.000000 
+level=2 epoch=132/500 train_effect=0.906526 eval_effect=0.918990 train_vq=0.000000 
+level=2 epoch=133/500 train_effect=0.890460 eval_effect=0.892872 train_vq=0.000000 
+level=2 epoch=134/500 train_effect=0.908143 eval_effect=0.923054 train_vq=0.000000 
+level=2 epoch=135/500 train_effect=0.920628 eval_effect=0.913590 train_vq=0.000000 
+level=2 epoch=136/500 train_effect=0.929116 eval_effect=0.917683 train_vq=0.000000 
+level=2 epoch=137/500 train_effect=0.955400 eval_effect=0.990654 train_vq=0.000000 
+level=2 epoch=138/500 train_effect=0.937676 eval_effect=0.868546 train_vq=0.000000 
+level=2 epoch=139/500 train_effect=0.892712 eval_effect=0.866653 train_vq=0.000000 
+level=2 epoch=140/500 train_effect=0.896261 eval_effect=0.891723 train_vq=0.000000 
+level=2 epoch=141/500 train_effect=0.908156 eval_effect=0.876198 train_vq=0.000000 
+level=2 epoch=142/500 train_effect=0.908426 eval_effect=0.893200 train_vq=0.000000 
+level=2 epoch=143/500 train_effect=0.906751 eval_effect=0.911458 train_vq=0.000000 
+level=2 epoch=144/500 train_effect=0.890811 eval_effect=0.914635 train_vq=0.000000 
+level=2 epoch=145/500 train_effect=0.897037 eval_effect=0.931749 train_vq=0.000000 
+level=2 epoch=146/500 train_effect=0.918221 eval_effect=0.879679 train_vq=0.000000 
+level=2 epoch=147/500 train_effect=0.923361 eval_effect=0.895551 train_vq=0.000000 
+level=2 epoch=148/500 train_effect=0.912989 eval_effect=0.951772 train_vq=0.000000 
+level=2 epoch=149/500 train_effect=0.933634 eval_effect=0.916646 train_vq=0.000000 
+level=2 epoch=150/500 train_effect=0.896549 eval_effect=0.874446 train_vq=0.000000 
+level=2 epoch=151/500 train_effect=0.890313 eval_effect=0.889580 train_vq=0.000000 
+level=2 epoch=152/500 train_effect=0.885568 eval_effect=0.895938 train_vq=0.000000 
+level=2 epoch=153/500 train_effect=0.927178 eval_effect=0.917214 train_vq=0.000000 
+level=2 epoch=154/500 train_effect=0.907970 eval_effect=0.978517 train_vq=0.000000 
+level=2 epoch=155/500 train_effect=0.902447 eval_effect=0.912529 train_vq=0.000000 
+level=2 epoch=156/500 train_effect=0.920820 eval_effect=0.914308 train_vq=0.000000 
+level=2 epoch=157/500 train_effect=0.913323 eval_effect=0.904668 train_vq=0.000000 
+level=2 epoch=158/500 train_effect=0.883911 eval_effect=0.896826 train_vq=0.000000 
+level=2 epoch=159/500 train_effect=0.905480 eval_effect=0.886846 train_vq=0.000000 
+level=2 epoch=160/500 train_effect=0.945907 eval_effect=0.924442 train_vq=0.000000 
+level=2 epoch=161/500 train_effect=0.892366 eval_effect=0.872045 train_vq=0.000000 
+level=2 epoch=162/500 train_effect=0.905427 eval_effect=0.893025 train_vq=0.000000 
+level=2 epoch=163/500 train_effect=0.899432 eval_effect=0.889627 train_vq=0.000000 
+level=2 epoch=164/500 train_effect=0.942857 eval_effect=0.894641 train_vq=0.000000 
+level=2 epoch=165/500 train_effect=0.908282 eval_effect=0.917706 train_vq=0.000000 
+level=2 epoch=166/500 train_effect=0.871991 eval_effect=0.887483 train_vq=0.000000 
+level=2 epoch=167/500 train_effect=0.888516 eval_effect=0.865457 train_vq=0.000000 
+level=2 epoch=168/500 train_effect=0.903240 eval_effect=0.900004 train_vq=0.000000 
+level=2 epoch=169/500 train_effect=0.936357 eval_effect=0.953476 train_vq=0.000000 
+level=2 epoch=170/500 train_effect=0.906039 eval_effect=0.864699 train_vq=0.000000 
+level=2 epoch=171/500 train_effect=0.904622 eval_effect=0.883312 train_vq=0.000000 
+level=2 epoch=172/500 train_effect=0.898761 eval_effect=0.891430 train_vq=0.000000 
+level=2 epoch=173/500 train_effect=0.880851 eval_effect=0.883899 train_vq=0.000000 
+level=2 epoch=174/500 train_effect=0.910431 eval_effect=0.917584 train_vq=0.000000 
+level=2 epoch=175/500 train_effect=0.947113 eval_effect=0.906927 train_vq=0.000000 
+level=2 epoch=176/500 train_effect=0.918033 eval_effect=0.879305 train_vq=0.000000 
+level=2 epoch=177/500 train_effect=0.886335 eval_effect=0.878308 train_vq=0.000000 
+level=2 epoch=178/500 train_effect=0.890994 eval_effect=0.881977 train_vq=0.000000 
+level=2 epoch=179/500 train_effect=0.929658 eval_effect=0.927340 train_vq=0.000000 
+level=2 epoch=180/500 train_effect=0.905372 eval_effect=0.868656 train_vq=0.000000 
+level=2 epoch=181/500 train_effect=0.901298 eval_effect=0.850791 train_vq=0.000000 
+level=2 epoch=182/500 train_effect=0.926509 eval_effect=0.905853 train_vq=0.000000 
+level=2 epoch=183/500 train_effect=0.909790 eval_effect=0.870054 train_vq=0.000000 
+level=2 epoch=184/500 train_effect=0.920499 eval_effect=0.885889 train_vq=0.000000 
+level=2 epoch=185/500 train_effect=0.898732 eval_effect=0.870390 train_vq=0.000000 
+level=2 epoch=186/500 train_effect=0.899439 eval_effect=0.895396 train_vq=0.000000 
+level=2 epoch=187/500 train_effect=0.881394 eval_effect=0.888560 train_vq=0.000000 
+level=2 epoch=188/500 train_effect=0.892035 eval_effect=0.891404 train_vq=0.000000 
+level=2 epoch=189/500 train_effect=0.908222 eval_effect=0.917705 train_vq=0.000000 
+level=2 epoch=190/500 train_effect=0.912912 eval_effect=0.909435 train_vq=0.000000 
+level=2 epoch=191/500 train_effect=0.914460 eval_effect=0.979396 train_vq=0.000000 
+level=2 epoch=192/500 train_effect=0.902462 eval_effect=0.883011 train_vq=0.000000 
+level=2 epoch=193/500 train_effect=0.904067 eval_effect=0.858803 train_vq=0.000000 
+level=2 epoch=194/500 train_effect=0.875807 eval_effect=0.854003 train_vq=0.000000 
+level=2 epoch=195/500 train_effect=0.860138 eval_effect=0.858437 train_vq=0.000000 
+level=2 epoch=196/500 train_effect=0.896668 eval_effect=0.859817 train_vq=0.000000 
+level=2 epoch=197/500 train_effect=0.908088 eval_effect=0.937268 train_vq=0.000000 
+level=2 epoch=198/500 train_effect=0.938770 eval_effect=0.884503 train_vq=0.000000 
+level=2 epoch=199/500 train_effect=0.904654 eval_effect=0.876026 train_vq=0.000000 
+level=2 epoch=200/500 train_effect=0.873797 eval_effect=0.870559 train_vq=0.000000 
+level=2 epoch=201/500 train_effect=0.890532 eval_effect=0.859678 train_vq=0.000000 
+level=2 epoch=202/500 train_effect=0.879791 eval_effect=0.889587 train_vq=0.000000 
+level=2 epoch=203/500 train_effect=0.922660 eval_effect=0.876675 train_vq=0.000000 
+level=2 epoch=204/500 train_effect=0.893436 eval_effect=0.893857 train_vq=0.000000 
+level=2 epoch=205/500 train_effect=0.897899 eval_effect=0.867979 train_vq=0.000000 
+level=2 epoch=206/500 train_effect=0.941753 eval_effect=0.878684 train_vq=0.000000 
+level=2 epoch=207/500 train_effect=0.886215 eval_effect=0.889857 train_vq=0.000000 
+level=2 epoch=208/500 train_effect=0.894545 eval_effect=0.876920 train_vq=0.000000 
+level=2 epoch=209/500 train_effect=0.899201 eval_effect=0.851091 train_vq=0.000000 
+level=2 epoch=210/500 train_effect=0.931716 eval_effect=0.965463 train_vq=0.000000 
+level=2 epoch=211/500 train_effect=0.908725 eval_effect=0.865787 train_vq=0.000000 
+level=2 epoch=212/500 train_effect=0.885593 eval_effect=0.872794 train_vq=0.000000 
+level=2 epoch=213/500 train_effect=0.902447 eval_effect=0.873052 train_vq=0.000000 
+level=2 epoch=214/500 train_effect=0.892837 eval_effect=0.900937 train_vq=0.000000 
+level=2 epoch=215/500 train_effect=0.893672 eval_effect=0.847255 train_vq=0.000000 
+level=2 epoch=216/500 train_effect=0.894360 eval_effect=0.883530 train_vq=0.000000 
+level=2 epoch=217/500 train_effect=0.915079 eval_effect=0.868571 train_vq=0.000000 
+level=2 epoch=218/500 train_effect=0.901489 eval_effect=0.882378 train_vq=0.000000 
+level=2 epoch=219/500 train_effect=0.909128 eval_effect=0.867112 train_vq=0.000000 
+level=2 epoch=220/500 train_effect=0.903362 eval_effect=0.851841 train_vq=0.000000 
+level=2 epoch=221/500 train_effect=0.907990 eval_effect=0.860049 train_vq=0.000000 
+level=2 epoch=222/500 train_effect=0.873241 eval_effect=0.880664 train_vq=0.000000 
+level=2 epoch=223/500 train_effect=0.894190 eval_effect=0.863451 train_vq=0.000000 
+level=2 epoch=224/500 train_effect=0.891667 eval_effect=0.849000 train_vq=0.000000 
+level=2 epoch=225/500 train_effect=0.923807 eval_effect=0.874888 train_vq=0.000000 
+level=2 epoch=226/500 train_effect=0.918253 eval_effect=0.864134 train_vq=0.000000 
+level=2 epoch=227/500 train_effect=0.892834 eval_effect=0.849408 train_vq=0.000000 
+level=2 epoch=228/500 train_effect=0.884930 eval_effect=0.859069 train_vq=0.000000 
+level=2 epoch=229/500 train_effect=0.884645 eval_effect=0.848613 train_vq=0.000000 
+level=2 epoch=230/500 train_effect=0.918512 eval_effect=0.862947 train_vq=0.000000 
+level=2 epoch=231/500 train_effect=0.882893 eval_effect=0.865552 train_vq=0.000000 
+level=2 epoch=232/500 train_effect=0.874295 eval_effect=0.871235 train_vq=0.000000 
+level=2 epoch=233/500 train_effect=0.892904 eval_effect=0.856661 train_vq=0.000000 
+level=2 epoch=234/500 train_effect=0.947049 eval_effect=0.889384 train_vq=0.000000 
+level=2 epoch=235/500 train_effect=0.860387 eval_effect=0.844425 train_vq=0.000000 
+level=2 epoch=236/500 train_effect=0.879949 eval_effect=0.890822 train_vq=0.000000 
+level=2 epoch=237/500 train_effect=0.915956 eval_effect=0.861848 train_vq=0.000000 
+level=2 epoch=238/500 train_effect=0.903544 eval_effect=0.849660 train_vq=0.000000 
+level=2 epoch=239/500 train_effect=0.870972 eval_effect=0.867434 train_vq=0.000000 
+level=2 epoch=240/500 train_effect=0.864969 eval_effect=0.856408 train_vq=0.000000 
+level=2 epoch=241/500 train_effect=0.878334 eval_effect=0.879591 train_vq=0.000000 
+level=2 epoch=242/500 train_effect=0.896836 eval_effect=0.862651 train_vq=0.000000 
+level=2 epoch=243/500 train_effect=0.913390 eval_effect=0.945234 train_vq=0.000000 
+level=2 epoch=244/500 train_effect=0.894458 eval_effect=0.861887 train_vq=0.000000 
+level=2 epoch=245/500 train_effect=0.900800 eval_effect=0.922146 train_vq=0.000000 
+level=2 epoch=246/500 train_effect=0.898161 eval_effect=0.971668 train_vq=0.000000 
+level=2 epoch=247/500 train_effect=0.897053 eval_effect=0.888013 train_vq=0.000000 
+level=2 epoch=248/500 train_effect=0.890000 eval_effect=0.898265 train_vq=0.000000 
+level=2 epoch=249/500 train_effect=0.891765 eval_effect=0.903447 train_vq=0.000000 
+level=2 epoch=250/500 train_effect=0.921388 eval_effect=0.893861 train_vq=0.000000 
+level=2 epoch=251/500 train_effect=0.899401 eval_effect=0.888603 train_vq=0.000000 
+level=2 epoch=252/500 train_effect=0.878214 eval_effect=0.858699 train_vq=0.000000 
+level=2 epoch=253/500 train_effect=0.873430 eval_effect=0.863177 train_vq=0.000000 
+level=2 epoch=254/500 train_effect=0.897683 eval_effect=0.852405 train_vq=0.000000 
+level=2 epoch=255/500 train_effect=0.883085 eval_effect=0.862744 train_vq=0.000000 
+level=2 epoch=256/500 train_effect=0.870004 eval_effect=0.859624 train_vq=0.000000 
+level=2 epoch=257/500 train_effect=0.889126 eval_effect=0.859500 train_vq=0.000000 
+level=2 epoch=258/500 train_effect=0.877855 eval_effect=0.874094 train_vq=0.000000 
+level=2 epoch=259/500 train_effect=0.875033 eval_effect=0.850858 train_vq=0.000000 
+level=2 epoch=260/500 train_effect=0.862965 eval_effect=0.868200 train_vq=0.000000 
+level=2 epoch=261/500 train_effect=0.887730 eval_effect=0.864201 train_vq=0.000000 
+level=2 epoch=262/500 train_effect=0.875178 eval_effect=0.858477 train_vq=0.000000 
+level=2 epoch=263/500 train_effect=0.890754 eval_effect=0.865514 train_vq=0.000000 
+level=2 epoch=264/500 train_effect=0.869803 eval_effect=0.864797 train_vq=0.000000 
+level=2 epoch=265/500 train_effect=0.905959 eval_effect=0.883314 train_vq=0.000000 
+level=2 epoch=266/500 train_effect=0.920887 eval_effect=0.932359 train_vq=0.000000 
+level=2 epoch=267/500 train_effect=0.899104 eval_effect=0.876815 train_vq=0.000000 
+level=2 epoch=268/500 train_effect=0.871507 eval_effect=0.911079 train_vq=0.000000 
+level=2 epoch=269/500 train_effect=0.866741 eval_effect=0.907736 train_vq=0.000000 
+level=2 epoch=270/500 train_effect=0.903133 eval_effect=0.880260 train_vq=0.000000 
+level=2 epoch=271/500 train_effect=0.922644 eval_effect=0.893774 train_vq=0.000000 
+level=2 epoch=272/500 train_effect=0.901840 eval_effect=0.862799 train_vq=0.000000 
+level=2 epoch=273/500 train_effect=0.880085 eval_effect=0.870448 train_vq=0.000000 
+level=2 epoch=274/500 train_effect=0.876746 eval_effect=0.868119 train_vq=0.000000 
+level=2 epoch=275/500 train_effect=0.903407 eval_effect=0.853639 train_vq=0.000000 
+level=2 epoch=276/500 train_effect=0.887111 eval_effect=0.857522 train_vq=0.000000 
+level=2 epoch=277/500 train_effect=0.894232 eval_effect=0.896595 train_vq=0.000000 
+level=2 epoch=278/500 train_effect=0.914997 eval_effect=0.887206 train_vq=0.000000 
+level=2 epoch=279/500 train_effect=0.887678 eval_effect=0.859208 train_vq=0.000000 
+level=2 epoch=280/500 train_effect=0.884480 eval_effect=0.864540 train_vq=0.000000 
+level=2 epoch=281/500 train_effect=0.873671 eval_effect=0.868593 train_vq=0.000000 
+level=2 epoch=282/500 train_effect=0.917289 eval_effect=0.857548 train_vq=0.000000 
+level=2 epoch=283/500 train_effect=0.900224 eval_effect=0.917691 train_vq=0.000000 
+level=2 epoch=284/500 train_effect=0.903076 eval_effect=0.869580 train_vq=0.000000 
+level=2 epoch=285/500 train_effect=0.875484 eval_effect=0.867002 train_vq=0.000000 
+level=2 epoch=286/500 train_effect=0.874943 eval_effect=0.862310 train_vq=0.000000 
+level=2 epoch=287/500 train_effect=0.879693 eval_effect=0.861102 train_vq=0.000000 
+level=2 epoch=288/500 train_effect=0.875932 eval_effect=0.856655 train_vq=0.000000 
+level=2 epoch=289/500 train_effect=0.907678 eval_effect=0.899015 train_vq=0.000000 
+level=2 epoch=290/500 train_effect=0.932047 eval_effect=0.875653 train_vq=0.000000 
+level=2 epoch=291/500 train_effect=0.900418 eval_effect=0.843442 train_vq=0.000000 
+level=2 epoch=292/500 train_effect=0.919288 eval_effect=0.883373 train_vq=0.000000 
+level=2 epoch=293/500 train_effect=0.860632 eval_effect=0.870716 train_vq=0.000000 
+level=2 epoch=294/500 train_effect=0.901999 eval_effect=0.876245 train_vq=0.000000 
+level=2 epoch=295/500 train_effect=0.916997 eval_effect=0.874442 train_vq=0.000000 
+level=2 epoch=296/500 train_effect=0.870725 eval_effect=0.908027 train_vq=0.000000 
+level=2 epoch=297/500 train_effect=0.902076 eval_effect=0.895545 train_vq=0.000000 
+level=2 epoch=298/500 train_effect=0.886104 eval_effect=0.871093 train_vq=0.000000 
+level=2 epoch=299/500 train_effect=0.906241 eval_effect=0.888311 train_vq=0.000000 
+level=2 epoch=300/500 train_effect=0.875913 eval_effect=0.872534 train_vq=0.000000 
+level=2 epoch=301/500 train_effect=0.888057 eval_effect=0.903911 train_vq=0.000000 
+level=2 epoch=302/500 train_effect=0.889112 eval_effect=0.957380 train_vq=0.000000 
+level=2 epoch=303/500 train_effect=0.881686 eval_effect=0.900973 train_vq=0.000000 
+level=2 epoch=304/500 train_effect=0.938093 eval_effect=0.901540 train_vq=0.000000 
+level=2 epoch=305/500 train_effect=0.889596 eval_effect=0.877161 train_vq=0.000000 
+level=2 epoch=306/500 train_effect=0.890561 eval_effect=0.858364 train_vq=0.000000 
+level=2 epoch=307/500 train_effect=0.859573 eval_effect=0.853295 train_vq=0.000000 
+level=2 epoch=308/500 train_effect=0.861913 eval_effect=0.863744 train_vq=0.000000 
+level=2 epoch=309/500 train_effect=0.907130 eval_effect=0.873770 train_vq=0.000000 
+level=2 epoch=310/500 train_effect=0.889863 eval_effect=0.895546 train_vq=0.000000 
+level=2 epoch=311/500 train_effect=0.885137 eval_effect=0.878019 train_vq=0.000000 
+level=2 epoch=312/500 train_effect=0.892605 eval_effect=0.867163 train_vq=0.000000 
+level=2 epoch=313/500 train_effect=0.892181 eval_effect=0.872051 train_vq=0.000000 
+level=2 epoch=314/500 train_effect=0.859924 eval_effect=0.854761 train_vq=0.000000 
+level=2 epoch=315/500 train_effect=0.885878 eval_effect=0.884082 train_vq=0.000000 
+level=2 epoch=316/500 train_effect=0.905886 eval_effect=0.857666 train_vq=0.000000 
+level=2 epoch=317/500 train_effect=0.892279 eval_effect=0.861533 train_vq=0.000000 
+level=2 epoch=318/500 train_effect=0.875369 eval_effect=0.910396 train_vq=0.000000 
+level=2 epoch=319/500 train_effect=0.891347 eval_effect=0.887674 train_vq=0.000000 
+level=2 epoch=320/500 train_effect=0.879561 eval_effect=0.903530 train_vq=0.000000 
+level=2 epoch=321/500 train_effect=0.872377 eval_effect=0.875662 train_vq=0.000000 
+level=2 epoch=322/500 train_effect=0.878673 eval_effect=0.876534 train_vq=0.000000 
+level=2 epoch=323/500 train_effect=0.910741 eval_effect=0.888923 train_vq=0.000000 
+level=2 epoch=324/500 train_effect=0.871162 eval_effect=0.873249 train_vq=0.000000 
+level=2 epoch=325/500 train_effect=0.884601 eval_effect=0.906714 train_vq=0.000000 
+level=2 epoch=326/500 train_effect=0.887611 eval_effect=0.882631 train_vq=0.000000 
+level=2 epoch=327/500 train_effect=0.914072 eval_effect=0.913331 train_vq=0.000000 
+level=2 epoch=328/500 train_effect=0.888195 eval_effect=0.909534 train_vq=0.000000 
+level=2 epoch=329/500 train_effect=0.895275 eval_effect=0.871165 train_vq=0.000000 
+level=2 epoch=330/500 train_effect=0.897950 eval_effect=0.880083 train_vq=0.000000 
+level=2 epoch=331/500 train_effect=0.895291 eval_effect=0.858451 train_vq=0.000000 
+level=2 epoch=332/500 train_effect=0.895236 eval_effect=0.865702 train_vq=0.000000 
+level=2 epoch=333/500 train_effect=0.893282 eval_effect=0.869719 train_vq=0.000000 
+level=2 epoch=334/500 train_effect=0.872271 eval_effect=0.879282 train_vq=0.000000 
+level=2 epoch=335/500 train_effect=0.870260 eval_effect=0.859363 train_vq=0.000000 
+level=2 epoch=336/500 train_effect=0.883410 eval_effect=0.866214 train_vq=0.000000 
+level=2 epoch=337/500 train_effect=0.905897 eval_effect=0.888658 train_vq=0.000000 
+level=2 epoch=338/500 train_effect=0.894953 eval_effect=0.884302 train_vq=0.000000 
+level=2 epoch=339/500 train_effect=0.880830 eval_effect=0.859775 train_vq=0.000000 
+level=2 epoch=340/500 train_effect=0.863943 eval_effect=0.851399 train_vq=0.000000 
+level=2 epoch=341/500 train_effect=0.863719 eval_effect=0.863887 train_vq=0.000000 
+level=2 epoch=342/500 train_effect=0.894295 eval_effect=0.852542 train_vq=0.000000 
+level=2 epoch=343/500 train_effect=0.887748 eval_effect=0.876867 train_vq=0.000000 
+level=2 epoch=344/500 train_effect=0.895837 eval_effect=0.877663 train_vq=0.000000 
+level=2 epoch=345/500 train_effect=0.903116 eval_effect=0.910758 train_vq=0.000000 
+level=2 epoch=346/500 train_effect=0.856408 eval_effect=0.861090 train_vq=0.000000 
+level=2 epoch=347/500 train_effect=0.896441 eval_effect=0.887664 train_vq=0.000000 
+level=2 epoch=348/500 train_effect=0.900010 eval_effect=0.868938 train_vq=0.000000 
+level=2 epoch=349/500 train_effect=0.870438 eval_effect=0.864458 train_vq=0.000000 
+level=2 epoch=350/500 train_effect=0.895296 eval_effect=0.855765 train_vq=0.000000 
+level=2 epoch=351/500 train_effect=0.877505 eval_effect=0.884956 train_vq=0.000000 
+level=2 epoch=352/500 train_effect=0.917140 eval_effect=0.879210 train_vq=0.000000 
+level=2 epoch=353/500 train_effect=0.899722 eval_effect=0.916946 train_vq=0.000000 
+level=2 epoch=354/500 train_effect=0.872168 eval_effect=0.860723 train_vq=0.000000 
+level=2 epoch=355/500 train_effect=0.877709 eval_effect=0.862846 train_vq=0.000000 
+level=2 epoch=356/500 train_effect=0.855011 eval_effect=0.858006 train_vq=0.000000 
+level=2 epoch=357/500 train_effect=0.879681 eval_effect=0.863504 train_vq=0.000000 
+level=2 epoch=358/500 train_effect=0.910941 eval_effect=0.854586 train_vq=0.000000 
+level=2 epoch=359/500 train_effect=0.896134 eval_effect=0.845224 train_vq=0.000000 
+level=2 epoch=360/500 train_effect=0.853172 eval_effect=0.858462 train_vq=0.000000 
+level=2 epoch=361/500 train_effect=0.871716 eval_effect=0.849058 train_vq=0.000000 
+level=2 epoch=362/500 train_effect=0.863362 eval_effect=0.847003 train_vq=0.000000 
+level=2 epoch=363/500 train_effect=0.910923 eval_effect=0.904453 train_vq=0.000000 
+level=2 epoch=364/500 train_effect=0.872305 eval_effect=0.837136 train_vq=0.000000 
+level=2 epoch=365/500 train_effect=0.874595 eval_effect=0.859542 train_vq=0.000000 
+level=2 epoch=366/500 train_effect=0.902020 eval_effect=0.878826 train_vq=0.000000 
+level=2 epoch=367/500 train_effect=0.876063 eval_effect=0.848579 train_vq=0.000000 
+level=2 epoch=368/500 train_effect=0.856446 eval_effect=0.850253 train_vq=0.000000 
+level=2 epoch=369/500 train_effect=0.877220 eval_effect=0.879557 train_vq=0.000000 
+level=2 epoch=370/500 train_effect=0.881975 eval_effect=0.867766 train_vq=0.000000 
+level=2 epoch=371/500 train_effect=0.893779 eval_effect=0.862598 train_vq=0.000000 
+level=2 epoch=372/500 train_effect=0.888010 eval_effect=0.838889 train_vq=0.000000 
+level=2 epoch=373/500 train_effect=0.861224 eval_effect=0.857744 train_vq=0.000000 
+level=2 epoch=374/500 train_effect=0.868596 eval_effect=0.867116 train_vq=0.000000 
+level=2 epoch=375/500 train_effect=0.895765 eval_effect=0.878242 train_vq=0.000000 
+level=2 epoch=376/500 train_effect=0.884459 eval_effect=0.861471 train_vq=0.000000 
+level=2 epoch=377/500 train_effect=0.880343 eval_effect=0.860083 train_vq=0.000000 
+level=2 epoch=378/500 train_effect=0.876541 eval_effect=0.879734 train_vq=0.000000 
+level=2 epoch=379/500 train_effect=0.883984 eval_effect=0.881664 train_vq=0.000000 
+level=2 epoch=380/500 train_effect=0.880278 eval_effect=0.896134 train_vq=0.000000 
+level=2 epoch=381/500 train_effect=0.864998 eval_effect=0.853860 train_vq=0.000000 
+level=2 epoch=382/500 train_effect=0.925227 eval_effect=0.884620 train_vq=0.000000 
+level=2 epoch=383/500 train_effect=0.906661 eval_effect=0.858860 train_vq=0.000000 
+level=2 epoch=384/500 train_effect=0.885225 eval_effect=0.858363 train_vq=0.000000 
+level=2 epoch=385/500 train_effect=0.863790 eval_effect=0.872774 train_vq=0.000000 
+level=2 epoch=386/500 train_effect=0.881371 eval_effect=0.852716 train_vq=0.000000 
+level=2 epoch=387/500 train_effect=0.917751 eval_effect=0.878930 train_vq=0.000000 
+level=2 epoch=388/500 train_effect=0.915594 eval_effect=0.850708 train_vq=0.000000 
+level=2 epoch=389/500 train_effect=0.884776 eval_effect=0.845315 train_vq=0.000000 
+level=2 epoch=390/500 train_effect=0.879242 eval_effect=0.840445 train_vq=0.000000 
+level=2 epoch=391/500 train_effect=0.868937 eval_effect=0.844233 train_vq=0.000000 
+level=2 epoch=392/500 train_effect=0.888494 eval_effect=0.867611 train_vq=0.000000 
+level=2 epoch=393/500 train_effect=0.890281 eval_effect=0.853553 train_vq=0.000000 
+level=2 epoch=394/500 train_effect=0.872231 eval_effect=0.865308 train_vq=0.000000 
+level=2 epoch=395/500 train_effect=0.875818 eval_effect=0.859988 train_vq=0.000000 
+level=2 epoch=396/500 train_effect=0.914371 eval_effect=0.868550 train_vq=0.000000 
+level=2 epoch=397/500 train_effect=0.883697 eval_effect=0.854367 train_vq=0.000000 
+level=2 epoch=398/500 train_effect=0.882966 eval_effect=0.858473 train_vq=0.000000 
+level=2 epoch=399/500 train_effect=0.873253 eval_effect=0.861666 train_vq=0.000000 
+level=2 epoch=400/500 train_effect=0.911978 eval_effect=0.923139 train_vq=0.000000 
+level=2 epoch=401/500 train_effect=0.879366 eval_effect=0.851126 train_vq=0.000000 
+level=2 epoch=402/500 train_effect=0.883080 eval_effect=0.870671 train_vq=0.000000 
+level=2 epoch=403/500 train_effect=0.878416 eval_effect=0.859371 train_vq=0.000000 
+level=2 epoch=404/500 train_effect=0.870602 eval_effect=0.863402 train_vq=0.000000 
+level=2 epoch=405/500 train_effect=0.865245 eval_effect=0.861334 train_vq=0.000000 
+level=2 epoch=406/500 train_effect=0.878935 eval_effect=0.844717 train_vq=0.000000 
+level=2 epoch=407/500 train_effect=0.885491 eval_effect=0.868300 train_vq=0.000000 
+level=2 epoch=408/500 train_effect=0.888251 eval_effect=0.849237 train_vq=0.000000 
+level=2 epoch=409/500 train_effect=0.877327 eval_effect=0.845015 train_vq=0.000000 
+level=2 epoch=410/500 train_effect=0.868427 eval_effect=0.891037 train_vq=0.000000 
+level=2 epoch=411/500 train_effect=0.899483 eval_effect=0.869032 train_vq=0.000000 
+level=2 epoch=412/500 train_effect=0.862536 eval_effect=0.866179 train_vq=0.000000 
+level=2 epoch=413/500 train_effect=0.888972 eval_effect=0.855060 train_vq=0.000000 
+level=2 epoch=414/500 train_effect=0.878901 eval_effect=0.850389 train_vq=0.000000 
+level=2 epoch=415/500 train_effect=0.875436 eval_effect=0.826892 train_vq=0.000000 
+level=2 epoch=416/500 train_effect=0.870734 eval_effect=0.849731 train_vq=0.000000 
+level=2 epoch=417/500 train_effect=0.871257 eval_effect=0.849795 train_vq=0.000000 
+level=2 epoch=418/500 train_effect=0.877742 eval_effect=0.887443 train_vq=0.000000 
+level=2 epoch=419/500 train_effect=0.870716 eval_effect=0.872190 train_vq=0.000000 
+level=2 epoch=420/500 train_effect=0.889283 eval_effect=0.868372 train_vq=0.000000 
+level=2 epoch=421/500 train_effect=0.860570 eval_effect=0.850459 train_vq=0.000000 
+level=2 epoch=422/500 train_effect=0.886459 eval_effect=0.889139 train_vq=0.000000 
+level=2 epoch=423/500 train_effect=0.891540 eval_effect=0.882848 train_vq=0.000000 
+level=2 epoch=424/500 train_effect=0.875512 eval_effect=0.882758 train_vq=0.000000 
+level=2 epoch=425/500 train_effect=0.890098 eval_effect=0.859685 train_vq=0.000000 
+level=2 epoch=426/500 train_effect=0.902118 eval_effect=0.835859 train_vq=0.000000 
+level=2 epoch=427/500 train_effect=0.885466 eval_effect=0.870886 train_vq=0.000000 
+level=2 epoch=428/500 train_effect=0.859308 eval_effect=0.864747 train_vq=0.000000 
+level=2 epoch=429/500 train_effect=0.879965 eval_effect=0.888792 train_vq=0.000000 
+level=2 epoch=430/500 train_effect=0.880254 eval_effect=0.848144 train_vq=0.000000 
+level=2 epoch=431/500 train_effect=0.873849 eval_effect=0.863342 train_vq=0.000000 
+level=2 epoch=432/500 train_effect=0.878440 eval_effect=0.888886 train_vq=0.000000 
+level=2 epoch=433/500 train_effect=0.906359 eval_effect=0.849865 train_vq=0.000000 
+level=2 epoch=434/500 train_effect=0.861087 eval_effect=0.867701 train_vq=0.000000 
+level=2 epoch=435/500 train_effect=0.891047 eval_effect=0.875411 train_vq=0.000000 
+level=2 epoch=436/500 train_effect=0.882829 eval_effect=0.842940 train_vq=0.000000 
+level=2 epoch=437/500 train_effect=0.881073 eval_effect=0.850955 train_vq=0.000000 
+level=2 epoch=438/500 train_effect=0.887782 eval_effect=0.861161 train_vq=0.000000 
+level=2 epoch=439/500 train_effect=0.893624 eval_effect=0.863928 train_vq=0.000000 
+level=2 epoch=440/500 train_effect=0.873030 eval_effect=0.857725 train_vq=0.000000 
+level=2 epoch=441/500 train_effect=0.858596 eval_effect=0.861392 train_vq=0.000000 
+level=2 epoch=442/500 train_effect=0.881128 eval_effect=0.856839 train_vq=0.000000 
+level=2 epoch=443/500 train_effect=0.882849 eval_effect=0.833268 train_vq=0.000000 
+level=2 epoch=444/500 train_effect=0.890521 eval_effect=0.873328 train_vq=0.000000 
+level=2 epoch=445/500 train_effect=0.884889 eval_effect=0.840076 train_vq=0.000000 
+level=2 epoch=446/500 train_effect=0.890812 eval_effect=0.875929 train_vq=0.000000 
+level=2 epoch=447/500 train_effect=0.882512 eval_effect=0.834875 train_vq=0.000000 
+level=2 epoch=448/500 train_effect=0.860384 eval_effect=0.853428 train_vq=0.000000 
+level=2 epoch=449/500 train_effect=0.869195 eval_effect=0.856911 train_vq=0.000000 
+level=2 epoch=450/500 train_effect=0.867271 eval_effect=0.873110 train_vq=0.000000 
+level=2 epoch=451/500 train_effect=0.896929 eval_effect=0.889796 train_vq=0.000000 
+level=2 epoch=452/500 train_effect=0.889891 eval_effect=0.864034 train_vq=0.000000 
+level=2 epoch=453/500 train_effect=0.872934 eval_effect=0.866058 train_vq=0.000000 
+level=2 epoch=454/500 train_effect=0.851865 eval_effect=0.873627 train_vq=0.000000 
+level=2 epoch=455/500 train_effect=0.873505 eval_effect=0.847608 train_vq=0.000000 
+level=2 epoch=456/500 train_effect=0.882407 eval_effect=0.863947 train_vq=0.000000 
+level=2 epoch=457/500 train_effect=0.856245 eval_effect=0.853747 train_vq=0.000000 
+level=2 epoch=458/500 train_effect=0.864873 eval_effect=0.844574 train_vq=0.000000 
+level=2 epoch=459/500 train_effect=0.900753 eval_effect=0.885269 train_vq=0.000000 
+level=2 epoch=460/500 train_effect=0.860974 eval_effect=0.840149 train_vq=0.000000 
+level=2 epoch=461/500 train_effect=0.878059 eval_effect=0.866348 train_vq=0.000000 
+level=2 epoch=462/500 train_effect=0.887206 eval_effect=0.845849 train_vq=0.000000 
+level=2 epoch=463/500 train_effect=0.897982 eval_effect=0.849137 train_vq=0.000000 
+level=2 epoch=464/500 train_effect=0.872929 eval_effect=0.821356 train_vq=0.000000 
+level=2 epoch=465/500 train_effect=0.858296 eval_effect=0.868889 train_vq=0.000000 
+level=2 epoch=466/500 train_effect=0.883665 eval_effect=0.866858 train_vq=0.000000 
+level=2 epoch=467/500 train_effect=0.871202 eval_effect=0.878534 train_vq=0.000000 
+level=2 epoch=468/500 train_effect=0.871179 eval_effect=0.892227 train_vq=0.000000 
+level=2 epoch=469/500 train_effect=0.867632 eval_effect=0.861726 train_vq=0.000000 
+level=2 epoch=470/500 train_effect=0.876007 eval_effect=0.842931 train_vq=0.000000 
+level=2 epoch=471/500 train_effect=0.907694 eval_effect=0.915378 train_vq=0.000000 
+level=2 epoch=472/500 train_effect=0.877279 eval_effect=0.849156 train_vq=0.000000 
+level=2 epoch=473/500 train_effect=0.875992 eval_effect=0.857845 train_vq=0.000000 
+level=2 epoch=474/500 train_effect=0.863996 eval_effect=0.857893 train_vq=0.000000 
+level=2 epoch=475/500 train_effect=0.892598 eval_effect=0.815371 train_vq=0.000000 
+level=2 epoch=476/500 train_effect=0.881500 eval_effect=0.878133 train_vq=0.000000 
+level=2 epoch=477/500 train_effect=0.863790 eval_effect=0.841899 train_vq=0.000000 
+level=2 epoch=478/500 train_effect=0.868285 eval_effect=0.857603 train_vq=0.000000 
+level=2 epoch=479/500 train_effect=0.868767 eval_effect=0.858703 train_vq=0.000000 
+level=2 epoch=480/500 train_effect=0.872822 eval_effect=0.874475 train_vq=0.000000 
+level=2 epoch=481/500 train_effect=0.883027 eval_effect=0.850409 train_vq=0.000000 
+level=2 epoch=482/500 train_effect=0.871993 eval_effect=0.839045 train_vq=0.000000 
+level=2 epoch=483/500 train_effect=0.862969 eval_effect=0.845078 train_vq=0.000000 
+level=2 epoch=484/500 train_effect=0.876520 eval_effect=0.859905 train_vq=0.000000 
+level=2 epoch=485/500 train_effect=0.858657 eval_effect=0.846524 train_vq=0.000000 
+level=2 epoch=486/500 train_effect=0.867551 eval_effect=0.862280 train_vq=0.000000 
+level=2 epoch=487/500 train_effect=0.893608 eval_effect=0.897769 train_vq=0.000000 
+level=2 epoch=488/500 train_effect=0.878405 eval_effect=0.835232 train_vq=0.000000 
+level=2 epoch=489/500 train_effect=0.858823 eval_effect=0.844140 train_vq=0.000000 
+level=2 epoch=490/500 train_effect=0.879883 eval_effect=0.837837 train_vq=0.000000 
+level=2 epoch=491/500 train_effect=0.885914 eval_effect=0.852970 train_vq=0.000000 
+level=2 epoch=492/500 train_effect=0.874424 eval_effect=0.846662 train_vq=0.000000 
+level=2 epoch=493/500 train_effect=0.863699 eval_effect=0.863900 train_vq=0.000000 
+level=2 epoch=494/500 train_effect=0.905831 eval_effect=0.868362 train_vq=0.000000 
+level=2 epoch=495/500 train_effect=0.894118 eval_effect=0.879548 train_vq=0.000000 
+level=2 epoch=496/500 train_effect=0.873535 eval_effect=0.867937 train_vq=0.000000 
+level=2 epoch=497/500 train_effect=0.873903 eval_effect=0.841177 train_vq=0.000000 
+level=2 epoch=498/500 train_effect=0.852829 eval_effect=0.853101 train_vq=0.000000 
+/home/kubra/DeepSym/models.py:143: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  encoder_state = torch.load(
+/home/kubra/DeepSym/models.py:147: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  decoder_state = torch.load(
+/home/kubra/DeepSym/data.py:9: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.observation = torch.load("data/img/obs_prev_z.pt").unsqueeze(1)
+/home/kubra/DeepSym/data.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.action = torch.load("data/img/action.pt")
+/home/kubra/DeepSym/data.py:12: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.effect = torch.load("data/img/delta_pix_1.pt")
+/home/kubra/DeepSym/data.py:34: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.observation = torch.load("data/img/obs_prev_z.pt")
+/home/kubra/DeepSym/data.py:38: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.effect = torch.load("data/img/delta_pix_3.pt")
+/home/kubra/DeepSym/poster_eval.py:467: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  effect_labels = torch.load(labels_path, map_location="cpu").detach().cpu().numpy().astype(int)
+{
+  "model": "original",
+  "seed": 5,
+  "level1_weighted_mse": 0.4702629527946313,
+  "level2_weighted_mse": 0.8154318634033203,
+  "object_used_codes": 3,
+  "relation_used_codes": 2,
+  "object_affordance_purity": 0.7995833333333333,
+  "tuple_effect_purity": 0.6716,
+  "poster_dir": "/home/kubra/DeepSym/save/poster_5seed/original/seed_5/poster"
+}
+/home/kubra/DeepSym/data.py:9: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.observation = torch.load("data/img/obs_prev_z.pt").unsqueeze(1)
+/home/kubra/DeepSym/data.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.action = torch.load("data/img/action.pt")
+/home/kubra/DeepSym/data.py:12: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.effect = torch.load("data/img/delta_pix_1.pt")
+/home/kubra/DeepSym/.venv/lib/python3.8/site-packages/torch/autograd/graph.py:769: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at ../aten/src/ATen/Context.cpp:185.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+/home/kubra/DeepSym/models.py:143: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  encoder_state = torch.load(
+/home/kubra/DeepSym/models.py:147: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  decoder_state = torch.load(
+/home/kubra/DeepSym/data.py:34: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.observation = torch.load("data/img/obs_prev_z.pt")
+/home/kubra/DeepSym/data.py:38: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.effect = torch.load("data/img/delta_pix_3.pt")
+/home/kubra/DeepSym/blocks.py:50: UserWarning: Deterministic behavior was enabled with either `torch.use_deterministic_algorithms(True)` or `at::Context::setDeterministicAlgorithms(true)`, but this operation is not deterministic because it uses CuBLAS and you have CUDA >= 10.2. To enable deterministic behavior in this case, you must set an environment variable before running your PyTorch application: CUBLAS_WORKSPACE_CONFIG=:4096:8 or CUBLAS_WORKSPACE_CONFIG=:16:8. For more information, go to https://docs.nvidia.com/cuda/cublas/index.html#results-reproducibility (Triggered internally at ../aten/src/ATen/Context.cpp:185.)
+  x = torch.nn.functional.linear(x, self.weight, self.bias)
+level=2 epoch=499/500 train_effect=0.878411 eval_effect=0.852211 train_vq=0.000000 
+level=2 epoch=500/500 train_effect=0.872407 eval_effect=0.852630 train_vq=0.000000 
+Best level-2 deterministic weighted MSE: 0.81537109
+
+Running poster evaluation:
+  /home/kubra/DeepSym/.venv/bin/python /home/kubra/DeepSym/poster_eval.py -opts /home/kubra/DeepSym/save/poster_5seed/original/seed_5/opts.yaml --model original

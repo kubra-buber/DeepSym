@@ -1,0 +1,15 @@
+[
+  {
+    "step": 1901.0,
+    "new_active_codes": 2.0,
+    "support": 15.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.2263137847185135,
+    "distance_p90": 0.5143071413040161,
+    "distance_p95": 1.1273667812347412,
+    "distance_max": 3.371735095977783,
+    "surprise_support": 15.0
+  }
+]
