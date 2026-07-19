@@ -1,0 +1,37 @@
+# Merge these settings into your existing opts.yaml.
+# The architecture/training keys already in opts.yaml remain unchanged.
+
+# Identical effect loss for all three bottlenecks.
+effect_weights1: [1.0, 1.0, 10.0]
+effect_weights2: [1.0, 1.0, 5.0, 1.0, 1.0, 1.0]
+
+# Identical EMA-VQ settings for fixed and dynamic VQ.
+vq_commitment_cost: 0.25
+vq_decay: 0.99
+vq_epsilon: 1.0e-5
+vq_num_embeddings1: 4   # normally 2**code1_dim
+vq_num_embeddings2: 2   # normally 2**code2_dim
+
+# Stabilized dynamic growth. Distances are squared Euclidean distances.
+dynamic_initial_embeddings: 1
+dynamic_warmup_steps: 200
+dynamic_growth_interval: 100
+dynamic_min_support: 8
+dynamic_min_support_fraction: 0.05
+# The support condition must hold at consecutive interval-spaced checks.
+dynamic_required_checks: 2
+surprise_threshold_1: 1.0
+surprise_threshold_2: 1.0
+
+# Poster labels and semantic evaluation.
+poster_object_names:
+  - Sphere
+  - Cube
+  - Vertical cylinder
+  - Horizontal cylinder
+  - Cup
+# Cube and vertical cylinder share the same affordance-level target group.
+poster_object_target_groups: [0, 1, 1, 2, 3]
+
+num_heights: 7
+num_stacks: 7

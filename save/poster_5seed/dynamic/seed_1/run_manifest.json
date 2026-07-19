@@ -1,0 +1,8 @@
+{
+  "model": "dynamic",
+  "seed": 1,
+  "save_dir": "/home/kubra/DeepSym/save/poster_pilot/dynamic/seed_1",
+  "levels": "both",
+  "device": "cuda",
+  "deterministic": true
+}

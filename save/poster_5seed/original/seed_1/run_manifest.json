@@ -1,0 +1,8 @@
+{
+  "model": "original",
+  "seed": 1,
+  "save_dir": "/home/kubra/DeepSym/save/poster_pilot/original/seed_1",
+  "levels": "both",
+  "device": "cuda",
+  "deterministic": true
+}
