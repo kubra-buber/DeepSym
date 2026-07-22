@@ -1,0 +1,50 @@
+Run: /home/kubra/DeepSym/save/poster_5seed/dynamic/seed_1
+Model: dynamic
+Seed: 1
+
+==============================================================================
+stack16
+below=objtype0 above=objtype2 relation=relation0
+leaf=37
+matching canonical pairs=58
+
+Exact decision path:
+  below_is_objtype2 <= 0.500000
+  below_is_objtype0 > 0.500000
+  above_is_objtype3 <= 0.500000
+  relation_is_relation1 <= 0.500000
+  above_is_objtype0 <= 0.500000
+  above_is_objtype1 <= 0.500000
+
+Leaf outcome distribution:
+  inserted     count=  40 p=0.689655
+  stacked      count=  12 p=0.206897
+  tumble2      count=   6 p=0.103448
+
+Selected canonical examples:
+  pair=2262: below=Cup size 6, above=Cube size 3, label=tumble2
+  pair=2272: below=Cup size 6, above=Vertical cylinder size 3, label=inserted
+  pair=2313: below=Cup size 7, above=Cube size 4, label=stacked
+
+==============================================================================
+stack20
+below=objtype0 above=objtype2 relation=relation1
+leaf=43
+matching canonical pairs=142
+
+Exact decision path:
+  below_is_objtype2 <= 0.500000
+  below_is_objtype0 > 0.500000
+  above_is_objtype3 <= 0.500000
+  relation_is_relation1 > 0.500000
+  above_is_objtype0 <= 0.500000
+  above_is_objtype2 > 0.500000
+
+Leaf outcome distribution:
+  stacked      count= 139 p=0.978873
+  tumble2      count=   3 p=0.021127
+
+Selected canonical examples:
+  pair=2214: below=Cup size 5, above=Cube size 5, label=stacked
+  pair=2215: below=Cup size 5, above=Cube size 6, label=stacked
+  pair=2224: below=Cup size 5, above=Vertical cylinder size 5, label=stacked

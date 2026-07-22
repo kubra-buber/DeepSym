@@ -1,0 +1,201 @@
+{
+  "run_dir": "/home/kubra/DeepSym/save/poster_5seed/dynamic/seed_1",
+  "model": "dynamic",
+  "seed": 1,
+  "n_object_codes": 4,
+  "n_relation_codes": 2,
+  "role_convention": "first/below, second/above",
+  "tuple_results": [
+    {
+      "run_dir": "/home/kubra/DeepSym/save/poster_5seed/dynamic/seed_1",
+      "below_symbol": 0,
+      "above_symbol": 2,
+      "relation_symbol": 0,
+      "leaf_id": 37,
+      "domain_actions": [
+        "stack16"
+      ],
+      "path": [
+        {
+          "feature_index": 2,
+          "feature_name": "below_is_objtype2",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 0,
+          "feature_name": "below_is_objtype0",
+          "operator": ">",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 7,
+          "feature_name": "above_is_objtype3",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 9,
+          "feature_name": "relation_is_relation1",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 4,
+          "feature_name": "above_is_objtype0",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 5,
+          "feature_name": "above_is_objtype1",
+          "operator": "<=",
+          "threshold": 0.5
+        }
+      ],
+      "distribution": [
+        {
+          "effect": "inserted",
+          "count": 40,
+          "probability": 0.6896551724137931
+        },
+        {
+          "effect": "stacked",
+          "count": 12,
+          "probability": 0.20689655172413793
+        },
+        {
+          "effect": "tumble2",
+          "count": 6,
+          "probability": 0.10344827586206896
+        }
+      ],
+      "num_matching_canonical_pairs": 58,
+      "selected_examples": [
+        {
+          "pair_index": 2262,
+          "below_canonical": 45,
+          "above_canonical": 12,
+          "below_type": 4,
+          "below_size": 6,
+          "above_type": 1,
+          "above_size": 3,
+          "effect_label": "tumble2"
+        },
+        {
+          "pair_index": 2272,
+          "below_canonical": 45,
+          "above_canonical": 22,
+          "below_type": 4,
+          "below_size": 6,
+          "above_type": 2,
+          "above_size": 3,
+          "effect_label": "inserted"
+        },
+        {
+          "pair_index": 2313,
+          "below_canonical": 46,
+          "above_canonical": 13,
+          "below_type": 4,
+          "below_size": 7,
+          "above_type": 1,
+          "above_size": 4,
+          "effect_label": "stacked"
+        }
+      ]
+    },
+    {
+      "run_dir": "/home/kubra/DeepSym/save/poster_5seed/dynamic/seed_1",
+      "below_symbol": 0,
+      "above_symbol": 2,
+      "relation_symbol": 1,
+      "leaf_id": 43,
+      "domain_actions": [
+        "stack20"
+      ],
+      "path": [
+        {
+          "feature_index": 2,
+          "feature_name": "below_is_objtype2",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 0,
+          "feature_name": "below_is_objtype0",
+          "operator": ">",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 7,
+          "feature_name": "above_is_objtype3",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 9,
+          "feature_name": "relation_is_relation1",
+          "operator": ">",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 4,
+          "feature_name": "above_is_objtype0",
+          "operator": "<=",
+          "threshold": 0.5
+        },
+        {
+          "feature_index": 6,
+          "feature_name": "above_is_objtype2",
+          "operator": ">",
+          "threshold": 0.5
+        }
+      ],
+      "distribution": [
+        {
+          "effect": "stacked",
+          "count": 139,
+          "probability": 0.9788732394366197
+        },
+        {
+          "effect": "tumble2",
+          "count": 3,
+          "probability": 0.02112676056338028
+        }
+      ],
+      "num_matching_canonical_pairs": 142,
+      "selected_examples": [
+        {
+          "pair_index": 2214,
+          "below_canonical": 44,
+          "above_canonical": 14,
+          "below_type": 4,
+          "below_size": 5,
+          "above_type": 1,
+          "above_size": 5,
+          "effect_label": "stacked"
+        },
+        {
+          "pair_index": 2215,
+          "below_canonical": 44,
+          "above_canonical": 15,
+          "below_type": 4,
+          "below_size": 5,
+          "above_type": 1,
+          "above_size": 6,
+          "effect_label": "stacked"
+        },
+        {
+          "pair_index": 2224,
+          "below_canonical": 44,
+          "above_canonical": 24,
+          "below_type": 4,
+          "below_size": 5,
+          "above_type": 2,
+          "above_size": 5,
+          "effect_label": "stacked"
+        }
+      ]
+    }
+  ]
+}

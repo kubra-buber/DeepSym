@@ -1,0 +1,201 @@
+tuple_below_symbol,tuple_above_symbol,tuple_relation_symbol,pair_index,below_type,below_type_name,below_size,above_type,above_type_name,above_size,effect_label
+0,2,0,2012,4,Cup,1,1,Cube,3,stacked
+0,2,0,2017,4,Cup,1,1,Cube,8,stacked
+0,2,0,2018,4,Cup,1,1,Cube,9,stacked
+0,2,0,2028,4,Cup,1,2,Vertical cylinder,9,stacked
+0,2,0,2029,4,Cup,1,2,Vertical cylinder,10,stacked
+0,2,0,2068,4,Cup,2,1,Cube,9,stacked
+0,2,0,2110,4,Cup,3,1,Cube,1,stacked
+0,2,0,2160,4,Cup,4,1,Cube,1,inserted
+0,2,0,2170,4,Cup,4,2,Vertical cylinder,1,stacked
+0,2,0,2210,4,Cup,5,1,Cube,1,inserted
+0,2,0,2220,4,Cup,5,2,Vertical cylinder,1,inserted
+0,2,0,2221,4,Cup,5,2,Vertical cylinder,2,tumble2
+0,2,0,2260,4,Cup,6,1,Cube,1,inserted
+0,2,0,2261,4,Cup,6,1,Cube,2,inserted
+0,2,0,2262,4,Cup,6,1,Cube,3,tumble2
+0,2,0,2270,4,Cup,6,2,Vertical cylinder,1,inserted
+0,2,0,2271,4,Cup,6,2,Vertical cylinder,2,inserted
+0,2,0,2272,4,Cup,6,2,Vertical cylinder,3,inserted
+0,2,0,2310,4,Cup,7,1,Cube,1,inserted
+0,2,0,2311,4,Cup,7,1,Cube,2,inserted
+0,2,0,2312,4,Cup,7,1,Cube,3,inserted
+0,2,0,2313,4,Cup,7,1,Cube,4,stacked
+0,2,0,2320,4,Cup,7,2,Vertical cylinder,1,inserted
+0,2,0,2321,4,Cup,7,2,Vertical cylinder,2,inserted
+0,2,0,2322,4,Cup,7,2,Vertical cylinder,3,inserted
+0,2,0,2323,4,Cup,7,2,Vertical cylinder,4,stacked
+0,2,0,2360,4,Cup,8,1,Cube,1,inserted
+0,2,0,2361,4,Cup,8,1,Cube,2,inserted
+0,2,0,2362,4,Cup,8,1,Cube,3,inserted
+0,2,0,2363,4,Cup,8,1,Cube,4,inserted
+0,2,0,2364,4,Cup,8,1,Cube,5,stacked
+0,2,0,2370,4,Cup,8,2,Vertical cylinder,1,inserted
+0,2,0,2371,4,Cup,8,2,Vertical cylinder,2,inserted
+0,2,0,2372,4,Cup,8,2,Vertical cylinder,3,inserted
+0,2,0,2373,4,Cup,8,2,Vertical cylinder,4,inserted
+0,2,0,2374,4,Cup,8,2,Vertical cylinder,5,stacked
+0,2,0,2410,4,Cup,9,1,Cube,1,inserted
+0,2,0,2411,4,Cup,9,1,Cube,2,inserted
+0,2,0,2412,4,Cup,9,1,Cube,3,tumble2
+0,2,0,2413,4,Cup,9,1,Cube,4,inserted
+0,2,0,2414,4,Cup,9,1,Cube,5,inserted
+0,2,0,2420,4,Cup,9,2,Vertical cylinder,1,inserted
+0,2,0,2421,4,Cup,9,2,Vertical cylinder,2,inserted
+0,2,0,2422,4,Cup,9,2,Vertical cylinder,3,inserted
+0,2,0,2423,4,Cup,9,2,Vertical cylinder,4,inserted
+0,2,0,2424,4,Cup,9,2,Vertical cylinder,5,tumble2
+0,2,0,2460,4,Cup,10,1,Cube,1,inserted
+0,2,0,2461,4,Cup,10,1,Cube,2,inserted
+0,2,0,2462,4,Cup,10,1,Cube,3,inserted
+0,2,0,2463,4,Cup,10,1,Cube,4,inserted
+0,2,0,2464,4,Cup,10,1,Cube,5,inserted
+0,2,0,2465,4,Cup,10,1,Cube,6,tumble2
+0,2,0,2470,4,Cup,10,2,Vertical cylinder,1,inserted
+0,2,0,2471,4,Cup,10,2,Vertical cylinder,2,inserted
+0,2,0,2472,4,Cup,10,2,Vertical cylinder,3,inserted
+0,2,0,2473,4,Cup,10,2,Vertical cylinder,4,inserted
+0,2,0,2474,4,Cup,10,2,Vertical cylinder,5,tumble2
+0,2,0,2475,4,Cup,10,2,Vertical cylinder,6,inserted
+0,2,1,2010,4,Cup,1,1,Cube,1,stacked
+0,2,1,2011,4,Cup,1,1,Cube,2,stacked
+0,2,1,2013,4,Cup,1,1,Cube,4,stacked
+0,2,1,2014,4,Cup,1,1,Cube,5,stacked
+0,2,1,2015,4,Cup,1,1,Cube,6,stacked
+0,2,1,2016,4,Cup,1,1,Cube,7,stacked
+0,2,1,2019,4,Cup,1,1,Cube,10,stacked
+0,2,1,2020,4,Cup,1,2,Vertical cylinder,1,stacked
+0,2,1,2021,4,Cup,1,2,Vertical cylinder,2,stacked
+0,2,1,2022,4,Cup,1,2,Vertical cylinder,3,stacked
+0,2,1,2023,4,Cup,1,2,Vertical cylinder,4,stacked
+0,2,1,2024,4,Cup,1,2,Vertical cylinder,5,stacked
+0,2,1,2025,4,Cup,1,2,Vertical cylinder,6,stacked
+0,2,1,2026,4,Cup,1,2,Vertical cylinder,7,stacked
+0,2,1,2027,4,Cup,1,2,Vertical cylinder,8,stacked
+0,2,1,2060,4,Cup,2,1,Cube,1,stacked
+0,2,1,2061,4,Cup,2,1,Cube,2,stacked
+0,2,1,2062,4,Cup,2,1,Cube,3,stacked
+0,2,1,2063,4,Cup,2,1,Cube,4,stacked
+0,2,1,2064,4,Cup,2,1,Cube,5,stacked
+0,2,1,2065,4,Cup,2,1,Cube,6,stacked
+0,2,1,2066,4,Cup,2,1,Cube,7,stacked
+0,2,1,2067,4,Cup,2,1,Cube,8,stacked
+0,2,1,2069,4,Cup,2,1,Cube,10,stacked
+0,2,1,2070,4,Cup,2,2,Vertical cylinder,1,stacked
+0,2,1,2071,4,Cup,2,2,Vertical cylinder,2,stacked
+0,2,1,2072,4,Cup,2,2,Vertical cylinder,3,stacked
+0,2,1,2073,4,Cup,2,2,Vertical cylinder,4,stacked
+0,2,1,2074,4,Cup,2,2,Vertical cylinder,5,stacked
+0,2,1,2075,4,Cup,2,2,Vertical cylinder,6,stacked
+0,2,1,2076,4,Cup,2,2,Vertical cylinder,7,stacked
+0,2,1,2077,4,Cup,2,2,Vertical cylinder,8,stacked
+0,2,1,2078,4,Cup,2,2,Vertical cylinder,9,stacked
+0,2,1,2079,4,Cup,2,2,Vertical cylinder,10,stacked
+0,2,1,2111,4,Cup,3,1,Cube,2,stacked
+0,2,1,2112,4,Cup,3,1,Cube,3,stacked
+0,2,1,2113,4,Cup,3,1,Cube,4,stacked
+0,2,1,2114,4,Cup,3,1,Cube,5,stacked
+0,2,1,2115,4,Cup,3,1,Cube,6,stacked
+0,2,1,2116,4,Cup,3,1,Cube,7,stacked
+0,2,1,2117,4,Cup,3,1,Cube,8,stacked
+0,2,1,2118,4,Cup,3,1,Cube,9,stacked
+0,2,1,2119,4,Cup,3,1,Cube,10,stacked
+0,2,1,2120,4,Cup,3,2,Vertical cylinder,1,stacked
+0,2,1,2121,4,Cup,3,2,Vertical cylinder,2,stacked
+0,2,1,2122,4,Cup,3,2,Vertical cylinder,3,stacked
+0,2,1,2123,4,Cup,3,2,Vertical cylinder,4,stacked
+0,2,1,2124,4,Cup,3,2,Vertical cylinder,5,stacked
+0,2,1,2125,4,Cup,3,2,Vertical cylinder,6,stacked
+0,2,1,2126,4,Cup,3,2,Vertical cylinder,7,stacked
+0,2,1,2127,4,Cup,3,2,Vertical cylinder,8,stacked
+0,2,1,2128,4,Cup,3,2,Vertical cylinder,9,stacked
+0,2,1,2129,4,Cup,3,2,Vertical cylinder,10,stacked
+0,2,1,2161,4,Cup,4,1,Cube,2,stacked
+0,2,1,2162,4,Cup,4,1,Cube,3,stacked
+0,2,1,2163,4,Cup,4,1,Cube,4,stacked
+0,2,1,2164,4,Cup,4,1,Cube,5,stacked
+0,2,1,2165,4,Cup,4,1,Cube,6,stacked
+0,2,1,2166,4,Cup,4,1,Cube,7,stacked
+0,2,1,2167,4,Cup,4,1,Cube,8,stacked
+0,2,1,2168,4,Cup,4,1,Cube,9,stacked
+0,2,1,2169,4,Cup,4,1,Cube,10,stacked
+0,2,1,2171,4,Cup,4,2,Vertical cylinder,2,stacked
+0,2,1,2172,4,Cup,4,2,Vertical cylinder,3,stacked
+0,2,1,2173,4,Cup,4,2,Vertical cylinder,4,stacked
+0,2,1,2174,4,Cup,4,2,Vertical cylinder,5,stacked
+0,2,1,2175,4,Cup,4,2,Vertical cylinder,6,stacked
+0,2,1,2176,4,Cup,4,2,Vertical cylinder,7,stacked
+0,2,1,2177,4,Cup,4,2,Vertical cylinder,8,stacked
+0,2,1,2178,4,Cup,4,2,Vertical cylinder,9,stacked
+0,2,1,2179,4,Cup,4,2,Vertical cylinder,10,stacked
+0,2,1,2211,4,Cup,5,1,Cube,2,tumble2
+0,2,1,2212,4,Cup,5,1,Cube,3,stacked
+0,2,1,2213,4,Cup,5,1,Cube,4,stacked
+0,2,1,2214,4,Cup,5,1,Cube,5,stacked
+0,2,1,2215,4,Cup,5,1,Cube,6,stacked
+0,2,1,2216,4,Cup,5,1,Cube,7,stacked
+0,2,1,2217,4,Cup,5,1,Cube,8,stacked
+0,2,1,2218,4,Cup,5,1,Cube,9,stacked
+0,2,1,2219,4,Cup,5,1,Cube,10,stacked
+0,2,1,2222,4,Cup,5,2,Vertical cylinder,3,stacked
+0,2,1,2223,4,Cup,5,2,Vertical cylinder,4,stacked
+0,2,1,2224,4,Cup,5,2,Vertical cylinder,5,stacked
+0,2,1,2225,4,Cup,5,2,Vertical cylinder,6,stacked
+0,2,1,2226,4,Cup,5,2,Vertical cylinder,7,stacked
+0,2,1,2227,4,Cup,5,2,Vertical cylinder,8,stacked
+0,2,1,2228,4,Cup,5,2,Vertical cylinder,9,stacked
+0,2,1,2229,4,Cup,5,2,Vertical cylinder,10,stacked
+0,2,1,2263,4,Cup,6,1,Cube,4,stacked
+0,2,1,2264,4,Cup,6,1,Cube,5,stacked
+0,2,1,2265,4,Cup,6,1,Cube,6,stacked
+0,2,1,2266,4,Cup,6,1,Cube,7,stacked
+0,2,1,2267,4,Cup,6,1,Cube,8,stacked
+0,2,1,2268,4,Cup,6,1,Cube,9,stacked
+0,2,1,2269,4,Cup,6,1,Cube,10,stacked
+0,2,1,2273,4,Cup,6,2,Vertical cylinder,4,stacked
+0,2,1,2274,4,Cup,6,2,Vertical cylinder,5,stacked
+0,2,1,2275,4,Cup,6,2,Vertical cylinder,6,stacked
+0,2,1,2276,4,Cup,6,2,Vertical cylinder,7,stacked
+0,2,1,2277,4,Cup,6,2,Vertical cylinder,8,stacked
+0,2,1,2278,4,Cup,6,2,Vertical cylinder,9,stacked
+0,2,1,2279,4,Cup,6,2,Vertical cylinder,10,stacked
+0,2,1,2314,4,Cup,7,1,Cube,5,stacked
+0,2,1,2315,4,Cup,7,1,Cube,6,stacked
+0,2,1,2316,4,Cup,7,1,Cube,7,stacked
+0,2,1,2317,4,Cup,7,1,Cube,8,stacked
+0,2,1,2318,4,Cup,7,1,Cube,9,stacked
+0,2,1,2319,4,Cup,7,1,Cube,10,stacked
+0,2,1,2324,4,Cup,7,2,Vertical cylinder,5,stacked
+0,2,1,2325,4,Cup,7,2,Vertical cylinder,6,stacked
+0,2,1,2326,4,Cup,7,2,Vertical cylinder,7,stacked
+0,2,1,2327,4,Cup,7,2,Vertical cylinder,8,stacked
+0,2,1,2328,4,Cup,7,2,Vertical cylinder,9,stacked
+0,2,1,2329,4,Cup,7,2,Vertical cylinder,10,stacked
+0,2,1,2365,4,Cup,8,1,Cube,6,stacked
+0,2,1,2366,4,Cup,8,1,Cube,7,stacked
+0,2,1,2367,4,Cup,8,1,Cube,8,stacked
+0,2,1,2368,4,Cup,8,1,Cube,9,stacked
+0,2,1,2369,4,Cup,8,1,Cube,10,stacked
+0,2,1,2375,4,Cup,8,2,Vertical cylinder,6,stacked
+0,2,1,2376,4,Cup,8,2,Vertical cylinder,7,stacked
+0,2,1,2377,4,Cup,8,2,Vertical cylinder,8,stacked
+0,2,1,2378,4,Cup,8,2,Vertical cylinder,9,stacked
+0,2,1,2379,4,Cup,8,2,Vertical cylinder,10,stacked
+0,2,1,2415,4,Cup,9,1,Cube,6,stacked
+0,2,1,2416,4,Cup,9,1,Cube,7,stacked
+0,2,1,2417,4,Cup,9,1,Cube,8,stacked
+0,2,1,2418,4,Cup,9,1,Cube,9,stacked
+0,2,1,2419,4,Cup,9,1,Cube,10,stacked
+0,2,1,2425,4,Cup,9,2,Vertical cylinder,6,tumble2
+0,2,1,2426,4,Cup,9,2,Vertical cylinder,7,stacked
+0,2,1,2427,4,Cup,9,2,Vertical cylinder,8,stacked
+0,2,1,2428,4,Cup,9,2,Vertical cylinder,9,stacked
+0,2,1,2429,4,Cup,9,2,Vertical cylinder,10,stacked
+0,2,1,2466,4,Cup,10,1,Cube,7,stacked
+0,2,1,2467,4,Cup,10,1,Cube,8,stacked
+0,2,1,2468,4,Cup,10,1,Cube,9,stacked
+0,2,1,2469,4,Cup,10,1,Cube,10,stacked
+0,2,1,2476,4,Cup,10,2,Vertical cylinder,7,tumble2
+0,2,1,2477,4,Cup,10,2,Vertical cylinder,8,stacked
+0,2,1,2478,4,Cup,10,2,Vertical cylinder,9,stacked
+0,2,1,2479,4,Cup,10,2,Vertical cylinder,10,stacked

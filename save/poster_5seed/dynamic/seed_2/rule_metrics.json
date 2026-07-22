@@ -1,0 +1,542 @@
+{
+  "training_accuracy": 0.796,
+  "weighted_leaf_purity": 0.796,
+  "num_training_samples": 2500,
+  "num_tree_leaves": 30,
+  "tree_depth": 7,
+  "num_object_codes": 4,
+  "num_relation_codes": 2,
+  "num_possible_symbolic_tuples": 32,
+  "num_exported_stack_actions": 30,
+  "leaf_stats": [
+    {
+      "leaf": 7,
+      "samples": 1,
+      "purity": 1.0,
+      "label_counts": {
+        "tumble2": 1
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          3,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 8,
+      "samples": 98,
+      "purity": 0.5816326530612245,
+      "label_counts": {
+        "roll1": 1,
+        "tumble1": 40,
+        "tumble2": 57
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 9,
+      "samples": 81,
+      "purity": 0.6790123456790124,
+      "label_counts": {
+        "inserted": 1,
+        "stacked": 8,
+        "tumble1": 17,
+        "tumble2": 55
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 12,
+      "samples": 45,
+      "purity": 0.9333333333333333,
+      "label_counts": {
+        "stacked": 1,
+        "roll1": 2,
+        "tumble2": 42
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 13,
+      "samples": 52,
+      "purity": 0.8846153846153846,
+      "label_counts": {
+        "stacked": 2,
+        "roll1": 1,
+        "tumble1": 3,
+        "tumble2": 46
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 15,
+      "samples": 76,
+      "purity": 0.868421052631579,
+      "label_counts": {
+        "roll1": 2,
+        "tumble1": 8,
+        "tumble2": 66
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 16,
+      "samples": 47,
+      "purity": 0.6808510638297872,
+      "label_counts": {
+        "tumble1": 15,
+        "tumble2": 32
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 19,
+      "samples": 71,
+      "purity": 0.5070422535211268,
+      "label_counts": {
+        "inserted": 2,
+        "stacked": 1,
+        "roll1": 36,
+        "tumble1": 17,
+        "tumble2": 15
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 20,
+      "samples": 72,
+      "purity": 0.5694444444444444,
+      "label_counts": {
+        "inserted": 3,
+        "stacked": 4,
+        "roll1": 41,
+        "tumble1": 6,
+        "roll2": 1,
+        "tumble2": 17
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 22,
+      "samples": 149,
+      "purity": 0.6845637583892618,
+      "label_counts": {
+        "inserted": 3,
+        "roll1": 102,
+        "tumble1": 31,
+        "roll2": 1,
+        "tumble2": 12
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 23,
+      "samples": 108,
+      "purity": 0.6018518518518519,
+      "label_counts": {
+        "inserted": 5,
+        "stacked": 4,
+        "roll1": 65,
+        "tumble1": 20,
+        "tumble2": 14
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 26,
+      "samples": 20,
+      "purity": 0.5,
+      "label_counts": {
+        "inserted": 7,
+        "roll1": 10,
+        "tumble1": 1,
+        "roll2": 2
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 27,
+      "samples": 23,
+      "purity": 0.6956521739130435,
+      "label_counts": {
+        "roll1": 16,
+        "tumble1": 4,
+        "roll2": 2,
+        "tumble2": 1
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 29,
+      "samples": 87,
+      "purity": 0.9425287356321839,
+      "label_counts": {
+        "tumble1": 4,
+        "roll2": 82,
+        "tumble2": 1
+      },
+      "symbolic_tuples": [
+        [
+          0,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 30,
+      "samples": 70,
+      "purity": 0.9571428571428572,
+      "label_counts": {
+        "stacked": 3,
+        "roll2": 67
+      },
+      "symbolic_tuples": [
+        [
+          3,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 35,
+      "samples": 31,
+      "purity": 0.7419354838709677,
+      "label_counts": {
+        "inserted": 23,
+        "stacked": 3,
+        "tumble2": 5
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 36,
+      "samples": 50,
+      "purity": 0.76,
+      "label_counts": {
+        "inserted": 38,
+        "stacked": 6,
+        "tumble2": 6
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 37,
+      "samples": 29,
+      "purity": 0.6551724137931034,
+      "label_counts": {
+        "inserted": 19,
+        "tumble2": 10
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 38,
+      "samples": 40,
+      "purity": 0.75,
+      "label_counts": {
+        "inserted": 7,
+        "stacked": 2,
+        "tumble1": 1,
+        "tumble2": 30
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 42,
+      "samples": 150,
+      "purity": 0.9666666666666667,
+      "label_counts": {
+        "inserted": 2,
+        "stacked": 145,
+        "tumble2": 3
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 43,
+      "samples": 69,
+      "purity": 0.9710144927536232,
+      "label_counts": {
+        "stacked": 67,
+        "tumble2": 2
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 44,
+      "samples": 81,
+      "purity": 0.9012345679012346,
+      "label_counts": {
+        "inserted": 8,
+        "stacked": 73
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 45,
+      "samples": 50,
+      "purity": 0.46,
+      "label_counts": {
+        "inserted": 11,
+        "stacked": 23,
+        "tumble2": 16
+      },
+      "symbolic_tuples": [
+        [
+          1,
+          3,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 50,
+      "samples": 171,
+      "purity": 0.9415204678362573,
+      "label_counts": {
+        "inserted": 1,
+        "stacked": 161,
+        "roll1": 1,
+        "tumble2": 8
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 51,
+      "samples": 35,
+      "purity": 0.6857142857142857,
+      "label_counts": {
+        "inserted": 24,
+        "stacked": 11
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 53,
+      "samples": 229,
+      "purity": 1.0,
+      "label_counts": {
+        "stacked": 229
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 54,
+      "samples": 165,
+      "purity": 0.9878787878787879,
+      "label_counts": {
+        "inserted": 1,
+        "stacked": 163,
+        "tumble2": 1
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 56,
+      "samples": 91,
+      "purity": 0.5054945054945055,
+      "label_counts": {
+        "inserted": 4,
+        "stacked": 37,
+        "roll1": 4,
+        "tumble2": 46
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "leaf": 57,
+      "samples": 129,
+      "purity": 0.8217054263565892,
+      "label_counts": {
+        "stacked": 106,
+        "roll1": 7,
+        "roll2": 2,
+        "tumble2": 14
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "leaf": 58,
+      "samples": 180,
+      "purity": 0.6944444444444444,
+      "label_counts": {
+        "inserted": 1,
+        "stacked": 49,
+        "roll1": 2,
+        "tumble1": 3,
+        "tumble2": 125
+      },
+      "symbolic_tuples": [
+        [
+          2,
+          3,
+          0
+        ],
+        [
+          2,
+          3,
+          1
+        ]
+      ]
+    }
+  ]
+}

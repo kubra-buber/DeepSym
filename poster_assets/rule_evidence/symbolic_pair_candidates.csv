@@ -1,0 +1,201 @@
+tuple_below_symbol,tuple_above_symbol,tuple_relation_symbol,pair_index,below_type,below_type_name,below_size,above_type,above_type_name,above_size,effect_label
+0,2,0,10,0,Sphere,1,1,Cube,1,roll1
+0,2,0,11,0,Sphere,1,1,Cube,2,roll1
+0,2,0,12,0,Sphere,1,1,Cube,3,roll1
+0,2,0,13,0,Sphere,1,1,Cube,4,roll1
+0,2,0,14,0,Sphere,1,1,Cube,5,roll1
+0,2,0,15,0,Sphere,1,1,Cube,6,roll1
+0,2,0,16,0,Sphere,1,1,Cube,7,roll1
+0,2,0,20,0,Sphere,1,2,Vertical cylinder,1,roll1
+0,2,0,21,0,Sphere,1,2,Vertical cylinder,2,roll1
+0,2,0,22,0,Sphere,1,2,Vertical cylinder,3,tumble2
+0,2,0,23,0,Sphere,1,2,Vertical cylinder,4,roll1
+0,2,0,24,0,Sphere,1,2,Vertical cylinder,5,tumble1
+0,2,0,25,0,Sphere,1,2,Vertical cylinder,6,tumble2
+0,2,0,26,0,Sphere,1,2,Vertical cylinder,7,tumble1
+0,2,0,27,0,Sphere,1,2,Vertical cylinder,8,tumble1
+0,2,0,28,0,Sphere,1,2,Vertical cylinder,9,roll1
+0,2,0,60,0,Sphere,2,1,Cube,1,tumble1
+0,2,0,61,0,Sphere,2,1,Cube,2,inserted
+0,2,0,62,0,Sphere,2,1,Cube,3,roll1
+0,2,0,63,0,Sphere,2,1,Cube,4,roll1
+0,2,0,64,0,Sphere,2,1,Cube,5,roll1
+0,2,0,65,0,Sphere,2,1,Cube,6,roll1
+0,2,0,66,0,Sphere,2,1,Cube,7,roll1
+0,2,0,70,0,Sphere,2,2,Vertical cylinder,1,tumble1
+0,2,0,71,0,Sphere,2,2,Vertical cylinder,2,inserted
+0,2,0,72,0,Sphere,2,2,Vertical cylinder,3,tumble1
+0,2,0,73,0,Sphere,2,2,Vertical cylinder,4,tumble1
+0,2,0,74,0,Sphere,2,2,Vertical cylinder,5,roll1
+0,2,0,75,0,Sphere,2,2,Vertical cylinder,6,roll1
+0,2,0,76,0,Sphere,2,2,Vertical cylinder,7,roll1
+0,2,0,77,0,Sphere,2,2,Vertical cylinder,8,roll1
+0,2,0,78,0,Sphere,2,2,Vertical cylinder,9,tumble1
+0,2,0,113,0,Sphere,3,1,Cube,4,tumble1
+0,2,0,114,0,Sphere,3,1,Cube,5,roll1
+0,2,0,115,0,Sphere,3,1,Cube,6,roll1
+0,2,0,116,0,Sphere,3,1,Cube,7,roll1
+0,2,0,120,0,Sphere,3,2,Vertical cylinder,1,tumble2
+0,2,0,122,0,Sphere,3,2,Vertical cylinder,3,tumble2
+0,2,0,123,0,Sphere,3,2,Vertical cylinder,4,tumble1
+0,2,0,124,0,Sphere,3,2,Vertical cylinder,5,roll1
+0,2,0,125,0,Sphere,3,2,Vertical cylinder,6,roll1
+0,2,0,126,0,Sphere,3,2,Vertical cylinder,7,tumble1
+0,2,0,127,0,Sphere,3,2,Vertical cylinder,8,roll1
+0,2,0,165,0,Sphere,4,1,Cube,6,roll1
+0,2,0,166,0,Sphere,4,1,Cube,7,roll1
+0,2,0,174,0,Sphere,4,2,Vertical cylinder,5,roll1
+0,2,0,175,0,Sphere,4,2,Vertical cylinder,6,roll1
+0,2,0,176,0,Sphere,4,2,Vertical cylinder,7,tumble2
+0,2,0,216,0,Sphere,5,1,Cube,7,tumble1
+0,2,0,226,0,Sphere,5,2,Vertical cylinder,7,roll1
+0,2,1,17,0,Sphere,1,1,Cube,8,roll1
+0,2,1,18,0,Sphere,1,1,Cube,9,roll1
+0,2,1,19,0,Sphere,1,1,Cube,10,tumble1
+0,2,1,29,0,Sphere,1,2,Vertical cylinder,10,tumble2
+0,2,1,67,0,Sphere,2,1,Cube,8,roll1
+0,2,1,68,0,Sphere,2,1,Cube,9,roll1
+0,2,1,69,0,Sphere,2,1,Cube,10,tumble1
+0,2,1,79,0,Sphere,2,2,Vertical cylinder,10,tumble1
+0,2,1,110,0,Sphere,3,1,Cube,1,roll1
+0,2,1,111,0,Sphere,3,1,Cube,2,tumble1
+0,2,1,112,0,Sphere,3,1,Cube,3,roll1
+0,2,1,117,0,Sphere,3,1,Cube,8,tumble1
+0,2,1,118,0,Sphere,3,1,Cube,9,roll1
+0,2,1,119,0,Sphere,3,1,Cube,10,roll1
+0,2,1,121,0,Sphere,3,2,Vertical cylinder,2,inserted
+0,2,1,128,0,Sphere,3,2,Vertical cylinder,9,roll1
+0,2,1,129,0,Sphere,3,2,Vertical cylinder,10,roll1
+0,2,1,160,0,Sphere,4,1,Cube,1,roll1
+0,2,1,161,0,Sphere,4,1,Cube,2,roll1
+0,2,1,162,0,Sphere,4,1,Cube,3,roll1
+0,2,1,163,0,Sphere,4,1,Cube,4,tumble1
+0,2,1,164,0,Sphere,4,1,Cube,5,tumble1
+0,2,1,167,0,Sphere,4,1,Cube,8,roll1
+0,2,1,168,0,Sphere,4,1,Cube,9,roll1
+0,2,1,169,0,Sphere,4,1,Cube,10,roll1
+0,2,1,170,0,Sphere,4,2,Vertical cylinder,1,roll1
+0,2,1,171,0,Sphere,4,2,Vertical cylinder,2,roll1
+0,2,1,172,0,Sphere,4,2,Vertical cylinder,3,tumble1
+0,2,1,173,0,Sphere,4,2,Vertical cylinder,4,roll1
+0,2,1,177,0,Sphere,4,2,Vertical cylinder,8,roll1
+0,2,1,178,0,Sphere,4,2,Vertical cylinder,9,roll1
+0,2,1,179,0,Sphere,4,2,Vertical cylinder,10,roll1
+0,2,1,210,0,Sphere,5,1,Cube,1,roll1
+0,2,1,211,0,Sphere,5,1,Cube,2,roll1
+0,2,1,212,0,Sphere,5,1,Cube,3,tumble1
+0,2,1,213,0,Sphere,5,1,Cube,4,roll1
+0,2,1,214,0,Sphere,5,1,Cube,5,roll1
+0,2,1,215,0,Sphere,5,1,Cube,6,roll1
+0,2,1,217,0,Sphere,5,1,Cube,8,tumble1
+0,2,1,218,0,Sphere,5,1,Cube,9,roll1
+0,2,1,219,0,Sphere,5,1,Cube,10,roll1
+0,2,1,220,0,Sphere,5,2,Vertical cylinder,1,roll1
+0,2,1,221,0,Sphere,5,2,Vertical cylinder,2,roll1
+0,2,1,222,0,Sphere,5,2,Vertical cylinder,3,roll1
+0,2,1,223,0,Sphere,5,2,Vertical cylinder,4,tumble2
+0,2,1,224,0,Sphere,5,2,Vertical cylinder,5,tumble2
+0,2,1,225,0,Sphere,5,2,Vertical cylinder,6,roll1
+0,2,1,227,0,Sphere,5,2,Vertical cylinder,8,roll1
+0,2,1,228,0,Sphere,5,2,Vertical cylinder,9,roll1
+0,2,1,229,0,Sphere,5,2,Vertical cylinder,10,tumble2
+0,2,1,260,0,Sphere,6,1,Cube,1,roll1
+0,2,1,261,0,Sphere,6,1,Cube,2,tumble1
+0,2,1,262,0,Sphere,6,1,Cube,3,roll1
+0,2,1,263,0,Sphere,6,1,Cube,4,roll1
+0,2,1,264,0,Sphere,6,1,Cube,5,tumble1
+0,2,1,265,0,Sphere,6,1,Cube,6,tumble1
+0,2,1,266,0,Sphere,6,1,Cube,7,roll1
+0,2,1,267,0,Sphere,6,1,Cube,8,roll1
+0,2,1,268,0,Sphere,6,1,Cube,9,roll1
+0,2,1,269,0,Sphere,6,1,Cube,10,roll1
+0,2,1,270,0,Sphere,6,2,Vertical cylinder,1,tumble1
+0,2,1,271,0,Sphere,6,2,Vertical cylinder,2,roll1
+0,2,1,272,0,Sphere,6,2,Vertical cylinder,3,tumble2
+0,2,1,273,0,Sphere,6,2,Vertical cylinder,4,tumble1
+0,2,1,274,0,Sphere,6,2,Vertical cylinder,5,roll1
+0,2,1,275,0,Sphere,6,2,Vertical cylinder,6,tumble2
+0,2,1,276,0,Sphere,6,2,Vertical cylinder,7,roll1
+0,2,1,277,0,Sphere,6,2,Vertical cylinder,8,roll1
+0,2,1,278,0,Sphere,6,2,Vertical cylinder,9,roll1
+0,2,1,279,0,Sphere,6,2,Vertical cylinder,10,tumble1
+0,2,1,310,0,Sphere,7,1,Cube,1,roll1
+0,2,1,311,0,Sphere,7,1,Cube,2,roll1
+0,2,1,312,0,Sphere,7,1,Cube,3,roll1
+0,2,1,313,0,Sphere,7,1,Cube,4,tumble1
+0,2,1,314,0,Sphere,7,1,Cube,5,roll1
+0,2,1,315,0,Sphere,7,1,Cube,6,tumble1
+0,2,1,316,0,Sphere,7,1,Cube,7,roll1
+0,2,1,317,0,Sphere,7,1,Cube,8,roll1
+0,2,1,318,0,Sphere,7,1,Cube,9,roll1
+0,2,1,319,0,Sphere,7,1,Cube,10,tumble1
+0,2,1,320,0,Sphere,7,2,Vertical cylinder,1,tumble1
+0,2,1,321,0,Sphere,7,2,Vertical cylinder,2,roll1
+0,2,1,322,0,Sphere,7,2,Vertical cylinder,3,tumble2
+0,2,1,323,0,Sphere,7,2,Vertical cylinder,4,roll1
+0,2,1,324,0,Sphere,7,2,Vertical cylinder,5,tumble2
+0,2,1,325,0,Sphere,7,2,Vertical cylinder,6,roll1
+0,2,1,326,0,Sphere,7,2,Vertical cylinder,7,roll1
+0,2,1,327,0,Sphere,7,2,Vertical cylinder,8,roll1
+0,2,1,328,0,Sphere,7,2,Vertical cylinder,9,roll1
+0,2,1,329,0,Sphere,7,2,Vertical cylinder,10,tumble2
+0,2,1,360,0,Sphere,8,1,Cube,1,roll1
+0,2,1,361,0,Sphere,8,1,Cube,2,roll1
+0,2,1,362,0,Sphere,8,1,Cube,3,roll1
+0,2,1,363,0,Sphere,8,1,Cube,4,roll1
+0,2,1,364,0,Sphere,8,1,Cube,5,tumble2
+0,2,1,365,0,Sphere,8,1,Cube,6,tumble1
+0,2,1,366,0,Sphere,8,1,Cube,7,tumble1
+0,2,1,367,0,Sphere,8,1,Cube,8,tumble1
+0,2,1,368,0,Sphere,8,1,Cube,9,roll1
+0,2,1,369,0,Sphere,8,1,Cube,10,tumble1
+0,2,1,370,0,Sphere,8,2,Vertical cylinder,1,roll1
+0,2,1,371,0,Sphere,8,2,Vertical cylinder,2,tumble1
+0,2,1,372,0,Sphere,8,2,Vertical cylinder,3,tumble1
+0,2,1,373,0,Sphere,8,2,Vertical cylinder,4,roll1
+0,2,1,374,0,Sphere,8,2,Vertical cylinder,5,roll1
+0,2,1,375,0,Sphere,8,2,Vertical cylinder,6,roll1
+0,2,1,376,0,Sphere,8,2,Vertical cylinder,7,roll1
+0,2,1,377,0,Sphere,8,2,Vertical cylinder,8,tumble1
+0,2,1,378,0,Sphere,8,2,Vertical cylinder,9,roll1
+0,2,1,379,0,Sphere,8,2,Vertical cylinder,10,inserted
+0,2,1,410,0,Sphere,9,1,Cube,1,roll2
+0,2,1,411,0,Sphere,9,1,Cube,2,roll1
+0,2,1,412,0,Sphere,9,1,Cube,3,roll1
+0,2,1,413,0,Sphere,9,1,Cube,4,roll1
+0,2,1,414,0,Sphere,9,1,Cube,5,roll1
+0,2,1,415,0,Sphere,9,1,Cube,6,roll1
+0,2,1,416,0,Sphere,9,1,Cube,7,roll1
+0,2,1,417,0,Sphere,9,1,Cube,8,roll1
+0,2,1,418,0,Sphere,9,1,Cube,9,tumble1
+0,2,1,419,0,Sphere,9,1,Cube,10,tumble1
+0,2,1,420,0,Sphere,9,2,Vertical cylinder,1,roll1
+0,2,1,421,0,Sphere,9,2,Vertical cylinder,2,tumble1
+0,2,1,422,0,Sphere,9,2,Vertical cylinder,3,roll1
+0,2,1,423,0,Sphere,9,2,Vertical cylinder,4,roll1
+0,2,1,424,0,Sphere,9,2,Vertical cylinder,5,tumble2
+0,2,1,425,0,Sphere,9,2,Vertical cylinder,6,roll1
+0,2,1,426,0,Sphere,9,2,Vertical cylinder,7,tumble2
+0,2,1,427,0,Sphere,9,2,Vertical cylinder,8,roll1
+0,2,1,428,0,Sphere,9,2,Vertical cylinder,9,roll1
+0,2,1,429,0,Sphere,9,2,Vertical cylinder,10,roll1
+0,2,1,460,0,Sphere,10,1,Cube,1,roll1
+0,2,1,461,0,Sphere,10,1,Cube,2,tumble1
+0,2,1,462,0,Sphere,10,1,Cube,3,roll1
+0,2,1,463,0,Sphere,10,1,Cube,4,roll1
+0,2,1,464,0,Sphere,10,1,Cube,5,roll1
+0,2,1,465,0,Sphere,10,1,Cube,6,roll1
+0,2,1,466,0,Sphere,10,1,Cube,7,roll1
+0,2,1,467,0,Sphere,10,1,Cube,8,roll1
+0,2,1,468,0,Sphere,10,1,Cube,9,tumble1
+0,2,1,469,0,Sphere,10,1,Cube,10,roll1
+0,2,1,470,0,Sphere,10,2,Vertical cylinder,1,tumble1
+0,2,1,471,0,Sphere,10,2,Vertical cylinder,2,roll1
+0,2,1,472,0,Sphere,10,2,Vertical cylinder,3,tumble2
+0,2,1,473,0,Sphere,10,2,Vertical cylinder,4,roll1
+0,2,1,474,0,Sphere,10,2,Vertical cylinder,5,roll1
+0,2,1,475,0,Sphere,10,2,Vertical cylinder,6,roll1
+0,2,1,476,0,Sphere,10,2,Vertical cylinder,7,tumble1
+0,2,1,477,0,Sphere,10,2,Vertical cylinder,8,roll1
+0,2,1,478,0,Sphere,10,2,Vertical cylinder,9,tumble2
+0,2,1,479,0,Sphere,10,2,Vertical cylinder,10,tumble2

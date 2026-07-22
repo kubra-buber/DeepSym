@@ -1,0 +1,52 @@
+Run: /home/kubra/DeepSym/save/poster_5seed/dynamic/seed_1
+Model: dynamic
+Seed: 1
+
+==============================================================================
+stack3
+below=objtype1 above=objtype3 relation=relation0
+leaf=11
+matching canonical pairs=63
+
+Exact decision path:
+  below_is_objtype2 <= 0.500000
+  below_is_objtype0 <= 0.500000
+  above_is_objtype0 <= 0.500000
+  above_is_objtype2 <= 0.500000
+  relation_is_relation1 <= 0.500000
+  above_is_objtype3 > 0.500000
+  below_is_objtype1 > 0.500000
+
+Leaf outcome distribution:
+  tumble2      count=  47 p=0.746032
+  tumble1      count=  15 p=0.238095
+  roll1        count=   1 p=0.015873
+
+Selected canonical examples:
+  pair= 234: below=Sphere size 5, above=Horizontal cylinder size 5, label=tumble2
+  pair= 235: below=Sphere size 5, above=Horizontal cylinder size 6, label=tumble2
+  pair= 284: below=Sphere size 6, above=Horizontal cylinder size 5, label=tumble2
+
+==============================================================================
+stack4
+below=objtype1 above=objtype3 relation=relation1
+leaf=14
+matching canonical pairs=36
+
+Exact decision path:
+  below_is_objtype2 <= 0.500000
+  below_is_objtype0 <= 0.500000
+  above_is_objtype0 <= 0.500000
+  above_is_objtype2 <= 0.500000
+  relation_is_relation1 > 0.500000
+  above_is_objtype1 <= 0.500000
+  below_is_objtype3 <= 0.500000
+
+Leaf outcome distribution:
+  tumble1      count=  25 p=0.694444
+  tumble2      count=  11 p=0.305556
+
+Selected canonical examples:
+  pair= 184: below=Sphere size 4, above=Horizontal cylinder size 5, label=tumble1
+  pair= 185: below=Sphere size 4, above=Horizontal cylinder size 6, label=tumble2
+  pair= 236: below=Sphere size 5, above=Horizontal cylinder size 7, label=tumble1

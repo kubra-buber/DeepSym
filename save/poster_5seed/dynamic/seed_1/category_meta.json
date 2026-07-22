@@ -1,0 +1,13 @@
+{
+  "encoding": "vq_onehot",
+  "model_kind": "dynamic",
+  "num_object_codes": 4,
+  "num_relation_codes": 2,
+  "num_objects": 50,
+  "num_pairs": 2500,
+  "feature_order": [
+    "below_object_onehot",
+    "above_object_onehot",
+    "relation_onehot"
+  ]
+}
