@@ -1,0 +1,47 @@
+[
+  {
+    "event_type": "grow",
+    "step": 400.0,
+    "new_active_codes": 2.0,
+    "new_code_index": 1.0,
+    "support": 93.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 20.79463005065918,
+    "distance_p90": 64.45846557617188,
+    "distance_p95": 92.49251556396484,
+    "distance_max": 111.2863998413086,
+    "surprise_support": 93.0
+  },
+  {
+    "event_type": "grow",
+    "step": 800.0,
+    "new_active_codes": 3.0,
+    "new_code_index": 2.0,
+    "support": 40.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 1.30892014503479,
+    "distance_p90": 2.213656425476074,
+    "distance_p95": 4.167463302612305,
+    "distance_max": 10.740339279174805,
+    "surprise_support": 40.0
+  },
+  {
+    "event_type": "grow",
+    "step": 2300.0,
+    "new_active_codes": 4.0,
+    "new_code_index": 3.0,
+    "support": 12.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.4260942339897156,
+    "distance_p90": 1.2371978759765625,
+    "distance_p95": 1.4265801906585693,
+    "distance_max": 2.293692111968994,
+    "surprise_support": 12.0
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "step": 301.0,
+    "new_active_codes": 2.0,
+    "support": 115.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 2.8604698181152344,
+    "distance_p90": 7.722013473510742,
+    "distance_p95": 13.370904922485352,
+    "distance_max": 43.249637603759766,
+    "surprise_support": 115.0
+  },
+  {
+    "step": 501.0,
+    "new_active_codes": 3.0,
+    "support": 20.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.3733852803707123,
+    "distance_p90": 0.8935978412628174,
+    "distance_p95": 1.3942135572433472,
+    "distance_max": 3.359874725341797,
+    "surprise_support": 20.0
+  },
+  {
+    "step": 901.0,
+    "new_active_codes": 4.0,
+    "support": 18.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.3236132860183716,
+    "distance_p90": 0.801171064376831,
+    "distance_p95": 1.1137278079986572,
+    "distance_max": 2.5634613037109375,
+    "surprise_support": 18.0
+  },
+  {
+    "step": 4301.0,
+    "new_active_codes": 5.0,
+    "support": 18.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.32399338483810425,
+    "distance_p90": 0.7701342105865479,
+    "distance_p95": 1.0882503986358643,
+    "distance_max": 2.090480089187622,
+    "surprise_support": 18.0
+  }
+]

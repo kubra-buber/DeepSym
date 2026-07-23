@@ -1,0 +1,15 @@
+{
+  "name": "l1_kobj4",
+  "description": "Poster baseline Level-1 settings.",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "overrides": {
+    "vq_num_embeddings1": 4,
+    "vq_num_embeddings2": 2
+  },
+  "base_opts": "/home/kubra/DeepSym/opts.yaml",
+  "source_git_commit": "2cacef05f4c23a44b93f82e254b7defd0b40a634"
+}

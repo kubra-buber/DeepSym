@@ -1,0 +1,12 @@
+{
+  "config": "/home/kubra/DeepSym/dynamic_level1_sweep.yaml",
+  "base_opts": "/home/kubra/DeepSym/opts.yaml",
+  "repo_root": "/home/kubra/DeepSym",
+  "git_commit": "2cacef05f4c23a44b93f82e254b7defd0b40a634",
+  "experiments": [
+    "l1_kobj3",
+    "l1_kobj4",
+    "l1_kobj6",
+    "l1_kobj8"
+  ]
+}

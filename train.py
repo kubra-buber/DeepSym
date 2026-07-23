@@ -35,6 +35,7 @@ MODEL_MODULES = {
     "original": "models",
     "vq": "models_vq",
     "dynamic": "models_vq_dynamic",
+    "dynamic_prune": "models_vq_dynamic_prune",
 }
 
 

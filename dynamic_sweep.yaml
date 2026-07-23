@@ -1,0 +1,154 @@
+# Dynamic EMA-VQ ablation suite
+# Run from the DeepSym repository root with:
+#   python run_dynamic_sweep.py -c dynamic_sweep.yaml
+
+sweep_name: dynamic_vq_ablation
+repo_root: .
+base_opts: opts.yaml
+output_root: save/dynamic_sweeps
+
+# Use "python" here if that is the interpreter of the active environment.
+python_bin: python
+train_script: train.py
+poster_eval_script: model_eval.py
+aggregate_script: aggregate_dynamic_sweeps.py
+
+device: auto
+num_workers: 0
+skip_done: true
+repair_missing_evaluation: true
+continue_on_error: false
+aggregate_all: true
+
+# Pilot stage: use 3 seeds. Promote the best settings to 5 seeds later.
+seeds: [1, 2, 3]
+
+experiments:
+  # Reuse the already completed poster baseline. No training is performed.
+  baseline_kobj4_krel2:
+    existing_root: save/poster_5seed/dynamic
+    description: Poster Dynamic EMA-VQ baseline: Kobj<=4, Krel<=2.
+
+  # --------------------------
+  # A. Upper-bound ablation
+  # --------------------------
+  kobj3_krel2:
+    description: Deliberately under-capacity object codebook.
+    overrides:
+      vq_num_embeddings1: 3
+      vq_num_embeddings2: 2
+
+  kobj6_krel2:
+    description: Larger object-code upper bound; relation bound unchanged.
+    overrides:
+      vq_num_embeddings1: 6
+      vq_num_embeddings2: 2
+
+  kobj8_krel2:
+    description: Larger object-code upper bound; relation bound unchanged.
+    overrides:
+      vq_num_embeddings1: 8
+      vq_num_embeddings2: 2
+
+  kobj4_krel3:
+    description: Tests whether more than two relation codes are useful.
+    overrides:
+      vq_num_embeddings1: 4
+      vq_num_embeddings2: 3
+
+  # --------------------------
+  # B. Growth-threshold pilots
+  # Enable after inspecting the upper-bound sweep.
+  # --------------------------
+  threshold_0p5:
+    enabled: false
+    description: More permissive growth threshold; squared Euclidean distance.
+    overrides:
+      surprise_threshold_1: 0.5
+      surprise_threshold_2: 0.5
+
+  threshold_1p5:
+    enabled: false
+    description: More conservative growth threshold.
+    overrides:
+      surprise_threshold_1: 1.5
+      surprise_threshold_2: 1.5
+
+  # --------------------------
+  # C. Growth timing and persistence
+  # --------------------------
+  warmup_100:
+    enabled: false
+    overrides:
+      dynamic_warmup_steps: 100
+
+  warmup_400:
+    enabled: false
+    overrides:
+      dynamic_warmup_steps: 400
+
+  checks_1:
+    enabled: false
+    description: Growth after one supported check; less conservative.
+    overrides:
+      dynamic_required_checks: 1
+
+  checks_3:
+    enabled: false
+    description: Growth must persist for three checks.
+    overrides:
+      dynamic_required_checks: 3
+
+  # --------------------------
+  # D. VQ optimization parameters
+  # --------------------------
+  commitment_0p10:
+    enabled: false
+    overrides:
+      vq_commitment_cost: 0.10
+
+  commitment_0p50:
+    enabled: false
+    overrides:
+      vq_commitment_cost: 0.50
+
+  decay_0p95:
+    enabled: false
+    overrides:
+      vq_decay: 0.95
+
+  decay_0p999:
+    enabled: false
+    overrides:
+      vq_decay: 0.999
+
+comparisons:
+  upper_bound:
+    experiments:
+      - baseline_kobj4_krel2
+      - kobj3_krel2
+      - kobj6_krel2
+      - kobj8_krel2
+      - kobj4_krel3
+
+  threshold:
+    experiments:
+      - baseline_kobj4_krel2
+      - threshold_0p5
+      - threshold_1p5
+
+  timing_and_persistence:
+    experiments:
+      - baseline_kobj4_krel2
+      - warmup_100
+      - warmup_400
+      - checks_1
+      - checks_3
+
+  vq_optimization:
+    experiments:
+      - baseline_kobj4_krel2
+      - commitment_0p10
+      - commitment_0p50
+      - decay_0p95
+      - decay_0p999

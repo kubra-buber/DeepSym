@@ -1,0 +1,41 @@
+[
+  {
+    "step": 501.0,
+    "new_active_codes": 2.0,
+    "support": 43.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.5054682493209839,
+    "distance_p90": 1.3741003274917603,
+    "distance_p95": 1.7097141742706299,
+    "distance_max": 2.7364163398742676,
+    "surprise_support": 43.0
+  },
+  {
+    "step": 1101.0,
+    "new_active_codes": 3.0,
+    "support": 32.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.46576860547065735,
+    "distance_p90": 1.1846990585327148,
+    "distance_p95": 1.395331859588623,
+    "distance_max": 2.668926239013672,
+    "surprise_support": 32.0
+  },
+  {
+    "step": 1301.0,
+    "new_active_codes": 4.0,
+    "support": 40.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.4955200254917145,
+    "distance_p90": 1.3089665174484253,
+    "distance_p95": 1.671432614326477,
+    "distance_max": 2.888406753540039,
+    "surprise_support": 40.0
+  }
+]

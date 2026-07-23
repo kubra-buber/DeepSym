@@ -1,0 +1,62 @@
+[
+  {
+    "event_type": "grow",
+    "step": 400.0,
+    "new_active_codes": 2.0,
+    "new_code_index": 1.0,
+    "support": 70.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 10.020834922790527,
+    "distance_p90": 29.285152435302734,
+    "distance_p95": 33.566436767578125,
+    "distance_max": 58.969478607177734,
+    "surprise_support": 70.0
+  },
+  {
+    "event_type": "grow",
+    "step": 800.0,
+    "new_active_codes": 3.0,
+    "new_code_index": 2.0,
+    "support": 68.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 5.654829978942871,
+    "distance_p90": 13.745532035827637,
+    "distance_p95": 25.49376106262207,
+    "distance_max": 65.56976318359375,
+    "surprise_support": 68.0
+  },
+  {
+    "event_type": "grow",
+    "step": 1200.0,
+    "new_active_codes": 4.0,
+    "new_code_index": 3.0,
+    "support": 9.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.35290926694869995,
+    "distance_p90": 0.8055416345596313,
+    "distance_p95": 1.1087100505828857,
+    "distance_max": 2.119504928588867,
+    "surprise_support": 9.0
+  },
+  {
+    "event_type": "grow",
+    "step": 2900.0,
+    "new_active_codes": 5.0,
+    "new_code_index": 4.0,
+    "support": 10.0,
+    "required_support": 8.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.47602367401123047,
+    "distance_p90": 0.9772086143493652,
+    "distance_p95": 1.6387746334075928,
+    "distance_max": 2.4532203674316406,
+    "surprise_support": 10.0
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "level": 1,
+  "epoch": 484,
+  "eval_effect": 0.16506474711000918,
+  "additional_metrics": {
+    "active_codes": 5.0,
+    "ema_used_codes": 5.0,
+    "occupancy_min": 0.06260469555854797,
+    "occupancy_max": 0.39689430594444275,
+    "occupancy_perplexity": 4.285439491271973,
+    "step_counter": 4840.0,
+    "last_check_step": 4800.0,
+    "last_maintenance_step": 4800.0,
+    "last_structure_step": 2900.0,
+    "surprise_streak": 0.0,
+    "growth_count": 4.0,
+    "prune_count": 0.0,
+    "merge_count": 0.0,
+    "distance_mean": 0.1923956274986267,
+    "distance_p90": 0.4092254638671875,
+    "distance_p95": 0.5378458499908447,
+    "distance_max": 0.8340536952018738,
+    "surprise_support": 0.0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "grow_only_k16",
+  "description": "Add-only control with a non-binding technical cap.",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "overrides": {
+    "vq_num_embeddings1": 16,
+    "dynamic_pruning_enabled": false,
+    "dynamic_merging_enabled": false
+  }
+}

@@ -1,0 +1,77 @@
+# Level-1 grow/prune Dynamic EMA-VQ pilot.
+#
+# Run:
+#   python run_dynamic_prune_level1.py -c dynamic_prune_level1_sweep.yaml
+#
+# Analyze:
+#   python analyze_level1_sweeps_v2.py \
+#     --root save/dynamic_prune_level1_sweeps
+
+repo_root: .
+base_opts: opts.yaml
+output_root: save/dynamic_prune_level1_sweeps
+python_bin: python
+train_script: train.py
+device: auto
+num_workers: 0
+skip_done: true
+seeds: [1, 2, 3]
+
+experiments:
+
+  # Control: large technical cap, but no code removal.
+  grow_only_k16:
+    description: Add-only control with a non-binding technical cap.
+    overrides:
+      vq_num_embeddings1: 16
+      dynamic_pruning_enabled: false
+      dynamic_merging_enabled: false
+
+  # Recommended first experiment.
+  prune_1pct_k16:
+    description: Remove codes below 1% EMA occupancy for three checks.
+    overrides:
+      vq_num_embeddings1: 16
+      dynamic_pruning_enabled: true
+      dynamic_merging_enabled: false
+      dynamic_prune_min_fraction_1: 0.01
+      dynamic_prune_patience: 3
+      dynamic_prune_min_age_steps: 800
+      dynamic_maintenance_interval: 100
+      dynamic_structure_warmup_steps: 1000
+      dynamic_structure_cooldown_steps: 300
+      dynamic_minimum_embeddings: 1
+
+  # Slightly stronger pruning; compare with 1%.
+  prune_2pct_k16:
+    description: Remove codes below 2% EMA occupancy for three checks.
+    overrides:
+      vq_num_embeddings1: 16
+      dynamic_pruning_enabled: true
+      dynamic_merging_enabled: false
+      dynamic_prune_min_fraction_1: 0.02
+      dynamic_prune_patience: 3
+      dynamic_prune_min_age_steps: 800
+      dynamic_maintenance_interval: 100
+      dynamic_structure_warmup_steps: 1000
+      dynamic_structure_cooldown_steps: 300
+      dynamic_minimum_embeddings: 1
+
+  # Optional second-stage experiment. Keep disabled until prune-only is read.
+  prune1_merge005_k16:
+    enabled: false
+    description: 1% pruning plus conservative latent-distance merging.
+    overrides:
+      vq_num_embeddings1: 16
+      dynamic_pruning_enabled: true
+      dynamic_merging_enabled: true
+      dynamic_prune_min_fraction_1: 0.01
+      dynamic_prune_patience: 3
+      dynamic_prune_min_age_steps: 800
+      dynamic_merge_distance_threshold_1: 0.05
+      dynamic_merge_max_small_fraction: 0.05
+      dynamic_merge_min_age_steps: 800
+      dynamic_maintenance_interval: 100
+      dynamic_structure_warmup_steps: 1000
+      dynamic_structure_cooldown_steps: 300
+      dynamic_minimum_embeddings: 1

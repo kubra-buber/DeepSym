@@ -1,0 +1,52 @@
+batch_norm: true
+cnn: true
+epoch1: 500
+batch_size1: 256
+learning_rate1: 1.0e-05
+code1_dim: 2
+filters1:
+- 1
+- 32
+- 64
+- 128
+- 256
+epoch2: 500
+batch_size2: 256
+learning_rate2: 5.0e-05
+code2_dim: 1
+filters2:
+- 2
+- 32
+- 64
+- 128
+- 256
+hidden_dim: 128
+depth: 2
+size: 42
+device: cuda
+load: null
+save: save/stable1
+vq_num_embeddings1: 16
+dynamic_pruning_enabled: true
+dynamic_merging_enabled: false
+dynamic_prune_min_fraction_1: 0.01
+dynamic_prune_patience: 3
+dynamic_prune_min_age_steps: 800
+dynamic_maintenance_interval: 100
+dynamic_structure_warmup_steps: 1000
+dynamic_structure_cooldown_steps: 300
+dynamic_minimum_embeddings: 1
+experiment_name: prune_1pct_k16
+experiment_description: Remove codes below 1% EMA occupancy for three checks.
+sweep_config: /home/kubra/DeepSym/dynamic_prune_level1_sweep.yaml
+sweep_overrides:
+  vq_num_embeddings1: 16
+  dynamic_pruning_enabled: true
+  dynamic_merging_enabled: false
+  dynamic_prune_min_fraction_1: 0.01
+  dynamic_prune_patience: 3
+  dynamic_prune_min_age_steps: 800
+  dynamic_maintenance_interval: 100
+  dynamic_structure_warmup_steps: 1000
+  dynamic_structure_cooldown_steps: 300
+  dynamic_minimum_embeddings: 1

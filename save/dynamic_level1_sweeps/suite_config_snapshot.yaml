@@ -1,0 +1,53 @@
+sweep_name: dynamic_vq_level1_ablation
+
+repo_root: .
+base_opts: opts.yaml
+output_root: save/dynamic_level1_sweeps
+
+python_bin: python
+train_script: train.py
+poster_eval_script: poster_eval.py
+aggregate_script: aggregate_dynamic_sweeps.py
+
+device: auto
+num_workers: 0
+skip_done: true
+repair_missing_evaluation: false
+continue_on_error: false
+aggregate_all: false
+
+seeds: [1, 2, 3]
+
+experiments:
+
+  l1_kobj3:
+    level: "1"
+    skip_poster_eval: true
+    description: Level-1 object upper bound 3.
+    overrides:
+      vq_num_embeddings1: 3
+      vq_num_embeddings2: 2
+
+  l1_kobj4:
+    level: "1"
+    skip_poster_eval: true
+    description: Poster baseline Level-1 settings.
+    overrides:
+      vq_num_embeddings1: 4
+      vq_num_embeddings2: 2
+
+  l1_kobj6:
+    level: "1"
+    skip_poster_eval: true
+    description: Level-1 object upper bound 6.
+    overrides:
+      vq_num_embeddings1: 6
+      vq_num_embeddings2: 2
+
+  l1_kobj8:
+    level: "1"
+    skip_poster_eval: true
+    description: Level-1 object upper bound 8.
+    overrides:
+      vq_num_embeddings1: 8
+      vq_num_embeddings2: 2

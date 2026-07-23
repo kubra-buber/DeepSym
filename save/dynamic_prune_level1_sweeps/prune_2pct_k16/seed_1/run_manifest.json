@@ -1,0 +1,8 @@
+{
+  "model": "dynamic_prune",
+  "seed": 1,
+  "save_dir": "/home/kubra/DeepSym/save/dynamic_prune_level1_sweeps/prune_2pct_k16/seed_1",
+  "levels": "1",
+  "device": "cuda",
+  "deterministic": true
+}

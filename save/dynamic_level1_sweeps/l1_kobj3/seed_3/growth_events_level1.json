@@ -1,0 +1,28 @@
+[
+  {
+    "step": 301.0,
+    "new_active_codes": 2.0,
+    "support": 71.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 1.6113786697387695,
+    "distance_p90": 4.679685592651367,
+    "distance_p95": 7.896017074584961,
+    "distance_max": 22.212543487548828,
+    "surprise_support": 71.0
+  },
+  {
+    "step": 1601.0,
+    "new_active_codes": 3.0,
+    "support": 16.0,
+    "required_support": 13.0,
+    "required_checks": 2.0,
+    "threshold": 1.0,
+    "distance_mean": 0.38412415981292725,
+    "distance_p90": 0.8128755688667297,
+    "distance_p95": 1.0701043605804443,
+    "distance_max": 2.401418447494507,
+    "surprise_support": 16.0
+  }
+]

@@ -1,0 +1,38 @@
+batch_norm: true
+cnn: true
+epoch1: 500
+batch_size1: 256
+learning_rate1: 1.0e-05
+code1_dim: 2
+filters1:
+- 1
+- 32
+- 64
+- 128
+- 256
+epoch2: 500
+batch_size2: 256
+learning_rate2: 5.0e-05
+code2_dim: 1
+filters2:
+- 2
+- 32
+- 64
+- 128
+- 256
+hidden_dim: 128
+depth: 2
+size: 42
+device: cuda
+load: null
+save: save/stable1
+vq_num_embeddings1: 6
+vq_num_embeddings2: 2
+experiment_name: l1_kobj6
+experiment_description: Level-1 object upper bound 6.
+sweep_name: dynamic_vq_level1_ablation
+sweep_overrides:
+  vq_num_embeddings1: 6
+  vq_num_embeddings2: 2
+sweep_config: /home/kubra/DeepSym/dynamic_level1_sweep.yaml
+sweep_git_commit: 2cacef05f4c23a44b93f82e254b7defd0b40a634

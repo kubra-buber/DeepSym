@@ -1,0 +1,21 @@
+{
+  "name": "prune_1pct_k16",
+  "description": "Remove codes below 1% EMA occupancy for three checks.",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "overrides": {
+    "vq_num_embeddings1": 16,
+    "dynamic_pruning_enabled": true,
+    "dynamic_merging_enabled": false,
+    "dynamic_prune_min_fraction_1": 0.01,
+    "dynamic_prune_patience": 3,
+    "dynamic_prune_min_age_steps": 800,
+    "dynamic_maintenance_interval": 100,
+    "dynamic_structure_warmup_steps": 1000,
+    "dynamic_structure_cooldown_steps": 300,
+    "dynamic_minimum_embeddings": 1
+  }
+}

@@ -1,0 +1,13 @@
+experiment,seed,run_dir,best_epoch,best_level1_mse,active_k,used_k_canonical,perplexity_canonical,minimum_code_count_canonical,minimum_code_fraction_canonical,shape_purity_canonical,affordance_purity_canonical,mean_assigned_squared_distance,p95_assigned_squared_distance
+l1_kobj3,1,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj3/seed_1,499,0.43893544770777226,3,3,2.586409289858933,10,0.2,0.6,0.8,1.1721659898757935,3.9378097653388973
+l1_kobj3,2,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj3/seed_2,447,0.313180579940478,3,3,2.9353264310499974,12,0.24,0.6,0.8,1.2213990688323975,4.965901994705198
+l1_kobj3,3,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj3/seed_3,427,0.37110090782245,3,3,2.9353264310499974,12,0.24,0.6,0.8,1.0628395080566406,3.0626975774765013
+l1_kobj4,1,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj4/seed_1,493,0.175329031397899,4,4,3.7817077505681467,9,0.18,0.78,0.98,0.26127028465270996,0.6693477034568782
+l1_kobj4,2,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj4/seed_2,491,0.145828271061182,4,4,3.7817077505681467,9,0.18,0.78,0.98,0.30102214217185974,0.7636426419019697
+l1_kobj4,3,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj4/seed_3,499,0.14149204355974992,4,4,3.7892914162759954,10,0.2,0.8,1.0,0.23865154385566711,0.761899575591087
+l1_kobj6,1,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj6/seed_1,487,0.17596480508645376,4,4,3.7892914162759954,10,0.2,0.8,1.0,0.21144047379493713,0.738520267605781
+l1_kobj6,2,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj6/seed_2,489,0.08698300987482072,6,6,5.743491774985176,5,0.1,0.92,1.0,0.19977712631225586,0.5482287764549255
+l1_kobj6,3,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj6/seed_3,499,0.45243575764199095,4,4,3.873186446471238,10,0.2,0.8,0.96,0.36518123745918274,0.9931691557168958
+l1_kobj8,1,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj8/seed_1,499,0.18047321438789368,6,6,4.297279144802437,1,0.02,0.78,0.98,0.17551034688949585,0.4960832267999648
+l1_kobj8,2,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj8/seed_2,499,0.14125142405430477,5,5,4.335259081991726,4,0.08,0.8,1.0,0.2900446355342865,0.8628960698842996
+l1_kobj8,3,/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj8/seed_3,500,0.1342522971580426,5,5,4.281707594146604,3,0.06,0.8,1.0,0.1793844848871231,0.4581329926848408

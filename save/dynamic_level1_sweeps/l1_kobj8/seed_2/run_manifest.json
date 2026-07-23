@@ -1,0 +1,8 @@
+{
+  "model": "dynamic",
+  "seed": 2,
+  "save_dir": "/home/kubra/DeepSym/save/dynamic_level1_sweeps/l1_kobj8/seed_2",
+  "levels": "1",
+  "device": "cuda",
+  "deterministic": true
+}
