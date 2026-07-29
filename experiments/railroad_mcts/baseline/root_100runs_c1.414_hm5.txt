@@ -1,0 +1,70 @@
+Replaying MCTS result: /home/kubra/DeepSym/experiments/railroad_mcts/inputs/mcts_result_20260724_163742.json
+Diagnostic state: before step 6
+Goal: ((H3) & (not stacked) & (not inserted))
+Goal already true: False
+State fluents: 33
+
+Exact root value, horizon 3: 0.983871000
+Exact selected action: stack27 O2 O1
+Top exact Q values:
+  Q=0.983871000  immediate_progress_p=0.983871  stack27 O2 O1
+  Q=0.981818000  immediate_progress_p=1.000000  stack21 O2 O5
+  Q=0.225352000  immediate_progress_p=0.239437  stack17 O2 O3
+
+MCTS selected after voting: stack17 O2 O3
+MCTS votes:
+  67/100: stack17 O2 O3
+  26/100: stack21 O2 O5
+  7/100: stack27 O2 O1
+
+Root action statistics — last MCTS run:
+action                          visits    total reward       mean Q    final UCB
+----------------------------------------------------------------------------------
+stack17 O2 O3                     9998     -438519.725      -43.861      -43.818
+stack21 O2 O5                        1        -135.000     -135.000     -130.708
+stack27 O2 O1                        1        -135.000     -135.000     -130.708
+
+Root outcome statistics — last MCTS run:
+action                        i   model p    visits       mean Q
+------------------------------------------------------------------------
+stack17 O2 O3                 0  0.746478      7399      -40.516
+stack17 O2 O3                 1  0.014085       139      -45.791
+stack17 O2 O3                 2  0.225352      2319      -30.045
+stack17 O2 O3                 3  0.014085       141     -444.673
+stack21 O2 O5                 0  0.981818         1     -135.000
+stack21 O2 O5                 1  0.018182         0        0.000
+stack27 O2 O1                 0  0.016129         0        0.000
+stack27 O2 O1                 1  0.983871         1     -135.000
+
+Aggregated root statistics over 100 independent MCTS runs:
+action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+----------------------------------------------------------------------------------------------------------------
+stack17 O2 O3                 67/100        669961      6699.61   -33761707.404      -50.394      -84.804
+stack21 O2 O5                 26/100        259979      2599.79   -10172615.000      -39.129     -127.838
+stack27 O2 O1                  7/100         70060       700.60    -2141141.818      -30.562     -127.680
+
+Last MCTS trace:
+ROOT_STATS	root_visits=10000	c=1.414214	heuristic_multiplier=5.000000
+ROOT_ACTION	name=stack17 O2 O3	visits=9998	total_reward=-438519.724676	mean_q=-43.860745	ucb=-43.817821
+ROOT_OUTCOME	action=stack17 O2 O3	index=0	probability=0.746478	visits=7399	total_reward=-299780.835776	mean_q=-40.516399
+ROOT_OUTCOME	action=stack17 O2 O3	index=1	probability=0.014085	visits=139	total_reward=-6365.000000	mean_q=-45.791367
+ROOT_OUTCOME	action=stack17 O2 O3	index=2	probability=0.225352	visits=2319	total_reward=-69675.000000	mean_q=-30.045278
+ROOT_OUTCOME	action=stack17 O2 O3	index=3	probability=0.014085	visits=141	total_reward=-62698.888900	mean_q=-444.672971
+ROOT_ACTION	name=stack21 O2 O5	visits=1	total_reward=-135.000000	mean_q=-135.000000	ucb=-130.708068
+ROOT_OUTCOME	action=stack21 O2 O5	index=0	probability=0.981818	visits=1	total_reward=-135.000000	mean_q=-135.000000
+ROOT_OUTCOME	action=stack21 O2 O5	index=1	probability=0.018182	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_ACTION	name=stack27 O2 O1	visits=1	total_reward=-135.000000	mean_q=-135.000000	ucb=-130.708068
+ROOT_OUTCOME	action=stack27 O2 O1	index=0	probability=0.016129	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_OUTCOME	action=stack27 O2 O1	index=1	probability=0.983871	visits=1	total_reward=-135.000000	mean_q=-135.000000
+BEST_PATH
+D:0|=visits=10000, Q=-43.88, g=0.00, h=20.17, g+h=20.17, #A=3
+   └── Action: stack17 O2 O3 (visits=9998)
+ D:1|=visits=7399, Q=-40.52, g=10.00, h=20.17, g+h=30.17, #A=2
+    └── Action: stack27 O2 O1 (visits=7397)
+  D:2|=visits=7267, Q=-40.01, g=20.00, h=25.00, g+h=45.00, #A=2
+     └── Action: increase_height3  (visits=7266)
+   D:3|=visits=7266, Q=-40.01, g=30.00, h=10.00, g+h=40.00, #A=1
+      └── Action: increase_stack3  (visits=7265)
+    D:4|=visits=7265, Q=-40.00, g=40.00, h=0.00, g+h=40.00, #A=0
+          (Leaf Node)
+

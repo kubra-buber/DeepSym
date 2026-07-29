@@ -1,0 +1,21 @@
+{
+  "created_at": "20260724_174842",
+  "repo_root": "/home/kubra/DeepSym",
+  "git_commit": "b4b12ef53e3e98e389c3827b6050350d924ed81b",
+  "git_status": "M railroad_source\n M save/stable1/mcts_result.json\n M save/stable1/plan.txt\n?? diagnose_railroad_heuristic.py\n?? experiments/\n?? railroad_mcts_local_fixes.patch\n?? run_mcts_100_plans.py\n?? save/stable1/mcts_result.empty.json\n?? sweep_railroad_root.py",
+  "opts": "/home/kubra/DeepSym/opts.yaml",
+  "goal": "(H3)",
+  "runs": 100,
+  "parameters": {
+    "iterations": 10000,
+    "max_depth": 25,
+    "max_symbolic_steps": 25,
+    "mcts_runs_per_state": 1,
+    "c": 5.0,
+    "heuristic_multiplier": 1.0,
+    "lambda_add": 0.0,
+    "lambda_max": 0.5,
+    "lambda_ff": 0.5,
+    "rollout_outcome": "progress"
+  }
+}

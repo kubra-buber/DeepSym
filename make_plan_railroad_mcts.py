@@ -90,6 +90,12 @@ def selected_action_name(selected: object) -> Optional[str]:
         return None
     name = getattr(selected, "name", None)
     text = canonical_action_name(name if name is not None else selected)
+
+    # Railroad C++ returns the sentinel string "NONE" when MCTS has no
+    # visited root action. It is not a grounded action name.
+    if text.upper() == "NONE":
+        return None
+
     return text or None
 
 

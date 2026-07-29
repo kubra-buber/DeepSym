@@ -1,0 +1,5 @@
+label=seed33_H4
+seed=33
+goal=(H4)
+runs=30
+iterations=10000

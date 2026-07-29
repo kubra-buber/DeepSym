@@ -1,0 +1,6 @@
+first_physical_action,count,fraction
+O1 on O5,11,0.36666666666666664
+O1 on O3,9,0.3
+O3 on O1,6,0.2
+O3 on O5,3,0.1
+O5 on O3,1,0.03333333333333333

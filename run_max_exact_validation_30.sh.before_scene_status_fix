@@ -1,0 +1,484 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+cd "$HOME/DeepSym" || exit 1
+
+RR_PY="${RR_PY:-/home/kubra/miniconda3/envs/deepsym_railroad/bin/python}"
+RECOG_PY="${RECOG_PY:-python}"
+ROOT="${ROOT:-experiments/railroad_mcts/max_exact_validation_30runs}"
+RUNS="${RUNS:-30}"
+ITERATIONS="${ITERATIONS:-10000}"
+MAX_DEPTH="${MAX_DEPTH:-25}"
+MAX_SYMBOLIC_STEPS="${MAX_SYMBOLIC_STEPS:-25}"
+RECOGNIZE_TIMEOUT="${RECOGNIZE_TIMEOUT:-300}"
+EXPECTED_TIMEOUT="${EXPECTED_TIMEOUT:-3600}"
+MCTS_TIMEOUT="${MCTS_TIMEOUT:-21600}"
+EVALUATOR="evaluate_fixed_plans_exact.py"
+
+mkdir -p "$ROOT/scenes"
+
+if [[ ! -f "$EVALUATOR" ]]; then
+    echo "ERROR: $EVALUATOR not found. Create it first."
+    exit 1
+fi
+
+SCENARIOS=(
+    "seed34_H5|34|(H5)"
+    "seed34_H4|34|(H4)"
+    "seed35_H3_S4|35|(H3) (S4)"
+    "seed35_H4|35|(H4)"
+    "seed36_H4|36|(H4)"
+    "seed37_H1_S3|37|(H1) (S3)"
+    "seed38_H2_S3|38|(H2) (S3)"
+    "seed39_H4|39|(H4)"
+    "seed42_H1_S3|42|(H1) (S3)"
+    "seed43_H3|43|(H3)"
+)
+
+RECOGNIZE_BACKUP="$ROOT/recognize.py.before_validation"
+cp recognize.py "$RECOGNIZE_BACKUP"
+
+restore_recognize() {
+    if [[ -f "$RECOGNIZE_BACKUP" ]]; then
+        cp "$RECOGNIZE_BACKUP" recognize.py
+    fi
+}
+trap restore_recognize EXIT
+trap 'restore_recognize; exit 130' INT
+trap 'restore_recognize; exit 143' TERM
+
+set_recognize_seed() {
+    local seed="$1"
+
+    "$RECOG_PY" - "$seed" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+seed = int(sys.argv[1])
+path = Path("recognize.py")
+text = path.read_text()
+new_text, count = re.subn(
+    r"np\.random\.seed\(\s*\d+\s*\)",
+    f"np.random.seed({seed})",
+    text,
+    count=1,
+)
+if count != 1:
+    raise SystemExit(
+        "ERROR: recognize.py içinde tam bir np.random.seed(...) satırı bulunamadı; "
+        f"eşleşme sayısı={count}"
+    )
+path.write_text(new_text)
+print(f"recognize.py seed set to {seed}")
+PY
+}
+
+activate_or_create_scene() {
+    local seed="$1"
+    local goal="$2"
+    local cache="$ROOT/scenes/seed${seed}"
+
+    mkdir -p "$cache"
+
+    if [[ -s "$cache/railroad_problem.json" &&
+          -s "$cache/objects.txt" &&
+          -s "$cache/railroad_operators.json" ]]; then
+        echo "Using cached scene for seed $seed"
+        cp "$cache/railroad_problem.json" save/stable1/railroad_problem.json
+        cp "$cache/objects.txt" save/stable1/objects.txt
+        cp "$cache/railroad_operators.json" save/stable1/railroad_operators.json
+        return 0
+    fi
+
+    echo "Generating scene for seed $seed (timeout=${RECOGNIZE_TIMEOUT}s)"
+    set_recognize_seed "$seed" || return 1
+
+    rm -f save/stable1/railroad_problem.json save/stable1/objects.txt
+
+    timeout "$RECOGNIZE_TIMEOUT" \
+        "$RECOG_PY" -u recognize.py \
+        -opts opts.yaml \
+        -goal "$goal" \
+        -device cpu \
+        2>&1 | tee "$cache/recognize.log"
+    local status=${PIPESTATUS[0]}
+
+    echo "$status" > "$cache/recognize_exit_status.txt"
+
+    if [[ "$status" -ne 0 ]]; then
+        echo "ERROR: recognize.py failed/timed out for seed $seed, status=$status"
+        return 1
+    fi
+
+    if [[ ! -s save/stable1/railroad_problem.json ||
+          ! -s save/stable1/objects.txt ||
+          ! -s save/stable1/railroad_operators.json ]]; then
+        echo "ERROR: scene files are missing after recognition for seed $seed"
+        return 1
+    fi
+
+    cp save/stable1/railroad_problem.json "$cache/railroad_problem.json"
+    cp save/stable1/objects.txt "$cache/objects.txt"
+    cp save/stable1/railroad_operators.json "$cache/railroad_operators.json"
+    cp recognize.py "$cache/recognize_seed${seed}.py"
+
+    sha256sum \
+        "$cache/railroad_problem.json" \
+        "$cache/objects.txt" \
+        "$cache/railroad_operators.json" \
+        > "$cache/SHA256SUMS"
+
+    return 0
+}
+
+run_expected() {
+    local scenario_dir="$1"
+    local goal="$2"
+    local out="$scenario_dir/expected"
+
+    mkdir -p "$out"
+
+    if [[ -s "$out/plan.txt" && -f "$out/completed.marker" ]]; then
+        echo "Expected already complete; skipping."
+        return 0
+    fi
+
+    rm -f "$out/plan.txt" "$out/completed.marker"
+
+    echo "Running expected maxprob-linear planner for goal=$goal"
+    timeout "$EXPECTED_TIMEOUT" \
+        "$RR_PY" make_plan_railroad_expected.py \
+        -opts opts.yaml \
+        -goal "$goal" \
+        -max-steps "$MAX_SYMBOLIC_STEPS" \
+        --plan-output maxprob-linear \
+        --rollout-outcome progress \
+        --debug-actions \
+        2>&1 | tee "$out/expected.log"
+    local status=${PIPESTATUS[0]}
+
+    echo "$status" > "$out/exit_status.txt"
+
+    if [[ "$status" -ne 0 || ! -s save/stable1/plan.txt ]]; then
+        echo "ERROR: expected planner failed/timed out, status=$status"
+        return 1
+    fi
+
+    cp save/stable1/plan.txt "$out/plan.txt"
+
+    if grep -qE '^not found\.$|^plan probability: 0(\.0+)?$' "$out/plan.txt"; then
+        echo "ERROR: expected planner found no positive-probability linear plan"
+        return 1
+    fi
+
+    touch "$out/completed.marker"
+    return 0
+}
+
+run_method() {
+    local scenario_dir="$1"
+    local goal="$2"
+    local method="$3"
+    local c="$4"
+    local hm="$5"
+    local ladd="$6"
+    local lmax="$7"
+    local lff="$8"
+
+    local out="$scenario_dir/mcts/$method"
+
+    if [[ -s "$out/exact_metrics.json" ]]; then
+        echo "$method exact metrics already complete; skipping."
+        return 0
+    fi
+
+    rm -rf "$out"
+    mkdir -p "$out"
+
+    echo
+    echo "Running $method: goal=$goal, runs=$RUNS"
+
+    timeout "$MCTS_TIMEOUT" \
+        "$RR_PY" run_mcts_100_plans.py \
+        -opts opts.yaml \
+        -goal "$goal" \
+        --runs "$RUNS" \
+        --iterations "$ITERATIONS" \
+        --max-depth "$MAX_DEPTH" \
+        --max-symbolic-steps "$MAX_SYMBOLIC_STEPS" \
+        --c "$c" \
+        --heuristic-multiplier "$hm" \
+        --lambda-add "$ladd" \
+        --lambda-max "$lmax" \
+        --lambda-ff "$lff" \
+        --rollout-outcome progress \
+        --output-dir "$out" \
+        2>&1 | tee "$out/mcts.log"
+    local mcts_status=${PIPESTATUS[0]}
+
+    echo "$mcts_status" > "$out/mcts_exit_status.txt"
+
+    # Even if every MCTS run failed, evaluate the method as 30 zero-probability
+    # attempts so planner failure is preserved instead of stopping the batch.
+    "$RR_PY" "$EVALUATOR" \
+        --opts opts.yaml \
+        --goal "$goal" \
+        --expected-plan "$scenario_dir/expected/plan.txt" \
+        --plan-frequency "$out/plan_frequency.csv" \
+        --requested-runs "$RUNS" \
+        --max-steps "$MAX_SYMBOLIC_STEPS" \
+        --method "$method" \
+        --output-dir "$out" \
+        2>&1 | tee "$out/exact_evaluation.log"
+    local eval_status=${PIPESTATUS[0]}
+
+    echo "$eval_status" > "$out/exact_evaluation_exit_status.txt"
+
+    if [[ "$eval_status" -ne 0 ]]; then
+        echo "ERROR: exact fixed-plan evaluation failed for $method"
+        return 1
+    fi
+
+    return 0
+}
+
+write_scenario_comparison() {
+    local scenario_dir="$1"
+
+    SCENARIO_DIR="$scenario_dir" "$RR_PY" - <<'PY' \
+        2>&1 | tee "$scenario_dir/exact_comparison.txt"
+import json
+import os
+from pathlib import Path
+
+scenario = Path(os.environ["SCENARIO_DIR"])
+methods = [("max_only", "Max-only"), ("max_ff", "Max+FF")]
+
+print("=" * 126)
+print("SCENARIO:", scenario.name)
+print("=" * 126)
+print(
+    f"{'Method':12s}"
+    f"{'Success':>11s}"
+    f"{'Failure':>11s}"
+    f"{'Mean exact p':>16s}"
+    f"{'Mean regret':>15s}"
+    f"{'Median regret':>17s}"
+    f"{'Optimal':>15s}"
+    f"{'Within 95%':>16s}"
+)
+print("=" * 126)
+
+for folder, display in methods:
+    path = scenario / "mcts" / folder / "exact_metrics.json"
+    if not path.exists():
+        print(f"{display:12s}  MISSING")
+        continue
+
+    data = json.loads(path.read_text())
+    requested = int(data["requested_runs"])
+    success = int(data["successful_runs"])
+    failed = int(data["failed_runs"])
+    optimal = int(data["optimal_count"])
+    near = int(data["within_95_count"])
+
+    print(
+        f"{display:12s}"
+        f"{success:5d}/{requested:<3d}"
+        f"{failed:5d}/{requested:<3d}"
+        f"{data['mean_exact_plan_probability']:16.6f}"
+        f"{data['mean_regret']:15.6f}"
+        f"{data['median_regret']:17.6f}"
+        f"{optimal:5d}/{requested:<3d} {100*data['optimal_plan_rate']:5.1f}%"
+        f"{near:5d}/{requested:<3d} {100*data['within_95_percent_rate']:5.1f}%"
+    )
+
+print("\nOPTIMUM")
+for folder, _display in methods:
+    path = scenario / "mcts" / folder / "exact_metrics.json"
+    if path.exists():
+        data = json.loads(path.read_text())
+        print(f"p* = {data['optimum_exact_linear_probability']:.9f}")
+        print(data["optimum_physical_plan"])
+        break
+PY
+}
+
+for spec in "${SCENARIOS[@]}"; do
+    IFS='|' read -r label seed goal <<< "$spec"
+    scenario_dir="$ROOT/$label"
+    mkdir -p "$scenario_dir/scene" "$scenario_dir/mcts"
+
+    echo
+    echo "################################################################################"
+    echo "SCENARIO: $label"
+    echo "SEED:     $seed"
+    echo "GOAL:     $goal"
+    echo "################################################################################"
+
+    if ! activate_or_create_scene "$seed" "$goal"; then
+        echo "SCENE FAILURE: $label"
+        echo "scene_failure" > "$scenario_dir/status.txt"
+        continue
+    fi
+
+    cp save/stable1/railroad_problem.json "$scenario_dir/scene/railroad_problem.json"
+    cp save/stable1/objects.txt "$scenario_dir/scene/objects.txt"
+    cp save/stable1/railroad_operators.json "$scenario_dir/scene/railroad_operators.json"
+    cp opts.yaml "$scenario_dir/scene/opts.yaml"
+
+    cat > "$scenario_dir/scenario_info.json" <<JSON
+{
+  "label": "$label",
+  "seed": $seed,
+  "goal": "$goal",
+  "runs": $RUNS,
+  "iterations": $ITERATIONS,
+  "max_depth": $MAX_DEPTH,
+  "max_symbolic_steps": $MAX_SYMBOLIC_STEPS
+}
+JSON
+
+    if ! run_expected "$scenario_dir" "$goal"; then
+        echo "EXPECTED FAILURE: $label"
+        echo "expected_failure" > "$scenario_dir/status.txt"
+        continue
+    fi
+
+    # Frozen main method.
+    run_method "$scenario_dir" "$goal" \
+        max_only \
+        3 1 \
+        0 1 0 || true
+
+    # Strongest alternative.
+    run_method "$scenario_dir" "$goal" \
+        max_ff \
+        5 1 \
+        0 0.5 0.5 || true
+
+    write_scenario_comparison "$scenario_dir"
+    echo "complete" > "$scenario_dir/status.txt"
+done
+
+ROOT_DIR="$ROOT" "$RR_PY" - <<'PY' \
+    2>&1 | tee "$ROOT/aggregate_exact_summary.txt"
+import csv
+import json
+import os
+import statistics
+from pathlib import Path
+
+root = Path(os.environ["ROOT_DIR"])
+methods = [("max_only", "Max-only"), ("max_ff", "Max+FF")]
+scenario_rows = []
+aggregate = {folder: {"probabilities": [], "regrets": [], "optimal": 0, "within95": 0, "failures": 0, "attempts": 0, "scenes": 0} for folder, _ in methods}
+
+for scenario in sorted(path for path in root.iterdir() if path.is_dir() and (path / "scenario_info.json").exists()):
+    info = json.loads((scenario / "scenario_info.json").read_text())
+
+    for folder, display in methods:
+        metrics_path = scenario / "mcts" / folder / "exact_metrics.json"
+        values_path = scenario / "mcts" / folder / "exact_plan_values.csv"
+        if not metrics_path.exists():
+            continue
+
+        metrics = json.loads(metrics_path.read_text())
+        attempts = int(metrics["requested_runs"])
+        failures = int(metrics["failed_runs"])
+        optimum = float(metrics["optimum_exact_linear_probability"])
+
+        probabilities = []
+        if values_path.exists():
+            with values_path.open(newline="") as handle:
+                for row in csv.DictReader(handle):
+                    probabilities.extend(
+                        [float(row["exact_linear_probability"])] * int(row["count"])
+                    )
+        probabilities.extend([0.0] * failures)
+        regrets = [max(0.0, optimum - value) for value in probabilities]
+
+        agg = aggregate[folder]
+        agg["probabilities"].extend(probabilities)
+        agg["regrets"].extend(regrets)
+        agg["optimal"] += int(metrics["optimal_count"])
+        agg["within95"] += int(metrics["within_95_count"])
+        agg["failures"] += failures
+        agg["attempts"] += attempts
+        agg["scenes"] += 1
+
+        scenario_rows.append({
+            "scenario": info["label"],
+            "seed": info["seed"],
+            "goal": info["goal"],
+            "method": display,
+            "optimum_probability": optimum,
+            "mean_exact_plan_probability": metrics["mean_exact_plan_probability"],
+            "mean_regret": metrics["mean_regret"],
+            "median_regret": metrics["median_regret"],
+            "optimal_plan_rate": metrics["optimal_plan_rate"],
+            "within_95_percent_rate": metrics["within_95_percent_rate"],
+            "planner_failure_rate": metrics["planner_failure_rate"],
+            "successful_runs": metrics["successful_runs"],
+            "failed_runs": failures,
+        })
+
+with (root / "scenario_exact_metrics.csv").open("w", newline="") as handle:
+    fields = [
+        "scenario", "seed", "goal", "method", "optimum_probability",
+        "mean_exact_plan_probability", "mean_regret", "median_regret",
+        "optimal_plan_rate", "within_95_percent_rate", "planner_failure_rate",
+        "successful_runs", "failed_runs",
+    ]
+    writer = csv.DictWriter(handle, fieldnames=fields)
+    writer.writeheader()
+    writer.writerows(scenario_rows)
+
+print("=" * 132)
+print("AGGREGATE EXACT-LINEAR VALIDATION")
+print("Failures are included as exact probability 0 and regret p*.")
+print("=" * 132)
+print(
+    f"{'Method':12s}"
+    f"{'Scenes':>8s}"
+    f"{'Runs':>8s}"
+    f"{'Mean exact p':>16s}"
+    f"{'Mean regret':>15s}"
+    f"{'Median regret':>17s}"
+    f"{'Optimal':>16s}"
+    f"{'Within 95%':>17s}"
+    f"{'Failure':>16s}"
+)
+print("=" * 132)
+
+for folder, display in methods:
+    data = aggregate[folder]
+    attempts = data["attempts"]
+    probabilities = data["probabilities"]
+    regrets = data["regrets"]
+
+    mean_probability = statistics.mean(probabilities) if probabilities else 0.0
+    mean_regret = statistics.mean(regrets) if regrets else 0.0
+    median_regret = statistics.median(regrets) if regrets else 0.0
+
+    print(
+        f"{display:12s}"
+        f"{data['scenes']:8d}"
+        f"{attempts:8d}"
+        f"{mean_probability:16.6f}"
+        f"{mean_regret:15.6f}"
+        f"{median_regret:17.6f}"
+        f"{data['optimal']:6d}/{attempts:<3d} {100*data['optimal']/attempts if attempts else 0:5.1f}%"
+        f"{data['within95']:6d}/{attempts:<3d} {100*data['within95']/attempts if attempts else 0:5.1f}%"
+        f"{data['failures']:6d}/{attempts:<3d} {100*data['failures']/attempts if attempts else 0:5.1f}%"
+    )
+
+print("\nPer-scenario CSV:", root / "scenario_exact_metrics.csv")
+PY
+
+echo
+echo "Validation finished."
+echo "Root: $ROOT"
+echo "Aggregate: $ROOT/aggregate_exact_summary.txt"
+echo "Per-scenario CSV: $ROOT/scenario_exact_metrics.csv"

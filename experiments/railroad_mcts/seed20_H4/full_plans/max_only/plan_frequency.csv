@@ -1,0 +1,12 @@
+physical_plan,count,fraction
+O3 on O1 | O2 on O3 | O5 on O2,54,0.54
+O2 on O1 | O3 on O2 | O5 on O3,28,0.28
+O3 on O1 | O2 on O3 | O4 on O2,4,0.04
+O1 on O5 | O2 on O1 | O3 on O2,3,0.03
+O1 on O5 | O3 on O1 | O2 on O3,3,0.03
+O1 on O3 | O2 on O1 | O5 on O2,2,0.02
+O2 on O1 | O3 on O2 | O4 on O3,2,0.02
+O2 on O5 | O3 on O2 | O4 on O3,1,0.01
+O2 on O1 | O5 on O2 | O3 on O5,1,0.01
+O3 on O1 | O5 on O3 | O2 on O5,1,0.01
+O3 on O5 | O2 on O3 | O1 on O2,1,0.01

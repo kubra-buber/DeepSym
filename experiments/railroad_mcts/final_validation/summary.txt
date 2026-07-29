@@ -1,0 +1,83 @@
+=== VOTES ===
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt:MCTS votes:
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-  100/100: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-Root action statistics — last MCTS run:
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-action                          visits    total reward       mean Q    final UCB
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-----------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-stack27 O4 O2                     9971     -608585.516      -61.036      -60.944
+--
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt:MCTS votes:
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-  100/100: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-Root action statistics — last MCTS run:
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-action                          visits    total reward       mean Q    final UCB
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-----------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-stack27 O4 O2                     9980     -610326.461      -61.155      -61.003
+--
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt:MCTS votes:
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-  100/100: stack27 O2 O1
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-Root action statistics — last MCTS run:
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-action                          visits    total reward       mean Q    final UCB
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-----------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-stack27 O2 O1                     9944     -300070.000      -30.176      -30.085
+--
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt:MCTS votes:
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-  98/100: stack27 O2 O1
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-  2/100: stack21 O2 O5
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-Root action statistics — last MCTS run:
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-action                          visits    total reward       mean Q    final UCB
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-----------------------------------------------------------------------------------
+
+=== EXACT AND MCTS SELECTIONS ===
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt:Exact root value, horizon 6: 0.968002145
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt:Exact selected action: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt:MCTS selected after voting: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt:Exact root value, horizon 6: 0.968002145
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt:Exact selected action: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt:MCTS selected after voting: stack27 O4 O2
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt:Exact root value, horizon 3: 0.983871000
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt:Exact selected action: stack27 O2 O1
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt:MCTS selected after voting: stack27 O2 O1
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt:Exact root value, horizon 3: 0.983871000
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt:Exact selected action: stack27 O2 O1
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt:MCTS selected after voting: stack27 O2 O1
+
+=== AGGREGATED ROOT STATISTICS ===
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt:Aggregated root statistics over 100 independent MCTS runs:
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-----------------------------------------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-stack27 O4 O2                100/100        997512      9975.12   -60967970.564      -61.120      -61.120
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-stack17 O4 O3                  0/100          1273        12.73      -83650.142      -65.711      -66.399
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-stack27 O4 O1                  0/100           828         8.28      -55437.086      -66.953      -67.053
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-stack21 O4 O5                  0/100           387         3.87      -31000.000      -80.103      -80.725
+experiments/railroad_mcts/final_validation/step3_max_c3_hm1_100runs.txt-
+--
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt:Aggregated root statistics over 100 independent MCTS runs:
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-----------------------------------------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-stack27 O4 O2                100/100        997360      9973.60   -61013503.088      -61.175      -61.175
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-stack17 O4 O3                  0/100          1365        13.65      -91520.494      -67.048      -68.368
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-stack27 O4 O1                  0/100           884         8.84      -60383.099      -68.307      -68.428
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-stack21 O4 O5                  0/100           391         3.91      -31835.000      -81.419      -82.062
+experiments/railroad_mcts/final_validation/step3_maxff_c5_hm1_100runs.txt-
+--
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt:Aggregated root statistics over 100 independent MCTS runs:
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-----------------------------------------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-stack27 O2 O1                100/100        990330      9903.30   -29899250.000      -30.191      -30.191
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-stack21 O2 O5                  0/100          8916        89.16     -279880.000      -31.391      -35.814
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-stack17 O2 O3                  0/100           754         7.54      -26137.872      -34.666      -35.208
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step6_max_c3_hm1_100runs.txt-Last MCTS trace:
+--
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt:Aggregated root statistics over 100 independent MCTS runs:
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-----------------------------------------------------------------------------------------------------------------
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-stack27 O2 O1                 98/100        968311      9683.11   -29248920.000      -30.206      -31.052
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-stack21 O2 O5                  2/100         30839       308.39     -980570.000      -31.796      -35.876
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-stack17 O2 O3                  0/100           850         8.50      -30654.093      -36.064      -37.005
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-
+experiments/railroad_mcts/final_validation/step6_maxff_c5_hm1_100runs.txt-Last MCTS trace:

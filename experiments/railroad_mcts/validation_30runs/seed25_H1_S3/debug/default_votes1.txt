@@ -1,0 +1,60 @@
+Loaded 45 Railroad operators
+Grounded 657 actions
+Objects: ['O1', 'O2', 'O3', 'O4', 'O5']
+Types: {'O1': 'objtype3', 'O2': 'objtype1', 'O3': 'objtype3', 'O4': 'objtype2', 'O5': 'objtype2'}
+Relations: 20
+Initial fluents: 32
+Goal: ((H1) & (S3) & (not stacked) & (not inserted))
+
+=== Starting Railroad MCTS planning ===
+Step 0: makebase O5
+  votes: makebase O5=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 1: increase_height1
+  votes: increase_height1=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 2: increase_stack1
+  votes: increase_stack1=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 3: stack26 O5 O3
+  votes: stack26 O5 O3=1/1
+  representative outcome probability: 0.904762
+        learned_dist=[inserted:0.089, stacked:0.905, tumble2:0.006]
+Step 4: increase_height2
+  votes: increase_height2=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 5: increase_stack2
+  votes: increase_stack2=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 6: stack23 O3 O2
+  votes: stack23 O3 O2=1/1
+  representative outcome probability: 0.577778
+        learned_dist=[inserted:0.578, stacked:0.422]
+Step 7: increase_stack3
+  votes: increase_stack3=1/1
+  representative outcome probability: 1.000000
+        auxiliary/deterministic
+Step 8: stack11 O2 O4
+  votes: stack11 O2 O4=1/1
+  representative outcome probability: 0.694445
+        learned_dist=[roll1:0.694, tumble1:0.194, tumble2:0.111]
+Step 9: stack13 O2 O1
+  votes: stack13 O2 O1=1/1
+  representative outcome probability: 0.770115
+        learned_dist=[roll1:0.172, roll2:0.770, tumble1:0.057]
+Traceback (most recent call last):
+  File "/home/kubra/DeepSym/make_plan_railroad_mcts.py", line 612, in <module>
+    main()
+  File "/home/kubra/DeepSym/make_plan_railroad_mcts.py", line 530, in main
+    plan_with_repeated_mcts(
+  File "/home/kubra/DeepSym/make_plan_railroad_mcts.py", line 298, in plan_with_repeated_mcts
+    selected, votes, elapsed, last_trace = run_mcts_vote(
+                                           ^^^^^^^^^^^^^^
+  File "/home/kubra/DeepSym/make_plan_railroad_mcts.py", line 210, in run_mcts_vote
+    raise RuntimeError(
+RuntimeError: Could not map the Railroad MCTS result back to a grounded action. MCTS returned 'NONE'; close grounded names=[]; first grounded names=['increase_height1', 'increase_height2', 'increase_height3', 'increase_height4', 'increase_height5', 'increase_height6', 'increase_stack1', 'increase_stack2', 'increase_stack3', 'increase_stack4', 'increase_stack5', 'increase_stack6', 'makebase O1', 'makebase O2', 'makebase O3', 'makebase O4', 'makebase O5', 'stack0 O1 O2', 'stack0 O1 O3', 'stack0 O1 O4']

@@ -1,0 +1,4 @@
+first_symbolic_action,count,fraction
+makebase O2,60,0.6
+makebase O3,35,0.35
+makebase O5,5,0.05

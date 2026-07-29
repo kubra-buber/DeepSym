@@ -1,0 +1,80 @@
+Replaying MCTS result: /home/kubra/DeepSym/experiments/railroad_mcts/inputs/mcts_result_20260724_163742.json
+Diagnostic state: before step 3
+Goal: ((H3) & (not stacked) & (not inserted))
+Goal already true: False
+State fluents: 33
+
+Exact root value, horizon 6: 0.968002145
+Exact selected action: stack27 O4 O2
+Top exact Q values:
+  Q=0.968002145  immediate_progress_p=0.983871  stack27 O4 O2
+  Q=0.415411981  immediate_progress_p=0.983871  stack27 O4 O1
+  Q=0.028169000  immediate_progress_p=0.239437  stack17 O4 O3
+  Q=0.000000000  immediate_progress_p=1.000000  stack21 O4 O5
+
+MCTS selected after voting: stack27 O4 O2
+MCTS votes:
+  100/100: stack27 O4 O2
+
+Root action statistics — last MCTS run:
+action                          visits    total reward       mean Q    final UCB
+----------------------------------------------------------------------------------
+stack27 O4 O2                     9993     -737685.612      -73.820      -73.777
+stack21 O4 O5                        3        -750.000     -250.000     -247.522
+stack27 O4 O1                        3        -468.077     -156.026     -153.548
+stack17 O4 O3                        1        -160.820     -160.820     -156.528
+
+Root outcome statistics — last MCTS run:
+action                        i   model p    visits       mean Q
+------------------------------------------------------------------------
+stack17 O4 O3                 0  0.746478         0        0.000
+stack17 O4 O3                 1  0.014085         1     -160.820
+stack17 O4 O3                 2  0.225352         0        0.000
+stack17 O4 O3                 3  0.014085         0        0.000
+stack21 O4 O5                 0  0.981818         3     -250.000
+stack21 O4 O5                 1  0.018182         0        0.000
+stack27 O4 O1                 0  0.016129         0        0.000
+stack27 O4 O1                 1  0.983871         3     -156.026
+stack27 O4 O2                 0  0.016129       152     -379.231
+stack27 O4 O2                 1  0.983871      9841      -69.103
+
+Aggregated root statistics over 100 independent MCTS runs:
+action                         votes  total visits  mean visits    total reward   weighted Q   mean run Q
+----------------------------------------------------------------------------------------------------------------
+stack27 O4 O2                100/100        999169      9991.69   -71228645.151      -71.288      -71.288
+stack27 O4 O1                  0/100           323         3.23      -51855.335     -160.543     -157.383
+stack21 O4 O5                  0/100           293         2.93      -74160.000     -253.106     -257.150
+stack17 O4 O3                  0/100           215         2.15      -37438.055     -174.130     -172.097
+
+Last MCTS trace:
+ROOT_STATS	root_visits=10000	c=1.414214	heuristic_multiplier=5.000000
+ROOT_ACTION	name=stack17 O4 O3	visits=1	total_reward=-160.819934	mean_q=-160.819934	ucb=-156.528002
+ROOT_OUTCOME	action=stack17 O4 O3	index=0	probability=0.746478	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_OUTCOME	action=stack17 O4 O3	index=1	probability=0.014085	visits=1	total_reward=-160.819934	mean_q=-160.819934
+ROOT_OUTCOME	action=stack17 O4 O3	index=2	probability=0.225352	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_OUTCOME	action=stack17 O4 O3	index=3	probability=0.014085	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_ACTION	name=stack21 O4 O5	visits=3	total_reward=-750.000000	mean_q=-250.000000	ucb=-247.522052
+ROOT_OUTCOME	action=stack21 O4 O5	index=0	probability=0.981818	visits=3	total_reward=-750.000000	mean_q=-250.000000
+ROOT_OUTCOME	action=stack21 O4 O5	index=1	probability=0.018182	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_ACTION	name=stack27 O4 O1	visits=3	total_reward=-468.076709	mean_q=-156.025570	ucb=-153.547622
+ROOT_OUTCOME	action=stack27 O4 O1	index=0	probability=0.016129	visits=0	total_reward=0.000000	mean_q=0.000000
+ROOT_OUTCOME	action=stack27 O4 O1	index=1	probability=0.983871	visits=3	total_reward=-468.076709	mean_q=-156.025570
+ROOT_ACTION	name=stack27 O4 O2	visits=9993	total_reward=-737685.612136	mean_q=-73.820235	ucb=-73.777301
+ROOT_OUTCOME	action=stack27 O4 O2	index=0	probability=0.016129	visits=152	total_reward=-57643.058076	mean_q=-379.230645
+ROOT_OUTCOME	action=stack27 O4 O2	index=1	probability=0.983871	visits=9841	total_reward=-680042.554060	mean_q=-69.102993
+BEST_PATH
+D:0|=visits=10000, Q=-73.91, g=0.00, h=30.16, g+h=30.16, #A=4
+   └── Action: stack27 O4 O2 (visits=9993)
+ D:1|=visits=9841, Q=-69.10, g=10.00, h=20.00, g+h=30.00, #A=2
+    └── Action: increase_stack2  (visits=9839)
+  D:2|=visits=9839, Q=-69.09, g=20.00, h=20.00, g+h=40.00, #A=1
+     └── Action: increase_height2  (visits=9838)
+   D:3|=visits=9838, Q=-69.08, g=30.00, h=20.17, g+h=50.17, #A=3
+      └── Action: stack21 O2 O5 (visits=9833)
+    D:4|=visits=9655, Q=-60.01, g=40.00, h=10.00, g+h=50.00, #A=2
+       └── Action: increase_height3  (visits=9653)
+     D:5|=visits=9653, Q=-60.00, g=50.00, h=10.00, g+h=60.00, #A=1
+        └── Action: increase_stack3  (visits=9652)
+      D:6|=visits=9652, Q=-60.00, g=60.00, h=0.00, g+h=60.00, #A=0
+              (Leaf Node)
+

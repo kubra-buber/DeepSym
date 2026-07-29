@@ -1,0 +1,20 @@
+{
+  "method": "max_ff",
+  "goal": "(H3) (S4)",
+  "requested_runs": 30,
+  "successful_runs": 30,
+  "failed_runs": 0,
+  "planner_failure_rate": 0.0,
+  "expected_plan_file_probability": 0.726002,
+  "optimum_exact_linear_probability": 0.7260016084807501,
+  "optimum_physical_plan": "O2 on O5 | O4 on O2 | O3 on O4",
+  "mean_exact_plan_probability": 0.6116829020904238,
+  "mean_exact_plan_probability_successful_only": 0.6116829020904238,
+  "mean_regret": 0.11431870639032635,
+  "median_regret": 0.14132828937284347,
+  "optimal_count": 0,
+  "optimal_plan_rate": 0.0,
+  "within_95_count": 0,
+  "within_95_percent_rate": 0.0,
+  "unique_successful_plans": 3
+}

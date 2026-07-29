@@ -1,0 +1,7 @@
+physical_plan,count,fraction
+O1 on O5 | O2 on O1,10,0.3333333333333333
+O1 on O3 | O5 on O1,6,0.2
+O3 on O1 | O5 on O3,6,0.2
+O1 on O5 | O3 on O1,5,0.16666666666666666
+O1 on O3 | O2 on O1,2,0.06666666666666667
+O3 on O1 | O2 on O3,1,0.03333333333333333

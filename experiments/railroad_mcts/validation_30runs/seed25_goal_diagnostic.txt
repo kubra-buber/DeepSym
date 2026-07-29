@@ -1,0 +1,221 @@
+Objects: ['O1', 'O2', 'O3', 'O4', 'O5']
+Types: {'O1': 'objtype3', 'O2': 'objtype1', 'O3': 'objtype3', 'O4': 'objtype2', 'O5': 'objtype2'}
+Total grounded actions: 657
+Applicable actions in original initial state: 5
+   makebase O1
+   makebase O2
+   makebase O3
+   makebase O4
+   makebase O5
+get_usable_actions count: 37
+  usable: stack30 O3 O5
+  usable: stack30 O3 O4
+  usable: stack30 O1 O5
+  usable: stack30 O1 O4
+  usable: stack27 O3 O1
+  usable: makebase O1
+  usable: increase_stack6 
+  usable: increase_stack5 
+  usable: increase_stack4 
+  usable: increase_stack3 
+  usable: increase_stack2 
+  usable: increase_stack1 
+  usable: stack27 O1 O3
+  usable: increase_height6 
+  usable: stack26 O4 O3
+  usable: stack13 O2 O3
+  usable: increase_height5 
+  usable: stack20 O5 O2
+  usable: stack13 O2 O1
+  usable: increase_height4 
+  usable: stack26 O4 O1
+  usable: stack26 O5 O3
+  usable: increase_height3 
+  usable: increase_height2 
+  usable: stack26 O5 O1
+  usable: increase_height1 
+  usable: stack20 O4 O2
+  usable: makebase O2
+  usable: makebase O3
+  usable: makebase O4
+
+====================================================================================================
+GOAL: (H1)
+====================================================================================================
+Parsed goal: ((H1) & (not stacked) & (not inserted))
+Goal already true initially: False
+Initial max-only heuristic: 20.0
+Selected action: 'makebase O1'
+
+MCTS TRACE:
+ROOT_STATS	root_visits=10000	c=3.000000	heuristic_multiplier=1.000000
+ROOT_ACTION	name=makebase O1	visits=2000	total_reward=-59990.000000	mean_q=-29.995000	ucb=-29.791416
+ROOT_OUTCOME	action=makebase O1	index=0	probability=1.000000	visits=2000	total_reward=-59990.000000	mean_q=-29.995000
+ROOT_ACTION	name=makebase O2	visits=2000	total_reward=-59990.000000	mean_q=-29.995000	ucb=-29.791416
+ROOT_OUTCOME	action=makebase O2	index=0	probability=1.000000	visits=2000	total_reward=-59990.000000	mean_q=-29.995000
+ROOT_ACTION	name=makebase O3	visits=2000	total_reward=-59990.000000	mean_q=-29.995000	ucb=-29.791416
+ROOT_OUTCOME	action=makebase O3	index=0	probability=1.000000	visits=2000	total_reward=-59990.000000	mean_q=-29.995000
+ROOT_ACTION	name=makebase O4	visits=2000	total_reward=-59990.000000	mean_q=-29.995000	ucb=-29.791416
+ROOT_OUTCOME	action=makebase O4	index=0	probability=1.000000	visits=2000	total_reward=-59990.000000	mean_q=-29.995000
+ROOT_ACTION	name=makebase O5	visits=2000	total_reward=-59990.000000	mean_q=-29.995000	ucb=-29.791416
+ROOT_OUTCOME	action=makebase O5	index=0	probability=1.000000	visits=2000	total_reward=-59990.000000	mean_q=-29.995000
+BEST_PATH
+D:0|=visits=10000, Q=-30.00, g=0.00, h=20.00, g+h=20.00, #A=5
+   └── Action: makebase O1 (visits=2000)
+ D:1|=visits=2000, Q=-30.00, g=10.00, h=10.00, g+h=20.00, #A=2
+    └── Action: increase_height1  (visits=1000)
+  D:2|=visits=1000, Q=-30.00, g=20.00, h=10.00, g+h=30.00, #A=1
+     └── Action: increase_stack1  (visits=999)
+   D:3|=visits=999, Q=-30.00, g=30.00, h=0.00, g+h=30.00, #A=0
+        (Leaf Node)
+
+
+====================================================================================================
+GOAL: (S2)
+====================================================================================================
+Parsed goal: ((S2) & (not stacked) & (not inserted))
+Goal already true initially: False
+Initial max-only heuristic: 30.0
+Selected action: 'makebase O3'
+
+MCTS TRACE:
+ROOT_STATS	root_visits=10000	c=3.000000	heuristic_multiplier=1.000000
+ROOT_ACTION	name=makebase O1	visits=318	total_reward=-16950.000000	mean_q=-53.301887	ucb=-52.791328
+ROOT_OUTCOME	action=makebase O1	index=0	probability=1.000000	visits=318	total_reward=-16950.000000	mean_q=-53.301887
+ROOT_ACTION	name=makebase O2	visits=2	total_reward=-150.000000	mean_q=-75.000000	ucb=-68.562102
+ROOT_OUTCOME	action=makebase O2	index=0	probability=1.000000	visits=2	total_reward=-150.000000	mean_q=-75.000000
+ROOT_ACTION	name=makebase O3	visits=9640	total_reward=-509150.000000	mean_q=-52.816390	ucb=-52.723660
+ROOT_OUTCOME	action=makebase O3	index=0	probability=1.000000	visits=9640	total_reward=-509150.000000	mean_q=-52.816390
+ROOT_ACTION	name=makebase O4	visits=20	total_reward=-1100.238789	mean_q=-55.011939	ucb=-52.976097
+ROOT_OUTCOME	action=makebase O4	index=0	probability=1.000000	visits=20	total_reward=-1100.238789	mean_q=-55.011939
+ROOT_ACTION	name=makebase O5	visits=20	total_reward=-1100.238789	mean_q=-55.011939	ucb=-52.976097
+ROOT_OUTCOME	action=makebase O5	index=0	probability=1.000000	visits=20	total_reward=-1100.238789	mean_q=-55.011939
+BEST_PATH
+D:0|=visits=10000, Q=-52.85, g=0.00, h=30.00, g+h=30.00, #A=5
+   └── Action: makebase O3 (visits=9640)
+ D:1|=visits=9640, Q=-52.82, g=10.00, h=20.00, g+h=30.00, #A=2
+    └── Action: increase_stack1  (visits=5575)
+  D:2|=visits=5575, Q=-52.77, g=20.00, h=30.00, g+h=50.00, #A=1
+     └── Action: increase_height1  (visits=5574)
+   D:3|=visits=5574, Q=-52.77, g=30.00, h=20.00, g+h=50.00, #A=4
+      └── Action: stack30 O3 O4 (visits=5140)
+    D:4|=visits=3879, Q=-50.00, g=40.00, h=10.00, g+h=50.00, #A=1
+       └── Action: increase_stack2  (visits=3878)
+     D:5|=visits=3878, Q=-50.00, g=50.00, h=0.00, g+h=50.00, #A=0
+            (Leaf Node)
+
+
+====================================================================================================
+GOAL: (S3)
+====================================================================================================
+Parsed goal: ((S3) & (not stacked) & (not inserted))
+Goal already true initially: False
+Initial max-only heuristic: 40.0
+Selected action: 'makebase O3'
+
+MCTS TRACE:
+ROOT_STATS	root_visits=10000	c=3.000000	heuristic_multiplier=1.000000
+ROOT_ACTION	name=makebase O1	visits=3273	total_reward=-268172.592112	mean_q=-81.934797	ucb=-81.775655
+ROOT_OUTCOME	action=makebase O1	index=0	probability=1.000000	visits=3273	total_reward=-268172.592112	mean_q=-81.934797
+ROOT_ACTION	name=makebase O2	visits=5	total_reward=-480.000000	mean_q=-96.000000	ucb=-91.928316
+ROOT_OUTCOME	action=makebase O2	index=0	probability=1.000000	visits=5	total_reward=-480.000000	mean_q=-96.000000
+ROOT_ACTION	name=makebase O3	visits=3973	total_reward=-325212.152006	mean_q=-81.855563	ucb=-81.711119
+ROOT_OUTCOME	action=makebase O3	index=0	probability=1.000000	visits=3973	total_reward=-325212.152006	mean_q=-81.855563
+ROOT_ACTION	name=makebase O4	visits=775	total_reward=-63630.956072	mean_q=-82.104459	ucb=-81.777414
+ROOT_OUTCOME	action=makebase O4	index=0	probability=1.000000	visits=775	total_reward=-63630.956072	mean_q=-82.104459
+ROOT_ACTION	name=makebase O5	visits=1974	total_reward=-161871.013271	mean_q=-82.001526	ucb=-81.796606
+ROOT_OUTCOME	action=makebase O5	index=0	probability=1.000000	visits=1974	total_reward=-161871.013271	mean_q=-82.001526
+BEST_PATH
+D:0|=visits=10000, Q=-81.94, g=0.00, h=40.00, g+h=40.00, #A=5
+   └── Action: makebase O3 (visits=3973)
+ D:1|=visits=3973, Q=-81.86, g=10.00, h=30.00, g+h=40.00, #A=2
+    └── Action: increase_stack1  (visits=3025)
+  D:2|=visits=3025, Q=-81.82, g=20.00, h=40.00, g+h=60.00, #A=1
+     └── Action: increase_height1  (visits=3024)
+   D:3|=visits=3024, Q=-81.83, g=30.00, h=30.00, g+h=60.00, #A=4
+      └── Action: stack30 O3 O5 (visits=2493)
+    D:4|=visits=1893, Q=-79.04, g=40.00, h=20.00, g+h=60.00, #A=1
+       └── Action: increase_stack2  (visits=1892)
+     D:5|=visits=1892, Q=-79.05, g=50.00, h=30.12, g+h=80.12, #A=3
+        └── Action: stack26 O5 O1 (visits=1787)
+      D:6|=visits=1595, Q=-79.99, g=60.00, h=10.00, g+h=70.00, #A=2
+         └── Action: increase_height2  (visits=797)
+       D:7|=visits=797, Q=-80.00, g=70.00, h=10.00, g+h=80.00, #A=1
+          └── Action: increase_stack3  (visits=796)
+        D:8|=visits=796, Q=-80.00, g=80.00, h=0.00, g+h=80.00, #A=0
+                  (Leaf Node)
+
+
+====================================================================================================
+GOAL: (H1) (S2)
+====================================================================================================
+Parsed goal: ((H1) & (S2) & (not stacked) & (not inserted))
+Goal already true initially: False
+Initial max-only heuristic: 30.0
+Selected action: 'makebase O1'
+
+MCTS TRACE:
+ROOT_STATS	root_visits=10000	c=3.000000	heuristic_multiplier=1.000000
+ROOT_ACTION	name=makebase O1	visits=7016	total_reward=-538640.000000	mean_q=-76.773090	ucb=-76.664394
+ROOT_OUTCOME	action=makebase O1	index=0	probability=1.000000	visits=7016	total_reward=-538640.000000	mean_q=-76.773090
+ROOT_ACTION	name=makebase O2	visits=5	total_reward=-460.000000	mean_q=-92.000000	ucb=-87.928316
+ROOT_OUTCOME	action=makebase O2	index=0	probability=1.000000	visits=5	total_reward=-460.000000	mean_q=-92.000000
+ROOT_ACTION	name=makebase O3	visits=2914	total_reward=-224360.000000	mean_q=-76.993823	ucb=-76.825162
+ROOT_OUTCOME	action=makebase O3	index=0	probability=1.000000	visits=2914	total_reward=-224360.000000	mean_q=-76.993823
+ROOT_ACTION	name=makebase O4	visits=35	total_reward=-2780.358183	mean_q=-79.438805	ucb=-77.899853
+ROOT_OUTCOME	action=makebase O4	index=0	probability=1.000000	visits=35	total_reward=-2780.358183	mean_q=-79.438805
+ROOT_ACTION	name=makebase O5	visits=30	total_reward=-2390.418071	mean_q=-79.680602	ucb=-78.018344
+ROOT_OUTCOME	action=makebase O5	index=0	probability=1.000000	visits=30	total_reward=-2390.418071	mean_q=-79.680602
+BEST_PATH
+D:0|=visits=10000, Q=-76.86, g=0.00, h=30.00, g+h=30.00, #A=5
+   └── Action: makebase O1 (visits=7016)
+ D:1|=visits=7016, Q=-76.77, g=10.00, h=20.00, g+h=30.00, #A=2
+    └── Action: increase_stack1  (visits=5174)
+  D:2|=visits=5174, Q=-76.70, g=20.00, h=30.00, g+h=50.00, #A=1
+     └── Action: increase_height1  (visits=5173)
+   D:3|=visits=5173, Q=-76.70, g=30.00, h=20.00, g+h=50.00, #A=4
+      └── Action: stack30 O1 O4 (visits=4902)
+    D:4|=visits=3692, Q=-50.00, g=40.00, h=10.00, g+h=50.00, #A=1
+       └── Action: increase_stack2  (visits=3692)
+     D:5|=visits=3692, Q=-50.00, g=50.00, h=0.00, g+h=50.00, #A=0
+            (Leaf Node)
+
+
+====================================================================================================
+GOAL: (H1) (S3)
+====================================================================================================
+Parsed goal: ((H1) & (S3) & (not stacked) & (not inserted))
+Goal already true initially: False
+Initial max-only heuristic: 40.0
+Selected action: 'makebase O2'
+
+MCTS TRACE:
+ROOT_STATS	root_visits=10000	c=3.000000	heuristic_multiplier=1.000000
+ROOT_ACTION	name=makebase O1	visits=825	total_reward=-139741.137845	mean_q=-169.383197	ucb=-169.066217
+ROOT_OUTCOME	action=makebase O1	index=0	probability=1.000000	visits=825	total_reward=-139741.137845	mean_q=-169.383197
+ROOT_ACTION	name=makebase O2	visits=7365	total_reward=-1245920.000000	mean_q=-169.167685	ucb=-169.061595
+ROOT_OUTCOME	action=makebase O2	index=0	probability=1.000000	visits=7365	total_reward=-1245920.000000	mean_q=-169.167685
+ROOT_ACTION	name=makebase O3	visits=798	total_reward=-135191.014162	mean_q=-169.412298	ucb=-169.090000
+ROOT_OUTCOME	action=makebase O3	index=0	probability=1.000000	visits=798	total_reward=-135191.014162	mean_q=-169.412298
+ROOT_ACTION	name=makebase O4	visits=491	total_reward=-83233.915767	mean_q=-169.519177	ucb=-169.108294
+ROOT_OUTCOME	action=makebase O4	index=0	probability=1.000000	visits=491	total_reward=-83233.915767	mean_q=-169.519177
+ROOT_ACTION	name=makebase O5	visits=521	total_reward=-88291.031147	mean_q=-169.464551	ucb=-169.065673
+ROOT_OUTCOME	action=makebase O5	index=0	probability=1.000000	visits=521	total_reward=-88291.031147	mean_q=-169.464551
+BEST_PATH
+D:0|=visits=10000, Q=-169.24, g=0.00, h=40.00, g+h=40.00, #A=5
+   └── Action: makebase O2 (visits=7365)
+ D:1|=visits=7365, Q=-169.17, g=10.00, h=30.00, g+h=40.00, #A=2
+    └── Action: increase_height1  (visits=3727)
+  D:2|=visits=3727, Q=-169.18, g=20.00, h=30.00, g+h=50.00, #A=1
+     └── Action: increase_stack1  (visits=3726)
+   D:3|=visits=3726, Q=-169.22, g=30.00, h=inf, g+h=inf, #A=4
+      └── Action: stack11 O2 O5 (visits=953)
+    D:4|=visits=663, Q=-169.64, g=40.00, h=inf, g+h=inf, #A=3
+       └── Action: stack13 O2 O1 (visits=221)
+     D:5|=visits=171, Q=-169.77, g=50.00, h=inf, g+h=inf, #A=2
+        └── Action: stack11 O2 O4 (visits=85)
+      D:6|=visits=52, Q=-169.81, g=60.00, h=inf, g+h=inf, #A=1
+         └── Action: stack13 O2 O3 (visits=51)
+       D:7|=visits=47, Q=-170.00, g=70.00, h=inf, g+h=inf, #A=0
+                (Leaf Node)
+

@@ -1,0 +1,41 @@
+{
+  "successful_process_runs": 30,
+  "failed_process_runs": 0,
+  "representative_rollout_goal_rate": 1.0,
+  "mean_representative_branch_probability": 0.9237487407683473,
+  "most_common_first_symbolic_actions": [
+    [
+      "makebase O3",
+      30
+    ]
+  ],
+  "most_common_first_physical_actions": [
+    [
+      "O4 on O3",
+      24
+    ],
+    [
+      "O2 on O3",
+      6
+    ]
+  ],
+  "most_common_physical_plans": [
+    [
+      "O4 on O3 | O2 on O4 | O5 on O2",
+      14
+    ],
+    [
+      "O4 on O3 | O5 on O4 | O2 on O5",
+      10
+    ],
+    [
+      "O2 on O3 | O4 on O2 | O5 on O4",
+      3
+    ],
+    [
+      "O2 on O3 | O5 on O2 | O4 on O5",
+      3
+    ]
+  ],
+  "warning": "representative_branch_probability and representative rollout goal rate describe the chosen diagnostic branch, not the closed-loop MCTS policy."
+}

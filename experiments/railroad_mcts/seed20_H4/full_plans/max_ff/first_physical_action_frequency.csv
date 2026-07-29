@@ -1,0 +1,6 @@
+first_physical_action,count,fraction
+O3 on O1,75,0.75
+O2 on O1,16,0.16
+O1 on O5,7,0.07
+O2 on O3,1,0.01
+O3 on O5,1,0.01

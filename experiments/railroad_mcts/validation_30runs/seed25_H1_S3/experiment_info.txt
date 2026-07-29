@@ -1,0 +1,5 @@
+label=seed25_H1_S3
+seed=25
+goal=(H1) (S3)
+runs=30
+iterations=10000

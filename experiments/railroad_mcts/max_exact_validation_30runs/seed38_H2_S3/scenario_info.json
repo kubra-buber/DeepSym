@@ -1,0 +1,9 @@
+{
+  "label": "seed38_H2_S3",
+  "seed": 38,
+  "goal": "(H2) (S3)",
+  "runs": 30,
+  "iterations": 10000,
+  "max_depth": 25,
+  "max_symbolic_steps": 25
+}

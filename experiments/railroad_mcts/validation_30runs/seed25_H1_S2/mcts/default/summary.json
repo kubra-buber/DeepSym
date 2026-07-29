@@ -1,0 +1,45 @@
+{
+  "successful_process_runs": 30,
+  "failed_process_runs": 0,
+  "representative_rollout_goal_rate": 1.0,
+  "mean_representative_branch_probability": 0.75,
+  "most_common_first_symbolic_actions": [
+    [
+      "makebase O1",
+      29
+    ],
+    [
+      "makebase O3",
+      1
+    ]
+  ],
+  "most_common_first_physical_actions": [
+    [
+      "O5 on O1",
+      16
+    ],
+    [
+      "O4 on O1",
+      13
+    ],
+    [
+      "O4 on O3",
+      1
+    ]
+  ],
+  "most_common_physical_plans": [
+    [
+      "O5 on O1",
+      16
+    ],
+    [
+      "O4 on O1",
+      13
+    ],
+    [
+      "O4 on O3",
+      1
+    ]
+  ],
+  "warning": "representative_branch_probability and representative rollout goal rate describe the chosen diagnostic branch, not the closed-loop MCTS policy."
+}

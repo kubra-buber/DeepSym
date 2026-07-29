@@ -1,0 +1,21 @@
+{
+  "created_at": "20260727_181110",
+  "repo_root": "/home/kubra/DeepSym",
+  "git_commit": "b4b12ef53e3e98e389c3827b6050350d924ed81b",
+  "git_status": "M make_plan_railroad_mcts.py\n D models_org.py\n M railroad_source\n M recognize.py\n M save/stable1/mcts_result.json\n M save/stable1/objects.txt\n M save/stable1/plan.txt\n M save/stable1/railroad_problem.json\n?? diagnose_railroad_heuristic.py\n?? diagnose_railroad_heuristic.py.before_inf_fix\n?? evaluate_fixed_plans_exact.py\n?? experiments/\n?? make_plan_railroad_mcts.py.before_none_fix\n?? models.py\n?? railroad_mcts_local_fixes.patch\n?? run_max_exact_validation_30.sh\n?? run_mcts_100_plans.py\n?? run_railroad_validation_30.sh\n?? run_railroad_validation_30_resume.sh\n?? save/stable1/mcts_result.empty.json\n?? sweep_railroad_root.py",
+  "opts": "/home/kubra/DeepSym/opts.yaml",
+  "goal": "(H3)",
+  "runs": 30,
+  "parameters": {
+    "iterations": 10000,
+    "max_depth": 25,
+    "max_symbolic_steps": 25,
+    "mcts_runs_per_state": 1,
+    "c": 3.0,
+    "heuristic_multiplier": 1.0,
+    "lambda_add": 0.0,
+    "lambda_max": 1.0,
+    "lambda_ff": 0.0,
+    "rollout_outcome": "progress"
+  }
+}
