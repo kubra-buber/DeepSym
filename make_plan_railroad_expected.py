@@ -35,7 +35,17 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import yaml
 
-from railroad._bindings import AndGoal, Fluent as F, LiteralGoal, State
+from railroad._bindings import (
+    AndGoal,
+    Fluent as F,
+    LiteralGoal,
+    NumericCompareOp,
+    NumericCondition,
+    NumericGoal,
+    NumericUpdate,
+    NumericUpdateOp,
+    State,
+)
 from railroad.core import Effect, Operator, transition
 from railroad.planner import get_usable_actions
 
@@ -84,70 +94,130 @@ def _normalize_effect_distribution(prob_effects: Sequence[Dict], *, op_name: str
 # ---------------------------------------------------------------------------
 
 def _effect_fluents(effect_name: str) -> set:
-    """Map a DeepSym effect label to Railroad fluents."""
+    """Map a DeepSym outcome to structural Railroad fluents.
+
+    H/S progress is represented directly by numeric updates.
+    """
     effect_name = str(effect_name)
 
-    if effect_name == "stacked":
-        # Original DeepSym PPDDL semantics: stacked also implies inserted.
+    if effect_name in {"stacked", "inserted"}:
         return {
-            F("stacked"),
-            F("inserted"),
             F("instack", "?above"),
             F("stackloc", "?above"),
             ~F("stackloc", "?below"),
         }
 
-    if effect_name == "inserted":
-        return {
-            F("inserted"),
-            F("instack", "?above"),
-            F("stackloc", "?above"),
-            ~F("stackloc", "?below"),
-        }
-
-    # Failure outcomes. These do not intentionally progress the tower, but are
-    # kept in the probabilistic state model for expected reachability.
-    if effect_name in {"roll1", "roll2", "tumble1", "tumble2"}:
+    if effect_name in {
+        "roll1",
+        "roll2",
+        "tumble1",
+        "tumble2",
+    }:
         return {F(effect_name)}
 
-    # Unknown labels are preserved as fluents so the planner can still reason
-    # with them if the learned effect set changes.
     return {F(effect_name)}
 
 
-def build_probabilistic_stack_operator(spec: Dict) -> Operator:
-    """Build one probabilistic Railroad Operator from one learned stack rule."""
-    below_type = spec.get("below_type", spec.get("obj1_type"))
-    above_type = spec.get("above_type", spec.get("obj2_type"))
+def _effect_numeric_updates(effect_name: str):
+    """Map DeepSym progress outcomes to native H/S updates."""
+    effect_name = str(effect_name)
+
+    if effect_name == "stacked":
+        return [
+            NumericUpdate(
+                "H",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+            NumericUpdate(
+                "S",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+        ]
+
+    if effect_name == "inserted":
+        return [
+            NumericUpdate(
+                "S",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+        ]
+
+    return []
+
+
+def build_probabilistic_stack_operator(
+    spec: Dict,
+) -> Operator:
+    """Build one probabilistic learned stack operator."""
+
+    below_type = spec.get(
+        "below_type",
+        spec.get("obj1_type"),
+    )
+
+    above_type = spec.get(
+        "above_type",
+        spec.get("obj2_type"),
+    )
+
     if below_type is None or above_type is None:
-        raise ValueError(f"Malformed stack operator spec: {spec}")
+        raise ValueError(
+            f"Malformed stack operator spec: {spec}"
+        )
 
     op_name = str(spec["name"])
-    normalized_effects = _normalize_effect_distribution(spec["prob_effects"], op_name=op_name)
+
+    normalized_effects = (
+        _normalize_effect_distribution(
+            spec["prob_effects"],
+            op_name=op_name,
+        )
+    )
+
     OPERATOR_EFFECT_DISTS[op_name] = {
-        str(pe["effect_name"]): float(pe["probability"])
+        str(pe["effect_name"]): float(
+            pe["probability"]
+        )
         for pe in normalized_effects
     }
 
     preconditions = [
-        ~F("stacked"),
-        ~F("inserted"),
         F("pickloc", "?above"),
         F("stackloc", "?below"),
         F(below_type, "?below"),
         F(above_type, "?above"),
-        F(spec["relation"], "?below", "?above"),
+        F(
+            spec["relation"],
+            "?below",
+            "?above",
+        ),
     ]
 
     prob_branches = []
+
     for pe in normalized_effects:
         p = float(pe["probability"])
         effect_name = str(pe["effect_name"])
+
         branch_effect = Effect(
             time=0,
-            resulting_fluents=_effect_fluents(effect_name),
+            resulting_fluents=_effect_fluents(
+                effect_name
+            ),
+            numeric_updates=_effect_numeric_updates(
+                effect_name
+            ),
         )
-        prob_branches.append((p, [branch_effect]))
+
+        prob_branches.append(
+            (
+                p,
+                [branch_effect],
+            )
+        )
 
     probabilistic_effect = Effect(
         time=0,
@@ -155,118 +225,206 @@ def build_probabilistic_stack_operator(spec: Dict) -> Operator:
         prob_effects=prob_branches,
     )
 
-    # Original PPDDL places (not (pickloc ?above)) outside the probabilistic
-    # effect, so the object is consumed regardless of the effect outcome.
+    # Preserve original DeepSym semantics: the placed object is consumed
+    # regardless of which probabilistic outcome occurs.
     pickloc_removal = Effect(
         time=0,
-        resulting_fluents={~F("pickloc", "?above")},
+        resulting_fluents={
+            ~F("pickloc", "?above")
+        },
     )
 
     return Operator(
         name=op_name,
-        parameters=[("?below", "object"), ("?above", "object")],
+        parameters=[
+            ("?below", "object"),
+            ("?above", "object"),
+        ],
         preconditions=preconditions,
-        effects=[probabilistic_effect, pickloc_removal],
+        effects=[
+            probabilistic_effect,
+            pickloc_removal,
+        ],
     )
 
 
-def build_auxiliary_operator(spec: Dict) -> Operator:
-    """Build deterministic DeepSym bookkeeping operators."""
-    if spec["type"] == "increase_height":
-        return Operator(
-            name=spec["name"],
-            parameters=[],
-            preconditions=[F("stacked"), F(spec["from_counter"])],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    ~F(spec["from_counter"]),
-                    F(spec["to_counter"]),
-                    ~F("stacked"),
-                },
-            )],
-        )
+def build_auxiliary_operator(
+    spec: Dict,
+) -> Optional[Operator]:
+    """Build the remaining non-learned operator.
 
-    if spec["type"] == "increase_stack":
-        return Operator(
-            name=spec["name"],
-            parameters=[],
-            preconditions=[F("inserted"), F(spec["from_counter"])],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    ~F(spec["from_counter"]),
-                    F(spec["to_counter"]),
-                    ~F("inserted"),
-                },
-            )],
-        )
+    Legacy numbered bookkeeping specs are ignored.
+    """
 
-    if spec["type"] == "makebase":
+    operator_type = spec["type"]
+
+    if operator_type in {
+        "increase_height",
+        "increase_stack",
+    }:
+        return None
+
+    if operator_type == "makebase":
         return Operator(
             name="makebase",
-            parameters=[("?obj", "object")],
-            preconditions=[~F("base")],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    F("base"),
-                    F("stacked"),
-                    F("inserted"),
-                    ~F("pickloc", "?obj"),
-                    F("stackloc", "?obj"),
-                },
-            )],
+            parameters=[
+                ("?obj", "object")
+            ],
+            preconditions=[
+                ~F("base")
+            ],
+            effects=[
+                Effect(
+                    time=0,
+                    resulting_fluents={
+                        F("base"),
+                        ~F("pickloc", "?obj"),
+                        F("stackloc", "?obj"),
+                    },
+                    numeric_updates=[
+                        NumericUpdate(
+                            "H",
+                            NumericUpdateOp.INCREASE,
+                            1,
+                        ),
+                        NumericUpdate(
+                            "S",
+                            NumericUpdateOp.INCREASE,
+                            1,
+                        ),
+                    ],
+                )
+            ],
         )
 
-    raise ValueError(f"Unknown auxiliary operator type: {spec['type']}")
+    raise ValueError(
+        f"Unknown auxiliary operator type: "
+        f"{operator_type}"
+    )
 
 
-def load_operators_from_json(json_path: str) -> List[Operator]:
-    """Load learned operator specs and reconstruct Railroad Operators."""
+def load_operators_from_json(
+    json_path: str,
+) -> List[Operator]:
+    """Reconstruct learned and auxiliary Railroad operators."""
+
     with open(json_path, "r") as f:
         all_specs = json.load(f)
 
     OPERATOR_EFFECT_DISTS.clear()
 
     operators: List[Operator] = []
+
     for spec in all_specs["stack_operators"]:
-        operators.append(build_probabilistic_stack_operator(spec))
-    for spec in all_specs["auxiliary_operators"]:
-        operators.append(build_auxiliary_operator(spec))
+        operators.append(
+            build_probabilistic_stack_operator(
+                spec
+            )
+        )
+
+    for spec in all_specs.get(
+        "auxiliary_operators",
+        [],
+    ):
+        operator = build_auxiliary_operator(
+            spec
+        )
+
+        if operator is not None:
+            operators.append(operator)
+
     return operators
 
 
-# ---------------------------------------------------------------------------
-# Problem parsing
-# ---------------------------------------------------------------------------
-
 def parse_deepsym_goal(goal_str: str):
-    """Parse a small DeepSym goal string into a Railroad goal expression."""
-    negative_tokens = set(re.findall(r"\(not\s*\((\w+)\)\)", goal_str))
+    """Parse H/S tokens as exact numeric goals."""
 
-    without_not_clauses = re.sub(r"\(not\s*\(\w+\)\)", " ", goal_str)
+    negative_tokens = set(
+        re.findall(
+            r"\(not\s*\((\w+)\)\)",
+            goal_str,
+        )
+    )
+
+    without_not_clauses = re.sub(
+        r"\(not\s*\(\w+\)\)",
+        " ",
+        goal_str,
+    )
+
     positive_tokens = [
-        tok for tok in re.findall(r"\((\w+)\)", without_not_clauses)
-        if tok.lower() not in {"and", "goal"}
+        token
+        for token in re.findall(
+            r"\((\w+)\)",
+            without_not_clauses,
+        )
+        if token.lower()
+        not in {"and", "goal"}
     ]
 
-    goals = [LiteralGoal(F(tok)) for tok in positive_tokens]
-    goals.extend(LiteralGoal(~F(tok)) for tok in sorted(negative_tokens))
+    def token_goal(
+        token: str,
+        *,
+        negated: bool = False,
+    ):
+        match = re.fullmatch(
+            r"([HS])(\d+)",
+            token,
+            flags=re.IGNORECASE,
+        )
 
-    # DeepSym's generated PDDL goals include these; add them for command-line
-    # goal strings like "(H3)" or "(S4)".
-    if "stacked" not in negative_tokens:
-        goals.append(LiteralGoal(~F("stacked")))
-    if "inserted" not in negative_tokens:
-        goals.append(LiteralGoal(~F("inserted")))
+        if match:
+            variable = match.group(1).upper()
+            value = int(match.group(2))
+
+            op = (
+                NumericCompareOp.NE
+                if negated
+                else NumericCompareOp.EQ
+            )
+
+            return NumericGoal(
+                NumericCondition(
+                    variable,
+                    op,
+                    value,
+                )
+            )
+
+        return LiteralGoal(
+            ~F(token)
+            if negated
+            else F(token)
+        )
+
+    goals = [
+        token_goal(token)
+        for token in positive_tokens
+    ]
+
+    goals.extend(
+        token_goal(
+            token,
+            negated=True,
+        )
+        for token in sorted(
+            negative_tokens
+        )
+    )
 
     if not goals:
-        raise ValueError(f"No goal fluents found in: {goal_str}")
-    return goals[0] if len(goals) == 1 else AndGoal(goals)
+        raise ValueError(
+            f"No goal conditions found in: "
+            f"{goal_str}"
+        )
+
+    if len(goals) == 1:
+        return goals[0]
+
+    return AndGoal(goals)
 
 
-# Backward-compatible name for older imports.
+# Backward-compatible name used by older diagnostic scripts.
 parse_pddl_goal = parse_deepsym_goal
 
 
@@ -378,15 +536,123 @@ def parse_problem_railroad(scene_path: str, objects_path: Optional[str] = None):
             above = str(above).upper()
         relations.append((r, below, above))
 
-    counters_data = data.get("counters", {})
-    if isinstance(counters_data, dict):
-        counters = set(str(v) for v in counters_data.values())
+    def parse_counter_value(
+        variable: str,
+        raw,
+    ) -> int:
+        if raw is None:
+            return 0
+
+        if isinstance(raw, bool):
+            raise ValueError(
+                f"Invalid {variable} counter value: "
+                f"{raw!r}"
+            )
+
+        if isinstance(raw, int):
+            return int(raw)
+
+        value = str(raw).strip().upper()
+
+        match = re.fullmatch(
+            rf"{variable}(\d+)",
+            value,
+        )
+
+        if match:
+            return int(match.group(1))
+
+        if re.fullmatch(
+            r"[+-]?\d+",
+            value,
+        ):
+            return int(value)
+
+        raise ValueError(
+            f"Invalid {variable} counter value: "
+            f"{raw!r}"
+        )
+
+    numeric_data = data.get(
+        "numeric_state"
+    )
+
+    if isinstance(
+        numeric_data,
+        dict,
+    ):
+        counters = {
+            "H": parse_counter_value(
+                "H",
+                numeric_data.get("H", 0),
+            ),
+            "S": parse_counter_value(
+                "S",
+                numeric_data.get("S", 0),
+            ),
+        }
+
     else:
-        counters = set(str(c) for c in counters_data)
-    if not any(c.startswith("H") for c in counters):
-        counters.add("H0")
-    if not any(c.startswith("S") for c in counters):
-        counters.add("S0")
+        legacy_data = data.get(
+            "counters",
+            {},
+        )
+
+        if isinstance(
+            legacy_data,
+            dict,
+        ):
+            counters = {
+                "H": parse_counter_value(
+                    "H",
+                    legacy_data.get("H", 0),
+                ),
+                "S": parse_counter_value(
+                    "S",
+                    legacy_data.get("S", 0),
+                ),
+            }
+
+        else:
+            tokens = [
+                str(v).strip().upper()
+                for v in legacy_data
+            ]
+
+            h_token = next(
+                (
+                    v
+                    for v in tokens
+                    if re.fullmatch(
+                        r"H\d+",
+                        v,
+                    )
+                ),
+                "H0",
+            )
+
+            s_token = next(
+                (
+                    v
+                    for v in tokens
+                    if re.fullmatch(
+                        r"S\d+",
+                        v,
+                    )
+                ),
+                "S0",
+            )
+
+            counters = {
+                "H": parse_counter_value(
+                    "H",
+                    h_token,
+                ),
+                "S": parse_counter_value(
+                    "S",
+                    s_token,
+                ),
+            }
 
     missing_types = [obj for obj in objects if obj not in obj_types]
     if missing_types:
@@ -401,62 +667,133 @@ def parse_problem_pddl(problem_path: str, objects_path: Optional[str] = None):
     return parse_problem_railroad(problem_path, objects_path)
 
 
-def build_initial_state(objects: Sequence[str],
-                        obj_types: Dict[str, str],
-                        relations: Sequence[Tuple[str, str, str]],
-                        counters: Iterable[str]):
+def build_initial_state(
+    objects: Sequence[str],
+    obj_types: Dict[str, str],
+    relations: Sequence[
+        Tuple[str, str, str]
+    ],
+    counters: Dict[str, int],
+):
+    """Build native numeric DeepSym state."""
+
     fluents = set()
 
     for obj in objects:
-        fluents.add(F("pickloc", obj))
+        fluents.add(
+            F("pickloc", obj)
+        )
 
     for obj, typ in obj_types.items():
-        fluents.add(F(typ, obj))
+        fluents.add(
+            F(typ, obj)
+        )
 
     for rel, obj1, obj2 in relations:
-        fluents.add(F(rel, obj1, obj2))
+        fluents.add(
+            F(rel, obj1, obj2)
+        )
 
-    counter_set = set(counters)
-    fluents.add(F("H0" if not any(c.startswith("H") for c in counter_set) else next(c for c in counter_set if c.startswith("H"))))
-    fluents.add(F("S0" if not any(c.startswith("S") for c in counter_set) else next(c for c in counter_set if c.startswith("S"))))
+    numeric_values = {
+        "H": int(
+            counters.get("H", 0)
+        ),
+        "S": int(
+            counters.get("S", 0)
+        ),
+    }
 
-    return State(fluents=fluents), {"object": set(objects)}
+    return (
+        State(
+            fluents=fluents,
+            numeric_values=numeric_values,
+        ),
+        {
+            "object": set(objects),
+        },
+    )
 
 
-# ---------------------------------------------------------------------------
-# Expected reachability planner
-# ---------------------------------------------------------------------------
+def state_key(
+    state: State,
+) -> Tuple[str, ...]:
+    """Hashable key including fluent and numeric state."""
 
-def state_key(state: State) -> Tuple[str, ...]:
-    """Hashable state key for DeepSym's zero-time symbolic states."""
-    return tuple(sorted(str(f) for f in state.fluents))
+    parts = [
+        f"F:{fluent}"
+        for fluent in state.fluents
+    ]
+
+    parts.extend(
+        f"N:{name}={value}"
+        for name, value
+        in state.numeric_values.items()
+    )
+
+    return tuple(
+        sorted(parts)
+    )
 
 
-def action_base_name(action_name: str) -> str:
+def action_base_name(
+    action_name: str,
+) -> str:
     return action_name.split()[0]
 
 
-def is_stack_action(action_name: str) -> bool:
-    base = action_base_name(action_name)
-    return base.startswith("stack")
+def is_stack_action(
+    action_name: str,
+) -> bool:
+    return action_base_name(
+        action_name
+    ).startswith("stack")
 
 
-def is_progress_state(state: State) -> bool:
-    """A progress stack outcome creates the transient flags consumed by aux operators."""
-    return F("stacked") in state.fluents or F("inserted") in state.fluents
+def is_progress_state(
+    state: State,
+    previous_state: State,
+) -> bool:
+    """Whether H or S increased."""
+
+    before = dict(
+        previous_state.numeric_values
+    )
+
+    after = dict(
+        state.numeric_values
+    )
+
+    return (
+        after.get("H", 0)
+        > before.get("H", 0)
+        or
+        after.get("S", 0)
+        > before.get("S", 0)
+    )
 
 
-def progress_outcomes_for_plan(action_name: str, outcomes: Sequence[Tuple[State, float]]) -> List[Tuple[State, float]]:
-    """Keep only successful/progress branches for a fixed executable plan.
+def progress_outcomes_for_plan(
+    action_name: str,
+    current_state: State,
+    outcomes: Sequence[
+        Tuple[State, float]
+    ],
+) -> List[Tuple[State, float]]:
+    """Keep only progress branches for fixed stack plans."""
 
-    Expected-reachability policies may use failure branches as contingency states.
-    A linear plan.txt cannot represent those contingencies, so for the executable
-    representative plan we should not roll through roll/tumble branches and then
-    append fallback actions.
-    """
-    if not is_stack_action(action_name):
+    if not is_stack_action(
+        action_name
+    ):
         return list(outcomes)
-    return [(s, p) for s, p in outcomes if is_progress_state(s)]
+
+    return [
+        (state, probability)
+        for state, probability in outcomes
+        if is_progress_state(
+            state,
+            current_state,
+        )
+    ]
 
 
 def transition_safe(state: State, action) -> List[Tuple[State, float]]:
@@ -508,21 +845,24 @@ def expected_reachability_plan(initial_state: State,
     # they are immediately useful, then stack actions by name.
     sorted_actions = sorted(all_actions, key=lambda a: a.name)
 
-    def heuristic_action_order(action) -> Tuple[int, str]:
+    def heuristic_action_order(
+        action,
+    ) -> Tuple[int, str]:
         name = action.name
-        if name.startswith("increase_height") or name.startswith("increase_stack"):
-            return (0, name)
+
         if name.startswith("makebase"):
-            return (1, name)
+            return (0, name)
+
         if is_stack_action(name):
-            return (2, name)
-        return (3, name)
+            return (1, name)
+
+        return (2, name)
 
     @lru_cache(maxsize=None)
     def value(key: Tuple[str, ...], depth: int) -> float:
         state = state_store[key]
 
-        if goal.evaluate(state.fluents):
+        if goal.evaluate(state):
             policy[(key, depth)] = (None, 1.0)
             return 1.0
         if depth <= 0:
@@ -570,33 +910,74 @@ def expected_reachability_plan(initial_state: State,
     return start_val, policy, state_store, outcome_cache, value
 
 
-def choose_representative_outcome(outcomes: Sequence[Tuple[State, float]],
-                                  remaining_depth: int,
-                                  value_fn,
-                                  mode: str) -> Tuple[State, float]:
-    """Choose one outcome branch for writing a representative plan.txt."""
+def choose_representative_outcome(
+    current_state: State,
+    outcomes: Sequence[
+        Tuple[State, float]
+    ],
+    remaining_depth: int,
+    value_fn,
+    mode: str,
+) -> Tuple[State, float]:
+    """Choose one branch for representative plan output."""
+
     if not outcomes:
-        raise ValueError("Cannot choose from empty outcome list")
+        raise ValueError(
+            "Cannot choose from empty outcome list"
+        )
 
     if mode == "probability":
-        return max(outcomes, key=lambda item: item[1])
+        return max(
+            outcomes,
+            key=lambda item: item[1],
+        )
 
     if mode == "value":
-        return max(outcomes, key=lambda item: value_fn(state_key(item[0]), remaining_depth))
+        return max(
+            outcomes,
+            key=lambda item: value_fn(
+                state_key(item[0]),
+                remaining_depth,
+            ),
+        )
 
     if mode == "progress":
-        progress = [(s, p) for s, p in outcomes if is_progress_state(s)]
-        if progress:
-            # For plan.txt, prefer the most likely branch that actually makes progress.
-            # This avoids writing failure-branch fallback attempts as if they were
-            # a normal open-loop plan.
-            return max(progress, key=lambda item: (item[1], value_fn(state_key(item[0]), remaining_depth)))
-        return max(outcomes, key=lambda item: item[1])
+        progress = [
+            (state, probability)
+            for state, probability in outcomes
+            if is_progress_state(
+                state,
+                current_state,
+            )
+        ]
 
-    # Default: choose the branch with largest contribution p * V(s').
+        if progress:
+            return max(
+                progress,
+                key=lambda item: (
+                    item[1],
+                    value_fn(
+                        state_key(item[0]),
+                        remaining_depth,
+                    ),
+                ),
+            )
+
+        return max(
+            outcomes,
+            key=lambda item: item[1],
+        )
+
+    # Default: largest p * V contribution.
     return max(
         outcomes,
-        key=lambda item: item[1] * value_fn(state_key(item[0]), remaining_depth),
+        key=lambda item: (
+            item[1]
+            * value_fn(
+                state_key(item[0]),
+                remaining_depth,
+            )
+        ),
     )
 
 
@@ -617,7 +998,7 @@ def rollout_policy(initial_state: State,
     action_by_name = {a.name: a for a in all_actions}
 
     for remaining in range(max_steps, 0, -1):
-        if goal.evaluate(state.fluents):
+        if goal.evaluate(state):
             break
 
         key = state_key(state)
@@ -640,6 +1021,7 @@ def rollout_policy(initial_state: State,
             break
 
         state, chosen_p = choose_representative_outcome(
+            state,
             outcomes,
             remaining - 1,
             value_fn,
@@ -683,7 +1065,7 @@ def max_probability_linear_plan(initial_state: State,
             continue
 
         state = state_store[key]
-        if goal.evaluate(state.fluents):
+        if goal.evaluate(state):
             best_goal_node = node
             break
         if depth >= max_steps:
@@ -696,7 +1078,7 @@ def max_probability_linear_plan(initial_state: State,
 
             # A fixed linear plan can only represent success/progress branches.
             # Failure branches become plan failure, not a later fallback action.
-            usable_outcomes = progress_outcomes_for_plan(action.name, outcomes)
+            usable_outcomes = progress_outcomes_for_plan(action.name, state, outcomes)
             if not usable_outcomes:
                 continue
 
@@ -848,7 +1230,7 @@ def main() -> None:
         plan_probability, history, rollout_final_state = max_probability_linear_plan(
             initial_state, goal, all_actions, args.max_steps
         )
-        rollout_goal = bool(goal.evaluate(rollout_final_state.fluents))
+        rollout_goal = bool(goal.evaluate(rollout_final_state))
         print(f"Max-probability linear plan reaches goal: {rollout_goal}")
         print(f"Max-probability linear plan probability: {plan_probability:.6f}")
     else:
@@ -862,7 +1244,7 @@ def main() -> None:
             value_fn,
             args.rollout_outcome,
         )
-        rollout_goal = bool(goal.evaluate(rollout_final_state.fluents))
+        rollout_goal = bool(goal.evaluate(rollout_final_state))
         print(f"Representative policy rollout reaches goal: {rollout_goal}")
         print(f"Representative branch probability: {plan_probability:.6f}")
 
