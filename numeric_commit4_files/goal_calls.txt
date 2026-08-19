@@ -1,0 +1,56 @@
+packages/railroad/include/railroad/goal.hpp:61:  virtual FluentSet get_all_literals() const = 0;
+packages/railroad/include/railroad/goal.hpp:74:  int goal_count(const FluentSet& fluents) const { return satisfied_leaf_count(fluents); }
+packages/railroad/include/railroad/goal.hpp:83:  const std::vector<FluentSet>& get_dnf_branches() const {
+packages/railroad/include/railroad/goal.hpp:129:  FluentSet get_all_literals() const override { return {}; }
+packages/railroad/include/railroad/goal.hpp:159:  FluentSet get_all_literals() const override { return {}; }
+packages/railroad/include/railroad/goal.hpp:203:  FluentSet get_all_literals() const override { return {fluent_}; }
+packages/railroad/include/railroad/goal.hpp:258:  FluentSet get_all_literals() const override {
+packages/railroad/include/railroad/goal.hpp:261:      auto s = child->get_all_literals();
+packages/railroad/include/railroad/goal.hpp:299:    for (const auto& child : children_) sum += child->goal_count(fluents);
+packages/railroad/include/railroad/goal.hpp:309:      const auto& child_branches = child->get_dnf_branches();
+packages/railroad/include/railroad/goal.hpp:364:  FluentSet get_all_literals() const override {
+packages/railroad/include/railroad/goal.hpp:367:      auto s = child->get_all_literals();
+packages/railroad/include/railroad/goal.hpp:405:    for (const auto& child : children_) best = std::max(best, child->goal_count(fluents));
+packages/railroad/include/railroad/goal.hpp:414:      const auto& child_branches = child->get_dnf_branches();
+packages/railroad/include/railroad/heuristic.hpp:157:  return goal->get_dnf_branches();
+packages/railroad/include/railroad/planner.hpp:136:    if (goal->evaluate(current.fluents())) {
+packages/railroad/include/railroad/planner.hpp:355:      if (goal->evaluate(node->state.fluents())) {
+packages/railroad/include/railroad/planner.hpp:424:    int goal_count_val = goal->goal_count(node->state.fluents());
+packages/railroad/include/railroad/planner.hpp:425:    if (goal->evaluate(node->state.fluents())) {
+packages/railroad/include/railroad/planner.hpp:426:      reward = -node->state.time() + SUCCESS_REWARD + 0 * goal_count_val - accumulated_extra_cost;
+packages/railroad/include/railroad/planner.hpp:435:      reward = -node->state.time() - h * heuristic_multiplier + 0 * goal_count_val - accumulated_extra_cost;
+packages/railroad/src/railroad/bench/benchmarks/multi_object_search.py:123:        if goal.evaluate(sim.state.fluents):
+packages/railroad/src/railroad/bench/benchmarks/multi_object_search.py:152:        "success": goal.evaluate(sim.state.fluents),
+packages/railroad/src/railroad/bench/benchmarks/movie_night.py:138:        if goal.evaluate(sim.state.fluents):
+packages/railroad/src/railroad/bench/benchmarks/movie_night.py:166:        "success": goal.evaluate(sim.state.fluents),
+packages/railroad/src/railroad/bench/benchmarks/procthor_search.py:127:        if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/bench/benchmarks/procthor_search.py:153:        "success": goal.evaluate(env.state.fluents),
+packages/railroad/src/railroad/bench/benchmarks/basic_planning.py:81:        if goal.evaluate(sim.state.fluents):
+packages/railroad/src/railroad/bench/benchmarks/basic_planning.py:106:        "success": goal.evaluate(sim.state.fluents),
+Binary file packages/railroad/src/railroad/_bindings.cpython-311-x86_64-linux-gnu.so matches
+packages/railroad/src/railroad/dashboard/dashboard.py:98:        self.goal_fluents = list(goal.get_all_literals())
+packages/railroad/src/railroad/dashboard/dashboard.py:424:        return self.goal.goal_count(sim_state.fluents)
+packages/railroad/src/railroad/dashboard/dashboard.py:428:        return self.goal.evaluate(sim_state.fluents)
+packages/railroad/src/railroad/dashboard/dashboard.py:463:            satisfied = goal.evaluate(fluents)
+packages/railroad/src/railroad/dashboard/dashboard.py:496:            return goal.goal_count(fluents), len(goal.get_all_literals())
+packages/railroad/src/railroad/dashboard/_goals.py:91:    if not goal.evaluate(fluents):
+packages/railroad/src/railroad/dashboard/_goals.py:156:            child_literals = child.get_all_literals()
+packages/railroad/src/railroad/dashboard/_goals.py:158:            achieved = child.goal_count(fluents)
+packages/railroad/src/railroad/_bindings.pyi:86:    def get_all_literals(self) -> set[Fluent]:
+packages/railroad/src/railroad/_bindings.pyi:90:    def goal_count(self, fluents: collections.abc.Set[Fluent]) -> int:
+packages/railroad/src/railroad/_bindings.pyi:120:    def get_all_literals(self) -> set[Fluent]:
+packages/railroad/src/railroad/_bindings.pyi:124:    def get_dnf_branches(self) -> list[set[Fluent]]:
+packages/railroad/src/railroad/_bindings.pyi:132:    def goal_count(self, fluents: collections.abc.Set[Fluent]) -> int:
+packages/railroad/src/railroad/examples/multi_object_search.py:119:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/examples/clear_the_table.py:108:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/examples/heterogeneous_robots.py:172:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/examples/procthor_search.py:143:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/examples/frontier_search.py:179:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/examples/find_and_move_couch.py:118:            if goal.evaluate(env.state.fluents):
+packages/railroad/src/railroad/_bindings.cpp:248:      .def("get_all_literals", [](const Fluent &self) {
+packages/railroad/src/railroad/_bindings.cpp:249:        return LiteralGoal(self).get_all_literals();
+packages/railroad/src/railroad/_bindings.cpp:251:      .def("goal_count", [](const Fluent &self, const std::unordered_set<Fluent> &fluents) {
+packages/railroad/src/railroad/_bindings.cpp:252:        return LiteralGoal(self).goal_count(fluents);
+packages/railroad/src/railroad/_bindings.cpp:577:      .def("get_all_literals", &GoalBase::get_all_literals,
+packages/railroad/src/railroad/_bindings.cpp:579:      .def("get_dnf_branches", &GoalBase::get_dnf_branches,
+packages/railroad/src/railroad/_bindings.cpp:583:      .def("goal_count", &GoalBase::goal_count, py::arg("fluents"),

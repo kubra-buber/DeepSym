@@ -1,0 +1,116 @@
+====================================================================================================
+exact_metrics_by_scenario.csv
+Rows: 20
+Columns:
+  - scenario
+  - method
+  - goal
+  - requested_runs
+  - successful_runs
+  - failed_runs
+  - planner_failure_rate
+  - expected_plan_file_probability
+  - optimum_exact_linear_probability
+  - optimum_physical_plan
+  - mean_exact_plan_probability
+  - mean_exact_plan_probability_successful_only
+  - mean_regret
+  - median_regret
+  - optimal_count
+  - optimal_plan_rate
+  - within_95_count
+  - within_95_percent_rate
+  - unique_successful_plans
+
+First five rows:
+    scenario   method      goal  requested_runs  successful_runs  failed_runs  planner_failure_rate  expected_plan_file_probability  optimum_exact_linear_probability                     optimum_physical_plan  mean_exact_plan_probability  mean_exact_plan_probability_successful_only  mean_regret  median_regret  optimal_count  optimal_plan_rate  within_95_count  within_95_percent_rate  unique_successful_plans
+   seed34_H4 max_only      (H4)              30               30            0                   0.0                        0.934802                          0.934802            O2 on O1 | O3 on O2 | O5 on O3                     0.897360                                     0.897360     0.037441       0.026556              0                0.0               20                0.666667                        9
+   seed34_H4   max_ff      (H4)              30               30            0                   0.0                        0.934802                          0.934802            O2 on O1 | O3 on O2 | O5 on O3                     0.899104                                     0.899104     0.035697       0.026556              0                0.0               21                0.700000                        7
+   seed34_H5 max_only      (H5)              30               30            0                   0.0                        0.903220                          0.903220 O1 on O4 | O2 on O1 | O3 on O2 | O5 on O3                     0.834190                                     0.834190     0.069030       0.067448              0                0.0                0                0.000000                        4
+   seed34_H5   max_ff      (H5)              30               30            0                   0.0                        0.903220                          0.903220 O1 on O4 | O2 on O1 | O3 on O2 | O5 on O3                     0.835773                                     0.835773     0.067448       0.067448              0                0.0                0                0.000000                        2
+seed35_H3_S4 max_only (H3) (S4)              30               30            0                   0.0                        0.726002                          0.726002            O2 on O5 | O4 on O2 | O3 on O4                     0.617833                                     0.617833     0.108169       0.141328              0                0.0                0                0.000000                        3
+
+====================================================================================================
+exact_plan_values_all.csv
+Rows: 91
+Columns:
+  - scenario
+  - method
+  - physical_plan
+  - count
+  - exact_linear_probability
+  - regret
+  - relative_to_optimum
+  - is_optimal
+  - within_95_percent
+
+First five rows:
+ scenario   method                  physical_plan  count  exact_linear_probability   regret  relative_to_optimum  is_optimal  within_95_percent
+seed34_H4 max_only O1 on O5 | O2 on O1 | O3 on O2     10                  0.908245 0.026556             0.971592           0                  1
+seed34_H4 max_only O1 on O5 | O3 on O1 | O2 on O3      9                  0.908245 0.026556             0.971592           0                  1
+seed34_H4 max_only O3 on O5 | O2 on O3 | O1 on O2      3                  0.882444 0.052358             0.943990           0                  0
+seed34_H4 max_only O2 on O5 | O1 on O2 | O3 on O1      2                  0.882444 0.052358             0.943990           0                  0
+seed34_H4 max_only O3 on O5 | O1 on O3 | O2 on O1      2                  0.882444 0.052358             0.943990           0                  0
+
+====================================================================================================
+first_action_frequency_all.csv
+Rows: 57
+Columns:
+  - scenario
+  - method
+  - first_physical_action
+  - count
+  - fraction
+
+First five rows:
+ scenario   method first_physical_action  count  fraction
+seed34_H4 max_only              O1 on O5     20  0.666667
+seed34_H4 max_only              O3 on O5      6  0.200000
+seed34_H4 max_only              O2 on O5      3  0.100000
+seed34_H4 max_only              O2 on O4      1  0.033333
+seed34_H4   max_ff              O1 on O5     21  0.700000
+
+====================================================================================================
+plan_frequency_all.csv
+Rows: 91
+Columns:
+  - scenario
+  - method
+  - physical_plan
+  - count
+  - fraction
+
+First five rows:
+ scenario   method                  physical_plan  count  fraction
+seed34_H4 max_only O1 on O5 | O2 on O1 | O3 on O2     10  0.333333
+seed34_H4 max_only O1 on O5 | O3 on O1 | O2 on O3      9  0.300000
+seed34_H4 max_only O3 on O5 | O2 on O3 | O1 on O2      3  0.100000
+seed34_H4 max_only O2 on O5 | O1 on O2 | O3 on O1      2  0.066667
+seed34_H4 max_only O3 on O5 | O1 on O3 | O2 on O1      2  0.066667
+
+====================================================================================================
+runs_all.csv
+Rows: 600
+Columns:
+  - scenario
+  - method
+  - run
+  - ok
+  - elapsed_seconds
+  - first_symbolic_action
+  - first_physical_action
+  - physical_plan
+  - representative_branch_probability
+  - representative_goal_reached
+  - symbolic_action_count
+  - physical_action_count
+  - error
+
+First five rows:
+ scenario   method  run   ok  elapsed_seconds first_symbolic_action first_physical_action                  physical_plan  representative_branch_probability  representative_goal_reached  symbolic_action_count  physical_action_count  error
+seed34_H4 max_only    0 True         4.625959           makebase O5              O1 on O5 O1 on O5 | O2 on O1 | O3 on O2                           0.908245                         True                     12                      3    NaN
+seed34_H4 max_only    1 True         4.573220           makebase O5              O2 on O5 O2 on O5 | O3 on O2 | O1 on O3                           0.882444                         True                     12                      3    NaN
+seed34_H4 max_only    2 True         4.509972           makebase O5              O3 on O5 O3 on O5 | O2 on O3 | O1 on O2                           0.882444                         True                     12                      3    NaN
+seed34_H4 max_only    3 True         4.586469           makebase O5              O1 on O5 O1 on O5 | O2 on O1 | O3 on O2                           0.908245                         True                     12                      3    NaN
+seed34_H4 max_only    4 True         4.453587           makebase O5              O1 on O5 O1 on O5 | O3 on O1 | O2 on O3                           0.908245                         True                     12                      3    NaN
+

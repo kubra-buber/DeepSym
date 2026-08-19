@@ -148,3 +148,4 @@ last_id
 .DS_Store
 setup.cfg
 *.sublime-workspace
+railroad_mcts_trial/railroad_source/

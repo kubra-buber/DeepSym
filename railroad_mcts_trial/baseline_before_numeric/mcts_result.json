@@ -2,10 +2,10 @@
   "planner": "railroad_mcts",
   "goal": "(H4) (S5)",
   "parameters": {
-    "iterations": 10000,
+    "iterations": 1000,
     "max_depth": 25,
     "max_symbolic_steps": 25,
-    "mcts_runs": 10,
+    "mcts_runs": 1,
     "c": 3.0,
     "heuristic_multiplier": 1.0,
     "lambda_add": 0.0,
@@ -16,8 +16,8 @@
   },
   "symbolic_action_history": [
     "makebase O4",
-    "increase_height1",
     "increase_stack1",
+    "increase_height1",
     "stack30 O4 O5",
     "increase_stack2",
     "stack28 O5 O1",
@@ -48,7 +48,7 @@
       "above": "O3"
     }
   ],
-  "representative_branch_probability": 0.6811841014819124,
+  "representative_branch_probability": 0.6811841014819126,
   "representative_rollout_goal_reached": true,
   "warning": "representative_branch_probability is not an exact closed-loop MCTS policy value; compare empirical closed-loop success separately",
   "decisions": [
@@ -90,10 +90,10 @@
       ],
       "selected_action": "makebase O4",
       "votes": {
-        "makebase O4": 10
+        "makebase O4": 1
       },
       "mean_search_seconds_by_action": {
-        "makebase O4": 2.5780308312969282
+        "makebase O4": 0.22880883794277906
       },
       "outcomes": [
         {
@@ -181,14 +181,12 @@
         "(stacked)",
         "(stackloc O4)"
       ],
-      "selected_action": "increase_height1",
+      "selected_action": "increase_stack1",
       "votes": {
-        "increase_height1": 6,
-        "increase_stack1": 4
+        "increase_stack1": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_height1": 1.0431809639946248,
-        "increase_stack1": 1.0073129742522724
+        "increase_stack1": 0.18200601695571095
       },
       "outcomes": [
         {
@@ -196,10 +194,9 @@
           "goal": false,
           "progress": true,
           "state": [
-            "(H1)",
-            "(S0)",
+            "(H0)",
+            "(S1)",
             "(base)",
-            "(inserted)",
             "(objtype2 O1)",
             "(objtype2 O2)",
             "(objtype2 O3)",
@@ -229,6 +226,7 @@
             "(relation1 O5 O1)",
             "(relation1 O5 O2)",
             "(relation1 O5 O3)",
+            "(stacked)",
             "(stackloc O4)"
           ]
         }
@@ -239,10 +237,9 @@
     {
       "step": 2,
       "state": [
-        "(H1)",
-        "(S0)",
+        "(H0)",
+        "(S1)",
         "(base)",
-        "(inserted)",
         "(objtype2 O1)",
         "(objtype2 O2)",
         "(objtype2 O3)",
@@ -272,14 +269,15 @@
         "(relation1 O5 O1)",
         "(relation1 O5 O2)",
         "(relation1 O5 O3)",
+        "(stacked)",
         "(stackloc O4)"
       ],
-      "selected_action": "increase_stack1",
+      "selected_action": "increase_height1",
       "votes": {
-        "increase_stack1": 10
+        "increase_height1": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_stack1": 0.8533806573890615
+        "increase_height1": 0.17439766798634082
       },
       "outcomes": [
         {
@@ -365,10 +363,10 @@
       ],
       "selected_action": "stack30 O4 O5",
       "votes": {
-        "stack30 O4 O5": 10
+        "stack30 O4 O5": 1
       },
       "mean_search_seconds_by_action": {
-        "stack30 O4 O5": 0.7889955076039769
+        "stack30 O4 O5": 0.17247740097809583
       },
       "outcomes": [
         {
@@ -538,10 +536,10 @@
       ],
       "selected_action": "increase_stack2",
       "votes": {
-        "increase_stack2": 10
+        "increase_stack2": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_stack2": 0.20101433400413954
+        "increase_stack2": 0.06172849296126515
       },
       "outcomes": [
         {
@@ -627,10 +625,10 @@
       ],
       "selected_action": "stack28 O5 O1",
       "votes": {
-        "stack28 O5 O1": 10
+        "stack28 O5 O1": 1
       },
       "mean_search_seconds_by_action": {
-        "stack28 O5 O1": 0.1982706092996523
+        "stack28 O5 O1": 0.0560610470129177
       },
       "outcomes": [
         {
@@ -760,12 +758,10 @@
       ],
       "selected_action": "increase_height2",
       "votes": {
-        "increase_height2": 8,
-        "increase_stack3": 2
+        "increase_height2": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_height2": 0.08504287924006348,
-        "increase_stack3": 0.07544182299170643
+        "increase_height2": 0.022364897071383893
       },
       "outcomes": [
         {
@@ -853,10 +849,10 @@
       ],
       "selected_action": "increase_stack3",
       "votes": {
-        "increase_stack3": 10
+        "increase_stack3": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_stack3": 0.07770196610945276
+        "increase_stack3": 0.01687035895884037
       },
       "outcomes": [
         {
@@ -942,16 +938,14 @@
       ],
       "selected_action": "stack24 O1 O2",
       "votes": {
-        "stack24 O1 O2": 6,
-        "stack24 O1 O3": 4
+        "stack24 O1 O2": 1
       },
       "mean_search_seconds_by_action": {
-        "stack24 O1 O2": 0.07772335632277343,
-        "stack24 O1 O3": 0.07490553775278386
+        "stack24 O1 O2": 0.0168931579682976
       },
       "outcomes": [
         {
-          "probability": 0.977777,
+          "probability": 0.9777770000000001,
           "goal": false,
           "progress": true,
           "state": [
@@ -993,7 +987,7 @@
           ]
         },
         {
-          "probability": 0.002778,
+          "probability": 0.0027780000000000005,
           "goal": false,
           "progress": false,
           "state": [
@@ -1033,7 +1027,7 @@
           ]
         },
         {
-          "probability": 0.016667,
+          "probability": 0.016667000000000005,
           "goal": false,
           "progress": false,
           "state": [
@@ -1073,7 +1067,7 @@
           ]
         },
         {
-          "probability": 0.002778,
+          "probability": 0.0027780000000000005,
           "goal": false,
           "progress": true,
           "state": [
@@ -1114,7 +1108,7 @@
           ]
         }
       ],
-      "representative_outcome_probability": 0.977777,
+      "representative_outcome_probability": 0.9777770000000001,
       "trace": null
     },
     {
@@ -1158,12 +1152,10 @@
       ],
       "selected_action": "increase_height3",
       "votes": {
-        "increase_height3": 5,
-        "increase_stack4": 5
+        "increase_height3": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_height3": 0.038269677595235405,
-        "increase_stack4": 0.039382911194115876
+        "increase_height3": 0.007713116006925702
       },
       "outcomes": [
         {
@@ -1251,10 +1243,10 @@
       ],
       "selected_action": "increase_stack4",
       "votes": {
-        "increase_stack4": 10
+        "increase_stack4": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_stack4": 0.0344236382865347
+        "increase_stack4": 0.006525148986838758
       },
       "outcomes": [
         {
@@ -1340,14 +1332,14 @@
       ],
       "selected_action": "stack24 O2 O3",
       "votes": {
-        "stack24 O2 O3": 10
+        "stack24 O2 O3": 1
       },
       "mean_search_seconds_by_action": {
-        "stack24 O2 O3": 0.03283207159838639
+        "stack24 O2 O3": 0.006017061998136342
       },
       "outcomes": [
         {
-          "probability": 0.016667,
+          "probability": 0.016667000000000005,
           "goal": false,
           "progress": false,
           "state": [
@@ -1387,7 +1379,7 @@
           ]
         },
         {
-          "probability": 0.977777,
+          "probability": 0.9777770000000001,
           "goal": false,
           "progress": true,
           "state": [
@@ -1429,7 +1421,7 @@
           ]
         },
         {
-          "probability": 0.002778,
+          "probability": 0.0027780000000000005,
           "goal": false,
           "progress": false,
           "state": [
@@ -1469,7 +1461,7 @@
           ]
         },
         {
-          "probability": 0.002778,
+          "probability": 0.0027780000000000005,
           "goal": false,
           "progress": true,
           "state": [
@@ -1510,7 +1502,7 @@
           ]
         }
       ],
-      "representative_outcome_probability": 0.977777,
+      "representative_outcome_probability": 0.9777770000000001,
       "trace": null
     },
     {
@@ -1554,10 +1546,10 @@
       ],
       "selected_action": "increase_height4",
       "votes": {
-        "increase_height4": 10
+        "increase_height4": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_height4": 0.011611169500974938
+        "increase_height4": 0.0035639690468087792
       },
       "outcomes": [
         {
@@ -1645,10 +1637,10 @@
       ],
       "selected_action": "increase_stack5",
       "votes": {
-        "increase_stack5": 10
+        "increase_stack5": 1
       },
       "mean_search_seconds_by_action": {
-        "increase_stack5": 0.009093914396362378
+        "increase_stack5": 0.002821895992383361
       },
       "outcomes": [
         {
