@@ -157,7 +157,7 @@ os.makedirs(opts["save"], exist_ok=True)
 # for make_plan_railroad.py, make_plan_railroad_expected.py and
 # closed_loop_railroad.py. It replaces problem.pddl in the Railroad path.
 scene = {
-    "format": "deepsym_railroad_problem_v1",
+    "format": "deepsym_railroad_problem_v2",
     "goal": args.goal,
     "objects": [
         {
@@ -169,7 +169,7 @@ scene = {
         for obj_i in obj_infos
     ],
     "relations": [],
-    "counters": {"H": "H0", "S": "S0"},
+    "numeric_state": {"H": 0, "S": 0},
 }
 
 for c_i in comparisons:

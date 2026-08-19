@@ -10,11 +10,21 @@ import re
 import sys
 import time
 from collections import Counter
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import yaml
 
-from railroad._bindings import AndGoal, Fluent as F, LiteralGoal, State
+from railroad._bindings import (
+    AndGoal,
+    Fluent as F,
+    LiteralGoal,
+    NumericCompareOp,
+    NumericCondition,
+    NumericGoal,
+    NumericUpdate,
+    NumericUpdateOp,
+    State,
+)
 from railroad.core import Effect, Operator, transition
 from railroad.planner import MCTSPlanner
 
@@ -48,31 +58,57 @@ def _normalize_effect_distribution(prob_effects: Sequence[Dict], *, op_name: str
 
 
 def _effect_fluents(effect_name: str) -> set:
-    """Map a DeepSym effect label to Railroad fluents."""
+    """Map a DeepSym outcome to structural Railroad fluents.
+
+    H/S progress is represented directly by numeric updates. The old
+    transient bookkeeping fluents ``stacked`` and ``inserted`` are no
+    longer produced.
+    """
+    effect_name = str(effect_name)
+
+    if effect_name in {"stacked", "inserted"}:
+        return {
+            F("instack", "?above"),
+            F("stackloc", "?above"),
+            ~F("stackloc", "?below"),
+        }
+
+    # Failure outcomes preserve their learned symbolic labels but do not
+    # advance H or S.
+    if effect_name in {"roll1", "roll2", "tumble1", "tumble2"}:
+        return {F(effect_name)}
+
+    return {F(effect_name)}
+
+
+def _effect_numeric_updates(effect_name: str):
+    """Map DeepSym progress outcomes directly to integer H/S updates."""
     effect_name = str(effect_name)
 
     if effect_name == "stacked":
-        # Original DeepSym PPDDL semantics: stacked also implies inserted.
-        return {
-            F("stacked"),
-            F("inserted"),
-            F("instack", "?above"),
-            F("stackloc", "?above"),
-            ~F("stackloc", "?below"),
-        }
+        return [
+            NumericUpdate(
+                "H",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+            NumericUpdate(
+                "S",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+        ]
 
     if effect_name == "inserted":
-        return {
-            F("inserted"),
-            F("instack", "?above"),
-            F("stackloc", "?above"),
-            ~F("stackloc", "?below"),
-        }
+        return [
+            NumericUpdate(
+                "S",
+                NumericUpdateOp.INCREASE,
+                1,
+            ),
+        ]
 
-
-    if effect_name in {"roll1", "roll2", "tumble1", "tumble2"}:
-        return {F(effect_name)}
-    return {F(effect_name)}
+    return []
 
 
 def build_probabilistic_stack_operator(spec: Dict) -> Operator:
@@ -90,8 +126,6 @@ def build_probabilistic_stack_operator(spec: Dict) -> Operator:
     }
 
     preconditions = [
-        ~F("stacked"),
-        ~F("inserted"),
         F("pickloc", "?above"),
         F("stackloc", "?below"),
         F(below_type, "?below"),
@@ -106,6 +140,9 @@ def build_probabilistic_stack_operator(spec: Dict) -> Operator:
         branch_effect = Effect(
             time=0,
             resulting_fluents=_effect_fluents(effect_name),
+            numeric_updates=_effect_numeric_updates(
+                effect_name
+            ),
         )
         prob_branches.append((p, [branch_effect]))
 
@@ -128,56 +165,56 @@ def build_probabilistic_stack_operator(spec: Dict) -> Operator:
     )
 
 
-def build_auxiliary_operator(spec: Dict) -> Operator:
-    """Build deterministic DeepSym bookkeeping operators."""
-    if spec["type"] == "increase_height":
-        return Operator(
-            name=spec["name"],
-            parameters=[],
-            preconditions=[F("stacked"), F(spec["from_counter"])],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    ~F(spec["from_counter"]),
-                    F(spec["to_counter"]),
-                    ~F("stacked"),
-                },
-            )],
-        )
+def build_auxiliary_operator(
+    spec: Dict,
+) -> Optional[Operator]:
+    """Build the remaining non-learned decision operator.
 
-    if spec["type"] == "increase_stack":
-        return Operator(
-            name=spec["name"],
-            parameters=[],
-            preconditions=[F("inserted"), F(spec["from_counter"])],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    ~F(spec["from_counter"]),
-                    F(spec["to_counter"]),
-                    ~F("inserted"),
-                },
-            )],
-        )
+    Legacy JSON may still contain numbered increase_height* and
+    increase_stack* bookkeeping operators. They are ignored because
+    H/S are now updated directly by physical outcomes.
+    """
+    operator_type = spec["type"]
 
-    if spec["type"] == "makebase":
+    if operator_type in {
+        "increase_height",
+        "increase_stack",
+    }:
+        return None
+
+    if operator_type == "makebase":
         return Operator(
             name="makebase",
             parameters=[("?obj", "object")],
             preconditions=[~F("base")],
-            effects=[Effect(
-                time=0,
-                resulting_fluents={
-                    F("base"),
-                    F("stacked"),
-                    F("inserted"),
-                    ~F("pickloc", "?obj"),
-                    F("stackloc", "?obj"),
-                },
-            )],
+            effects=[
+                Effect(
+                    time=0,
+                    resulting_fluents={
+                        F("base"),
+                        ~F("pickloc", "?obj"),
+                        F("stackloc", "?obj"),
+                    },
+                    numeric_updates=[
+                        NumericUpdate(
+                            "H",
+                            NumericUpdateOp.INCREASE,
+                            1,
+                        ),
+                        NumericUpdate(
+                            "S",
+                            NumericUpdateOp.INCREASE,
+                            1,
+                        ),
+                    ],
+                )
+            ],
         )
 
-    raise ValueError(f"Unknown auxiliary operator type: {spec['type']}")
+    raise ValueError(
+        f"Unknown auxiliary operator type: "
+        f"{operator_type}"
+    )
 
 
 def load_operators_from_json(json_path: str) -> List[Operator]:
@@ -190,34 +227,102 @@ def load_operators_from_json(json_path: str) -> List[Operator]:
     operators: List[Operator] = []
     for spec in all_specs["stack_operators"]:
         operators.append(build_probabilistic_stack_operator(spec))
-    for spec in all_specs["auxiliary_operators"]:
-        operators.append(build_auxiliary_operator(spec))
+    for spec in all_specs.get("auxiliary_operators", []):
+        operator = build_auxiliary_operator(spec)
+
+        if operator is not None:
+            operators.append(operator)
     return operators
 
 
 def parse_deepsym_goal(goal_str: str):
-    """Parse a small DeepSym goal string into a Railroad goal expression."""
-    negative_tokens = set(re.findall(r"\(not\s*\((\w+)\)\)", goal_str))
+    """Parse DeepSym H/S tokens as exact numeric goals.
 
-    without_not_clauses = re.sub(r"\(not\s*\(\w+\)\)", " ", goal_str)
+    Examples:
+        (H4) (S5)  -> H == 4 AND S == 5
+        (H3)       -> H == 3
+
+    Non-counter tokens remain fluent goals for compatibility.
+    """
+    negative_tokens = set(
+        re.findall(
+            r"\(not\s*\((\w+)\)\)",
+            goal_str,
+        )
+    )
+
+    without_not_clauses = re.sub(
+        r"\(not\s*\(\w+\)\)",
+        " ",
+        goal_str,
+    )
+
     positive_tokens = [
-        tok for tok in re.findall(r"\((\w+)\)", without_not_clauses)
+        tok
+        for tok in re.findall(
+            r"\((\w+)\)",
+            without_not_clauses,
+        )
         if tok.lower() not in {"and", "goal"}
     ]
 
-    goals = [LiteralGoal(F(tok)) for tok in positive_tokens]
-    goals.extend(LiteralGoal(~F(tok)) for tok in sorted(negative_tokens))
+    def token_goal(
+        token: str,
+        *,
+        negated: bool = False,
+    ):
+        match = re.fullmatch(
+            r"([HS])(\d+)",
+            token,
+            flags=re.IGNORECASE,
+        )
 
-    # DeepSym's generated PDDL goals include these; add them for command-line
-    # goal strings like "(H3)" or "(S4)".
-    if "stacked" not in negative_tokens:
-        goals.append(LiteralGoal(~F("stacked")))
-    if "inserted" not in negative_tokens:
-        goals.append(LiteralGoal(~F("inserted")))
+        if match:
+            variable = match.group(1).upper()
+            value = int(match.group(2))
+
+            op = (
+                NumericCompareOp.NE
+                if negated
+                else NumericCompareOp.EQ
+            )
+
+            return NumericGoal(
+                NumericCondition(
+                    variable,
+                    op,
+                    value,
+                )
+            )
+
+        return LiteralGoal(
+            ~F(token)
+            if negated
+            else F(token)
+        )
+
+    goals = [
+        token_goal(token)
+        for token in positive_tokens
+    ]
+
+    goals.extend(
+        token_goal(
+            token,
+            negated=True,
+        )
+        for token in sorted(negative_tokens)
+    )
 
     if not goals:
-        raise ValueError(f"No goal fluents found in: {goal_str}")
-    return goals[0] if len(goals) == 1 else AndGoal(goals)
+        raise ValueError(
+            f"No goal conditions found in: {goal_str}"
+        )
+
+    if len(goals) == 1:
+        return goals[0]
+
+    return AndGoal(goals)
 
 
 def parse_objects_txt(objects_path: str) -> Dict[str, Dict[str, float]]:
@@ -315,15 +420,113 @@ def parse_problem_railroad(scene_path: str, objects_path: Optional[str] = None):
             above = str(above).upper()
         relations.append((r, below, above))
 
-    counters_data = data.get("counters", {})
-    if isinstance(counters_data, dict):
-        counters = set(str(v) for v in counters_data.values())
+    def parse_counter_value(
+        variable: str,
+        raw,
+    ) -> int:
+        if raw is None:
+            return 0
+
+        if isinstance(raw, bool):
+            raise ValueError(
+                f"Invalid {variable} counter value: {raw!r}"
+            )
+
+        if isinstance(raw, int):
+            return int(raw)
+
+        text_value = str(raw).strip().upper()
+
+        match = re.fullmatch(
+            rf"{variable}(\d+)",
+            text_value,
+        )
+
+        if match:
+            return int(match.group(1))
+
+        if re.fullmatch(
+            r"[+-]?\d+",
+            text_value,
+        ):
+            return int(text_value)
+
+        raise ValueError(
+            f"Invalid {variable} counter value: {raw!r}"
+        )
+
+    numeric_data = data.get("numeric_state")
+
+    if isinstance(numeric_data, dict):
+        counters = {
+            "H": parse_counter_value(
+                "H",
+                numeric_data.get("H", 0),
+            ),
+            "S": parse_counter_value(
+                "S",
+                numeric_data.get("S", 0),
+            ),
+        }
+
     else:
-        counters = set(str(c) for c in counters_data)
-    if not any(c.startswith("H") for c in counters):
-        counters.add("H0")
-    if not any(c.startswith("S") for c in counters):
-        counters.add("S0")
+        legacy_data = data.get(
+            "counters",
+            {},
+        )
+
+        if isinstance(legacy_data, dict):
+            counters = {
+                "H": parse_counter_value(
+                    "H",
+                    legacy_data.get("H", 0),
+                ),
+                "S": parse_counter_value(
+                    "S",
+                    legacy_data.get("S", 0),
+                ),
+            }
+
+        else:
+            tokens = [
+                str(value).strip().upper()
+                for value in legacy_data
+            ]
+
+            h_token = next(
+                (
+                    value
+                    for value in tokens
+                    if re.fullmatch(
+                        r"H\d+",
+                        value,
+                    )
+                ),
+                "H0",
+            )
+
+            s_token = next(
+                (
+                    value
+                    for value in tokens
+                    if re.fullmatch(
+                        r"S\d+",
+                        value,
+                    )
+                ),
+                "S0",
+            )
+
+            counters = {
+                "H": parse_counter_value(
+                    "H",
+                    h_token,
+                ),
+                "S": parse_counter_value(
+                    "S",
+                    s_token,
+                ),
+            }
 
     missing_types = [obj for obj in objects if obj not in obj_types]
     if missing_types:
@@ -332,36 +535,96 @@ def parse_problem_railroad(scene_path: str, objects_path: Optional[str] = None):
     return objects, obj_types, relations, counters, object_infos
 
 
-def build_initial_state(objects: Sequence[str],
-                        obj_types: Dict[str, str],
-                        relations: Sequence[Tuple[str, str, str]],
-                        counters: Iterable[str]):
+def build_initial_state(
+    objects: Sequence[str],
+    obj_types: Dict[str, str],
+    relations: Sequence[Tuple[str, str, str]],
+    counters: Dict[str, int],
+):
+    """Build the initial Railroad state with native numeric H/S."""
+
     fluents = set()
 
     for obj in objects:
-        fluents.add(F("pickloc", obj))
+        fluents.add(
+            F("pickloc", obj)
+        )
 
     for obj, typ in obj_types.items():
-        fluents.add(F(typ, obj))
+        fluents.add(
+            F(typ, obj)
+        )
 
     for rel, obj1, obj2 in relations:
-        fluents.add(F(rel, obj1, obj2))
+        fluents.add(
+            F(rel, obj1, obj2)
+        )
 
-    counter_set = set(counters)
-    fluents.add(F("H0" if not any(c.startswith("H") for c in counter_set) else next(c for c in counter_set if c.startswith("H"))))
-    fluents.add(F("S0" if not any(c.startswith("S") for c in counter_set) else next(c for c in counter_set if c.startswith("S"))))
+    numeric_values = {
+        "H": int(
+            counters.get("H", 0)
+        ),
+        "S": int(
+            counters.get("S", 0)
+        ),
+    }
 
-    return State(fluents=fluents), {"object": set(objects)}
+    return (
+        State(
+            fluents=fluents,
+            numeric_values=numeric_values,
+        ),
+        {
+            "object": set(objects),
+        },
+    )
 
 
-def state_key(state: State) -> Tuple[str, ...]:
-    """Hashable state key for DeepSym's zero-time symbolic states."""
-    return tuple(sorted(str(f) for f in state.fluents))
+def state_key(
+    state: State,
+) -> Tuple[str, ...]:
+    """Hashable key containing both Boolean and numeric state."""
+
+    parts = [
+        f"F:{fluent}"
+        for fluent in state.fluents
+    ]
+
+    parts.extend(
+        f"N:{name}={value}"
+        for name, value
+        in state.numeric_values.items()
+    )
+
+    return tuple(
+        sorted(parts)
+    )
 
 
-def is_progress_state(state: State) -> bool:
-    """A progress stack outcome creates the transient flags consumed by aux operators."""
-    return F("stacked") in state.fluents or F("inserted") in state.fluents
+def is_progress_state(
+    state: State,
+    previous_state: Optional[State] = None,
+) -> bool:
+    """Return whether H or S increased relative to the previous state."""
+
+    if previous_state is None:
+        return False
+
+    before = dict(
+        previous_state.numeric_values
+    )
+
+    after = dict(
+        state.numeric_values
+    )
+
+    return (
+        after.get("H", 0)
+        > before.get("H", 0)
+        or
+        after.get("S", 0)
+        > before.get("S", 0)
+    )
 
 
 def transition_safe(state: State, action) -> List[Tuple[State, float]]:
@@ -590,34 +853,73 @@ def choose_outcome(
     *,
     mode: str,
     rng: random.Random,
+    current_state: Optional[State] = None,
 ):
     """Choose one outcome only for constructing a representative rollout."""
+
     if not outcomes:
-        raise ValueError("Cannot choose an outcome from an empty transition")
+        raise ValueError(
+            "Cannot choose an outcome from an empty transition"
+        )
 
     if mode == "sample":
         r = rng.random()
         cumulative = 0.0
+
         for state, probability in outcomes:
             cumulative += float(probability)
+
             if r <= cumulative + 1e-12:
-                return state, float(probability)
+                return (
+                    state,
+                    float(probability),
+                )
+
         state, probability = outcomes[-1]
-        return state, float(probability)
 
-    if mode == "progress" and action_name.startswith("stack"):
+        return (
+            state,
+            float(probability),
+        )
+
+    if (
+        mode == "progress"
+        and action_name.startswith("stack")
+        and current_state is not None
+    ):
         progress = [
-            (state, float(probability))
+            (
+                state,
+                float(probability),
+            )
             for state, probability in outcomes
-            if is_progress_state(state)
+            if is_progress_state(
+                state,
+                current_state,
+            )
         ]
-        if progress:
-            return max(progress, key=lambda item: (item[1], state_key(item[0])))
 
-    # "most-likely", or progress mode when no progress branch exists.
+        if progress:
+            return max(
+                progress,
+                key=lambda item: (
+                    item[1],
+                    state_key(item[0]),
+                ),
+            )
+
     return max(
-        ((state, float(probability)) for state, probability in outcomes),
-        key=lambda item: (item[1], state_key(item[0])),
+        (
+            (
+                state,
+                float(probability),
+            )
+            for state, probability in outcomes
+        ),
+        key=lambda item: (
+            item[1],
+            state_key(item[0]),
+        ),
     )
 
 
@@ -650,7 +952,7 @@ def plan_with_repeated_mcts(
     visited = set()
 
     for step in range(max_symbolic_steps):
-        if goal.evaluate(state.fluents):
+        if goal.evaluate(state):
             break
 
         key = state_key(state)
@@ -704,6 +1006,7 @@ def plan_with_repeated_mcts(
             outcomes,
             mode=outcome_mode,
             rng=rng,
+            current_state=state,
         )
 
         history.append(action_name)
@@ -722,8 +1025,8 @@ def plan_with_repeated_mcts(
             "outcomes": [
                 {
                     "probability": float(probability),
-                    "goal": bool(goal.evaluate(outcome_state.fluents)),
-                    "progress": bool(is_progress_state(outcome_state)),
+                    "goal": bool(goal.evaluate(outcome_state)),
+                    "progress": bool(is_progress_state(outcome_state, state)),
                     "state": list(state_key(outcome_state)),
                 }
                 for outcome_state, probability in outcomes
@@ -755,7 +1058,7 @@ def plan_with_repeated_mcts(
         if output_mode == "next-physical-action" and action_name.startswith("stack"):
             break
 
-    goal_reached = bool(goal.evaluate(state.fluents))
+    goal_reached = bool(goal.evaluate(state))
     return history, state, branch_probability, goal_reached, decision_log
 
 
@@ -899,6 +1202,10 @@ def main() -> None:
     print(f"Types: {obj_types}")
     print(f"Relations: {len(relations)}")
     print(f"Initial fluents: {len(initial_state.fluents)}")
+    print(
+        "Initial numeric state: "
+        f"{dict(initial_state.numeric_values)}"
+    )
     print(f"Goal: {goal}")
     print("\n=== Starting Railroad MCTS planning ===")
 
@@ -967,6 +1274,9 @@ def main() -> None:
         ),
         "decisions": decision_log,
         "final_state": list(state_key(final_state)),
+        "final_numeric_state": dict(
+            final_state.numeric_values
+        ),
     }
 
     result_path = os.path.join(save_dir, "mcts_result.json")

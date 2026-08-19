@@ -217,47 +217,20 @@ def tree_to_operator_specs(tree: DecisionTreeClassifier, effect_names: Sequence[
     return specs
 
 
-def create_auxiliary_specs(num_heights: int = 7, num_stacks: int = 7) -> List[Dict]:
-    aux: List[Dict] = []
-    for i in range(num_heights - 1):
-        aux.append({"type": "increase_height", "name": f"increase_height{i+1}", "from_counter": f"H{i}", "to_counter": f"H{i+1}"})
-    for i in range(num_stacks - 1):
-        aux.append({"type": "increase_stack", "name": f"increase_stack{i+1}", "from_counter": f"S{i}", "to_counter": f"S{i+1}"})
-    aux.append({"type": "makebase", "name": "makebase"})
-    return aux
+def create_auxiliary_specs() -> List[Dict]:
+    """Create only the remaining non-learned decision operator.
 
-
-def _train_or_load_tree(path: str, X: np.ndarray, y: np.ndarray, args) -> DecisionTreeClassifier:
-    if os.path.exists(path) and not args.retrain_tree:
-        try:
-            with open(path, "rb") as f:
-                tree = pickle.load(f)
-            if getattr(tree, "n_features_in_", X.shape[1]) == X.shape[1]:
-                print(f"Loaded existing decision tree from {path}")
-                return tree
-            print("Existing tree feature count mismatch; retraining.")
-        except Exception as e:
-            print(f"Could not load existing tree ({e}); retraining.")
-
-    tree = DecisionTreeClassifier(
-        min_samples_leaf=args.min_samples_leaf,
-        min_samples_split=args.min_samples_split,
-        max_depth=args.max_depth,
-        random_state=args.random_state,
-    )
-    print(
-        "Training DecisionTreeClassifier("
-        f"min_samples_leaf={args.min_samples_leaf}, "
-        f"min_samples_split={args.min_samples_split}, "
-        f"max_depth={args.max_depth}, "
-        f"random_state={args.random_state})"
-    )
-    tree.fit(X, y)
-    with open(path, "wb") as f:
-        pickle.dump(tree, f)
-    print(f"Saved decision tree to {path}")
-    return tree
-
+    H and S are native integer state variables. Their updates are attached
+    directly to makebase and learned stack outcome branches, so numbered
+    increase_height*/increase_stack* bookkeeping actions are no longer
+    generated.
+    """
+    return [
+        {
+            "type": "makebase",
+            "name": "makebase",
+        }
+    ]
 
 def main() -> None:
     parser = argparse.ArgumentParser("Convert DeepSym tree rules to Railroad JSON.")
@@ -302,6 +275,7 @@ def main() -> None:
         "stack_operators": stack_specs,
         "auxiliary_operators": aux_specs,
         "metadata": {
+            "planner_semantics": "probabilistic_numeric_counters",
             "category_encoding": enc.encoding,
             "order": "original_deepsym_compatible",
             "code1_dim": enc.code1_dim,
