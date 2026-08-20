@@ -42,6 +42,12 @@ def resolve_device(requested):
 parser = argparse.ArgumentParser("Recognize scene and write DeepSym Railroad scene JSON/objects.txt.")
 parser.add_argument("-opts", help="option file", type=str, required=True)
 parser.add_argument("-goal", help="goal state", type=str, default="(H3) (S0)")
+parser.add_argument(
+    "--seed",
+    type=int,
+    default=34,
+    help="random seed used to generate the scene",
+)
 parser.add_argument("-uri", help="master uri", type=str, default="http://localhost:11311")
 parser.add_argument(
     "-device",
@@ -80,7 +86,7 @@ model.encoder2.to(device)
 # Homogeneous transformation matrix. Keep it on CPU because locs are CPU.
 H = torch.load("H.pt", map_location="cpu")
 
-np.random.seed(34)
+np.random.seed(args.seed)
 
 # GENERATE A RANDOM SCENE
 NUM_OBJECTS = 5
