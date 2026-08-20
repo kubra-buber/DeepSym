@@ -39,7 +39,7 @@ from make_plan_railroad_expected import (
     state_key,
     transition_safe,
 )
-from make_plan_railroad_mcts import (
+from railroad_mcts_trial.make_plan_railroad_mcts import (
     canonical_action_name,
     choose_outcome,
 )
@@ -117,7 +117,7 @@ def main() -> None:
         outcomes = transition_safe(state, action)
         if not outcomes:
             raise RuntimeError(f"Replay transition rejected at step {index}: {name}")
-        state, _ = choose_outcome(name, outcomes, mode=outcome_mode, rng=rng)
+        state, _ = choose_outcome(name, outcomes, mode=outcome_mode, rng=rng, current_state=state)
 
     # Match MCTS: its root node is a copy whose absolute time is reset.
     root_state = state.copy_and_zero_out_time()
@@ -232,8 +232,8 @@ def main() -> None:
                 "action": name,
                 "outcome_index": outcome_index,
                 "probability": probability,
-                "goal": bool(goal.evaluate(next_state.fluents)),
-                "progress": bool(is_progress_state(next_state)),
+                "goal": bool(goal.evaluate(next_state)),
+                "progress": bool(is_progress_state(next_state, root_state)),
                 "g_time": g,
                 "h_base_dtime_plus_retry": h0,
                 "derived_h_add": derived_add,

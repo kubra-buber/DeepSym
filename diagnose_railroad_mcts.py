@@ -27,7 +27,7 @@ from make_plan_railroad_expected import (
     state_key,
     transition_safe,
 )
-from make_plan_railroad_mcts import (
+from railroad_mcts_trial.make_plan_railroad_mcts import (
     canonical_action_name,
     choose_outcome,
     run_mcts_vote,
@@ -124,11 +124,11 @@ def main() -> None:
         outcomes = transition_safe(state, action)
         if not outcomes:
             raise RuntimeError(f"Replay transition rejected at step {i}: {name}")
-        state, _ = choose_outcome(name, outcomes, mode=outcome_mode, rng=rng)
+        state, _ = choose_outcome(name, outcomes, mode=outcome_mode, rng=rng, current_state=state)
 
     print(f"Diagnostic state: before step {args.step}")
     print(f"Goal: {goal}")
-    print(f"Goal already true: {goal.evaluate(state.fluents)}")
+    print(f"Goal already true: {goal.evaluate(state)}")
     print(f"State fluents: {len(state.fluents)}")
 
     exact_value, policy, _store, outcome_cache, value_fn = expected_reachability_plan(
@@ -143,7 +143,7 @@ def main() -> None:
             continue
         q = sum(float(p) * value_fn(state_key(next_state), args.horizon - 1)
                 for next_state, p in outcomes)
-        progress_p = sum(float(p) for next_state, p in outcomes if is_progress_state(next_state))
+        progress_p = sum(float(p) for next_state, p in outcomes if is_progress_state(next_state, state))
         rows.append((q, progress_p, canonical_action_name(action_name)))
     rows.sort(key=lambda row: (-row[0], -row[1], row[2]))
 
