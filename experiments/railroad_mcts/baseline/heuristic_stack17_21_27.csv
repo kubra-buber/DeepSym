@@ -1,9 +1,0 @@
-action,outcome_index,probability,goal,progress,g_time,h_base_dtime_plus_retry,derived_h_add,derived_h_max,derived_h_ff,mixed_h,reconstruction_residual,leaf_reward,exact_continuation_value,exact_weighted_contribution,added_fluents,removed_fluents
-stack17 O2 O3,0,0.746478,False,False,10.0,0.16715514955999922,20.0,20.0,20.0,20.16715514956,0.0,-110.8357757478,0.0,0.0,(tumble2),(pickloc O3)
-stack17 O2 O3,1,0.225352,False,True,10.0,0.0,30.0,10.0,20.0,25.0,0.0,-135.0,1.0,0.225352,(inserted) ; (instack O3) ; (stacked) ; (stackloc O3),(pickloc O3) ; (stackloc O2)
-stack17 O2 O3,2,0.014085,False,False,10.0,0.16715514955999922,20.0,20.0,20.0,20.16715514956,0.0,-110.8357757478,0.0,0.0,(tumble1),(pickloc O3)
-stack17 O2 O3,3,0.014085,False,True,10.0,5.77778,50.0,40.0,40.0,50.77778,0.0,-263.88890000000004,0.0,0.0,(inserted) ; (instack O3) ; (stackloc O3),(pickloc O3) ; (stackloc O2)
-stack21 O2 O5,0,0.981818,False,True,10.0,0.0,30.0,10.0,20.0,25.0,0.0,-135.0,1.0,0.981818,(inserted) ; (instack O5) ; (stacked) ; (stackloc O5),(pickloc O5) ; (stackloc O2)
-stack21 O2 O5,1,0.018182,False,True,10.0,inf,nan,nan,nan,inf,nan,-inf,0.0,0.0,(inserted) ; (instack O5) ; (stackloc O5),(pickloc O5) ; (stackloc O2)
-stack27 O2 O1,0,0.016129,False,False,10.0,0.1818200000000001,20.0,20.0,20.0,20.181820000000002,0.0,-110.90910000000001,0.0,0.0,(tumble2),(pickloc O1)
-stack27 O2 O1,1,0.983871,False,True,10.0,0.0,30.0,10.0,20.0,25.0,0.0,-135.0,1.0,0.983871,(inserted) ; (instack O1) ; (stacked) ; (stackloc O1),(pickloc O1) ; (stackloc O2)

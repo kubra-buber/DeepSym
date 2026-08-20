@@ -1,5 +1,0 @@
-label=seed31_H4
-seed=31
-goal=(H4)
-runs=30
-iterations=10000

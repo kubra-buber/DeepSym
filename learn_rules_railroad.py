@@ -232,6 +232,51 @@ def create_auxiliary_specs() -> List[Dict]:
         }
     ]
 
+
+def _train_or_load_tree(
+    path: str,
+    X: np.ndarray,
+    y: np.ndarray,
+    args,
+) -> DecisionTreeClassifier:
+    """Load the existing decision tree when compatible, otherwise train it."""
+    if os.path.exists(path) and not args.retrain_tree:
+        try:
+            with open(path, "rb") as f:
+                tree = pickle.load(f)
+
+            if getattr(tree, "n_features_in_", X.shape[1]) == X.shape[1]:
+                print(f"Loaded existing decision tree from {path}")
+                return tree
+
+            print("Existing tree feature count mismatch; retraining.")
+        except Exception as exc:
+            print(f"Could not load existing tree ({exc}); retraining.")
+
+    tree = DecisionTreeClassifier(
+        min_samples_leaf=args.min_samples_leaf,
+        min_samples_split=args.min_samples_split,
+        max_depth=args.max_depth,
+        random_state=args.random_state,
+    )
+
+    print(
+        "Training DecisionTreeClassifier("
+        f"min_samples_leaf={args.min_samples_leaf}, "
+        f"min_samples_split={args.min_samples_split}, "
+        f"max_depth={args.max_depth}, "
+        f"random_state={args.random_state})"
+    )
+
+    tree.fit(X, y)
+
+    with open(path, "wb") as f:
+        pickle.dump(tree, f)
+
+    print(f"Saved decision tree to {path}")
+    return tree
+
+
 def main() -> None:
     parser = argparse.ArgumentParser("Convert DeepSym tree rules to Railroad JSON.")
     parser.add_argument("-opts", type=str, required=True)

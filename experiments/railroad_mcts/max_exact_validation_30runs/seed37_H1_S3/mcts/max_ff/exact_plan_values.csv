@@ -1,3 +1,0 @@
-physical_plan,count,exact_linear_probability,regret,relative_to_optimum,is_optimal,within_95_percent
-O1 on O3 | O5 on O1,20,0.05357175000000002,0.013392749999999974,0.8000022399928324,0,0
-O2 on O4 | O5 on O2,10,0.05357175000000002,0.013392749999999974,0.8000022399928324,0,0

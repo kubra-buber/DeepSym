@@ -1,5 +1,0 @@
-label=seed23_H1_S2
-seed=23
-goal=(H1) (S2)
-runs=30
-iterations=10000

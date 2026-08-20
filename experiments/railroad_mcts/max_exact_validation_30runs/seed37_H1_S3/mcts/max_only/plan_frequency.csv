@@ -1,3 +1,0 @@
-physical_plan,count,fraction
-O1 on O3 | O5 on O1,22,0.7333333333333333
-O2 on O4 | O5 on O2,8,0.26666666666666666
