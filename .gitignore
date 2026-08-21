@@ -149,3 +149,15 @@ last_id
 setup.cfg
 *.sublime-workspace
 railroad_mcts_trial/railroad_source/
+
+# Vendored Railroad build artifacts
+railroad_source_baseline/**/__pycache__/
+railroad_source_numeric/**/__pycache__/
+railroad_source_baseline/**/*.pyc
+railroad_source_numeric/**/*.pyc
+railroad_source_baseline/**/*.pyo
+railroad_source_numeric/**/*.pyo
+railroad_source_baseline/packages/railroad/src/railroad/_bindings*.so
+railroad_source_numeric/packages/railroad/src/railroad/_bindings*.so
+railroad_source_baseline/packages/railroad/src/railroad/_bindings.pyi
+railroad_source_numeric/packages/railroad/src/railroad/_bindings.pyi

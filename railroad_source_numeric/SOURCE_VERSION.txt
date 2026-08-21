@@ -1,0 +1,6 @@
+Source: https://github.com/RAIL-group/railroad
+Baseline tag: deepsym-numeric-baseline
+Baseline commit: 9853c20
+Numeric branch: deepsym-numeric
+Numeric commit: 27ae0bd
+Description: Railroad with native numeric state, updates, preconditions, goals, and numeric-aware heuristic.

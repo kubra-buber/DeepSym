@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=64", "wheel", "pybind11", "pybind11-stubgen"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "railroad"
+version = "0.2.0"
+description = "Multi-Robot Probabilistic Planning with PDDL"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "rich-click>=1.8.0",
+    "rich",
+    "matplotlib",
+    "pyqt5",
+    "scipy",
+    "scikit-image",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-timeout",
+]
+bench = [
+    "mlflow",
+    "pandas",
+    "dash>=3.3.0",
+    "dash-bootstrap-components>=1.6.0",
+    "plotly",
+]
+procthor = [
+    "ai2thor>=5.0.0",
+    "torch",
+    "sentence-transformers>=5.1.2",
+    "prior>=1.0.3",
+    "shapely",
+    "networkx",
+    "scipy",
+    "scikit-image",
+    "shapely>=2.1.2",
+]
+all = [
+    "railroad[test,bench,procthor]",
+]
+
+[project.scripts]
+railroad = "railroad.cli:main"
+
+[project.entry-points."railroad.benchmarks"]
+railroad = "railroad.bench.benchmarks"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+railroad = [
+    "*.pyi",
+    "environment/procthor/resources/models/*.pt",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore:invalid escape sequence:SyntaxWarning",
+]
+markers = [
+    "slow: marks tests as slow to run (deselect with '-m \"not slow\"')",
+]
+
+[tool.uv]
+cache-keys = [
+  { file = "pyproject.toml" },
+  { file = "setup.py" },
+
+  # Changing the bindings will trigger a rebuild
+  { file = "src/railroad/*.cpp" },
+
+  # Changes to headers will trigger a rebuild
+  { file = "include/**/*.hpp" },
+  { file = "include/**/*.h" },
+]

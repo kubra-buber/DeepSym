@@ -1,0 +1,44 @@
+"""Environment classes for robot simulation and planning execution.
+
+This module provides the recommended interface for robot environments
+used in PDDL planning and simulation.
+
+Usage:
+    from railroad.environment import (
+        Environment,           # Abstract base class for environments
+        SymbolicEnvironment,   # Environment for symbolic execution
+        ActiveSkill,           # Protocol for skill execution
+        SymbolicSkill,         # Symbolic skill implementation
+    )
+
+Legacy classes have been moved to railroad.experimental.environment:
+    from railroad.experimental.environment import (
+        AbstractEnvironment, BaseEnvironment, SimpleEnvironment,
+        EnvironmentInterface, OngoingAction, SkillStatus, SimulatedRobot, Pose,
+    )
+
+Unknown-space frontier search lives in railroad.experimental.unknown_search.
+"""
+
+from .environment import ActiveSkill, Environment
+from .skill import InterruptibleNavigationMoveSkill, MotionSkill, NavigationMoveSkill
+from .types import Pose, PoseLike
+from .symbolic import (
+    LocationRegistry,
+    SymbolicEnvironment,
+    SymbolicSkill,
+)
+
+__all__ = [
+    # Core classes
+    "ActiveSkill",
+    "Environment",
+    "InterruptibleNavigationMoveSkill",
+    "LocationRegistry",
+    "MotionSkill",
+    "NavigationMoveSkill",
+    "Pose",
+    "PoseLike",
+    "SymbolicEnvironment",
+    "SymbolicSkill",
+]

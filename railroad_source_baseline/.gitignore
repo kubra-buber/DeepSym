@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+# Build artifacts from pybind11
+/packages/railroad/src/railroad/*.so
+/packages/railroad/src/railroad/_bindings.pyi
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+
+# Virtual environments
+.venv
+
+# MacOS-specific
+*.DS_Store
+
+# Resources
+resources/
+data/
+/uv.lock
+
+
+# Logging
+mlruns
+mlflow.db
+.worktrees/
+.benchmark_cache/

@@ -1,0 +1,118 @@
+"""
+Example benchmark: Basic single-robot planning tasks.
+
+Demonstrates benchmark registration and parametrization.
+"""
+
+from railroad.bench import benchmark, BenchmarkCase
+from railroad.core import Fluent as F, State, get_action_by_name
+from railroad.planner import MCTSPlanner
+from railroad.dashboard import PlannerDashboard
+from railroad.experimental.environment import EnvironmentInterface, SimpleEnvironment
+from railroad import operators
+from rich.console import Console
+import time
+
+
+@benchmark(
+    name="single_robot_at_location",
+    description="Simple case showing that a robot can reach a destination via move.",
+    repeat=1,
+    tags=["simple", "navigation"],
+)
+def bench_single_robot_nav(case: BenchmarkCase):
+    """
+    Benchmark single robot navigation.
+
+    Measures planning performance for a robot moving between locations.
+    """
+    # Extract parameters
+    num_locations = case.num_locations
+
+    # Create simple test environment
+    import numpy as np
+    locations = {f"loc{i}": np.array([i * 2.0, 0.0]) for i in range(num_locations)}
+    locations["living_room"] = np.array([0.0, 0.0])  # Required for SimpleEnvironment
+    locations["start"] = np.array([0.0, 0.0])
+
+    robot_locations = {"robot1": "living_room"}
+    env = SimpleEnvironment(locations=locations, objects_at_locations={}, robot_locations=robot_locations)
+
+    # Define initial state
+    initial_state = State(
+        time=0,
+        fluents={
+            F("at robot1 living_room"),
+            F("free robot1"),
+        },
+    )
+
+    # Define goal: visit the last location
+    # Using Goal API: Single fluent creates a LiteralGoal
+    goal = F(f"at robot1 loc{num_locations - 1}")
+
+    # Create operators
+    move_time_fn = env.get_skills_time_fn('move')
+    move_op = operators.construct_move_operator_blocking(move_time_fn)
+
+    objects_by_type = {
+        "robot": {"robot1"},
+        "location": set(locations.keys()),
+    }
+
+    # Create simulator
+    sim = EnvironmentInterface(
+        initial_state,
+        objects_by_type,
+        [move_op],
+        env
+    )
+
+    # Run planning loop with timing
+    start_time = time.perf_counter()
+
+    recording_console = Console(record=True, force_terminal=True, width=120)
+    dashboard = PlannerDashboard(goal, sim, print_on_exit=False, console=recording_console)
+
+    planner = MCTSPlanner(sim.get_actions())
+
+    max_steps = 100
+    for iteration in range(max_steps):
+        if goal.evaluate(sim.state.fluents):
+            break
+
+        action_name = planner(
+            sim.state,
+            goal,
+            max_iterations=case.mcts.iterations,
+            c=100
+        )
+
+        if action_name == 'NONE':
+            break
+
+        action = get_action_by_name(sim.get_actions(), action_name)
+        sim.advance(action)
+        dashboard.update(planner, action_name)
+
+    wall_time = time.perf_counter() - start_time
+
+    actions_taken = [name for name, _ in dashboard.actions_taken]
+    dashboard.print_history()
+    html_output = recording_console.export_html(inline_styles=True)
+
+    # Return metrics
+    return {
+        "success": goal.evaluate(sim.state.fluents),
+        "wall_time": wall_time,
+        "plan_cost": float(sim.state.time),
+        "actions_count": len(actions_taken),
+        "actions": actions_taken,
+        "log_html": html_output,
+    }
+
+
+# Register parameter combinations
+bench_single_robot_nav.add_cases([
+    {"num_locations": 3, "mcts.iterations": 100,},
+])

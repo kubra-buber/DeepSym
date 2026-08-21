@@ -1,0 +1,44 @@
+[project]
+name = "railroad-monorepo"
+version = "0.2.0"
+description = "Planning suite from the RAIL Group @ GMU supporting multi-agent concurrent planning under uncertainty, among other capabilities."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # Local packages
+    "railroad[all]",
+    "environments",
+    # External dependencies
+    "matplotlib",
+    "pyqt5",
+    "roslibpy",
+    # Testing and formatting (monorepo-level)
+    "pytest-html",
+    "pytest-xdist>=3.8.0",
+    "ruff",
+    "ty>=0.0.12",
+]
+
+[tool.uv.sources]
+railroad = { path = "packages/railroad", editable = true }
+environments = { path = "packages/environments", editable = true }
+
+[tool.ty.src]
+exclude = ["**/scratch/**"]
+
+[tool.ty.environment]
+extra-paths = [
+    "packages/railroad/src",
+    "packages/environments/src",
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:invalid escape sequence:SyntaxWarning"
+]
+addopts = "-v -n auto --html=data/test_logs/test_report.html --self-contained-html"
+markers = [
+    "slow: marks tests as slow to run (deselect with '-m \"not slow\"')"
+]
+testpaths = ["packages"]
+norecursedirs = ["packages/environments/scratch"]

@@ -1,0 +1,112 @@
+"""
+Dry-run formatter for displaying execution plans.
+
+Provides Rich-based visualization of what will be executed.
+"""
+
+from rich.console import Console
+from rich.table import Table
+from rich.text import Text
+from datetime import datetime
+from collections import defaultdict
+from .plan import ExecutionPlan
+
+
+def format_dry_run(plan: ExecutionPlan):
+    """
+    Format and display execution plan.
+
+    Args:
+        plan: Execution plan to display
+    """
+    console = Console()
+
+    # Header
+    console.print("\n[bold cyan]Benchmark Execution Plan[/bold cyan]")
+    console.print()
+
+    # Metadata table
+    meta_table = Table.grid(padding=(0, 2))
+    meta_table.add_column(style="bold")
+    meta_table.add_column()
+
+    # Format timestamp
+    timestamp = plan.metadata.get('timestamp')
+    if timestamp:
+        timestamp_str = datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        timestamp_str = "unknown"
+
+    meta_table.add_row("Total tasks:", str(plan.total_tasks))
+    meta_table.add_row("Benchmarks:", str(plan.metadata.get('num_benchmarks', 'unknown')))
+    meta_table.add_row("Repeats:", str(plan.metadata.get('num_repeats', 'unknown')))
+    meta_table.add_row("Parallel workers:", str(plan.metadata.get('parallel_workers', 1)))
+    meta_table.add_row("Timestamp:", timestamp_str)
+    meta_table.add_row("Hostname:", plan.metadata.get('hostname', 'unknown'))
+    meta_table.add_row("Git hash:", plan.metadata.get('git_hash', 'unknown')[:8])
+    meta_table.add_row("Git dirty:", str(plan.metadata.get('git_dirty', True)))
+
+    console.print(meta_table)
+    console.print()
+
+    # Display benchmarks
+    console.print("[bold]Benchmarks[/bold]")
+    console.print()
+
+    # Get benchmark descriptions from metadata
+    benchmark_descriptions = plan.metadata.get("benchmark_descriptions", {})
+
+    # Group tasks by benchmark and case
+    for benchmark_name, tasks in plan.group_by_benchmark().items():
+        # Count cases and repeats
+        num_tasks = len(tasks)
+        num_cases = len(set(t.case_idx for t in tasks))
+        num_repeats = len(set(t.repeat_idx for t in tasks))
+
+        # Get tags from first task
+        tags = tasks[0].tags
+
+        # Format benchmark header
+        header = Text()
+        header.append(benchmark_name, style="bold yellow")
+        header.append(f" ({num_cases} cases × {num_repeats} repeats = {num_tasks} tasks)")
+
+        if tags:
+            header.append(" [")
+            for i, tag in enumerate(tags):
+                if i > 0:
+                    header.append(", ")
+                header.append(tag, style="cyan")
+            header.append("]")
+
+        console.print(header)
+
+        # Show description if available
+        description = benchmark_descriptions.get(benchmark_name, "")
+        if description:
+            console.print(f"  [italic dim]{description}[/italic dim]")
+
+        # Group by case
+        by_case = defaultdict(list)
+        for task in tasks:
+            by_case[task.case_idx].append(task)
+
+        for case_idx in sorted(by_case.keys()):
+            case_tasks = by_case[case_idx]
+
+            # Get params from first task (all tasks in same case have same params)
+            params = case_tasks[0].params
+            timeout = case_tasks[0].timeout
+
+            # Format params with rich syntax highlighting
+            param_parts = []
+            for k, v in params.items():
+                param_parts.append(f"[cyan]{k}[/cyan]=[yellow]{v}[/yellow]")
+            param_str = ", ".join(param_parts)
+
+            console.print(
+                f"  Case {case_idx}: {param_str} "
+                f"[dim](timeout={timeout}s, repeats={len(case_tasks)})[/dim]"
+            )
+
+        console.print()

@@ -1,0 +1,290 @@
+"""
+Main benchmark execution engine.
+
+Orchestrates benchmark discovery, plan creation, execution, and logging.
+"""
+
+import os
+import re
+import time
+import subprocess
+import socket
+import getpass
+from pathlib import Path
+from typing import List, Optional
+
+from .plan import ExecutionPlan, Task
+from .registry import Benchmark
+from .tracking import MLflowTracker
+from .progress import ProgressDisplay, get_cases_per_page
+
+
+class BenchmarkRunner:
+    """
+    Main orchestrator for benchmark execution.
+
+    Responsibilities:
+    - Create execution plan from benchmarks
+    - Launch MLflow experiment
+    - Execute tasks (sequential or parallel)
+    - Aggregate and log results
+    - Handle failures and timeouts
+    """
+
+    def __init__(
+        self,
+        benchmarks: List[Benchmark],
+        repeat_max: Optional[int] = None,
+        parallel: Optional[int] = None,
+        mlflow_tracking_uri: Optional[str] = None,
+        tags: Optional[List[str]] = None,
+        case_filter: Optional[str] = None,
+        include_files: Optional[List[str]] = None,
+        run_name: Optional[str] = None,
+    ):
+        """
+        Initialize benchmark runner.
+
+        Args:
+            benchmarks: List of benchmarks to run
+            repeat_max: Maximum number of repeats per case (default: None, uses each benchmark's repeat setting)
+            parallel: Number of parallel workers (default: None, auto-detects CPU count)
+            mlflow_tracking_uri: MLflow tracking URI (default: sqlite:///mlflow.db)
+            tags: Filter benchmarks by tags (default: None, run all)
+            case_filter: Filter cases by matching against benchmark name and parameters (default: None)
+            include_files: List of additional benchmark files to load (default: None)
+            run_name: Human-readable name for this benchmark run (default: None, auto-generated from timestamp)
+        """
+        self.benchmarks = benchmarks
+        self.repeat_max = repeat_max
+        # Auto-detect CPU count if not specified
+        cpu_max = max((os.cpu_count() or 1) - 2, 1)
+        self.parallel = parallel if parallel is not None else cpu_max
+        self.tracker = MLflowTracker(tracking_uri=mlflow_tracking_uri)
+        self.filter_tags = tags
+        self.case_filter = case_filter
+        self.include_files = include_files
+        self.run_name = run_name
+
+    def create_plan(self) -> ExecutionPlan:
+        """
+        Materialize the complete execution plan.
+
+        Expands all benchmarks × cases × repeats into individual tasks.
+
+        Returns:
+            ExecutionPlan with all tasks
+        """
+        tasks = []
+
+        # Get benchmarks (optionally filtered by tags)
+        if self.filter_tags:
+            benchmarks = [
+                b for b in self.benchmarks
+                if any(tag in b.tags for tag in self.filter_tags)
+            ]
+        else:
+            benchmarks = self.benchmarks
+
+        # Collect benchmark descriptions for display
+        benchmark_descriptions = {
+            benchmark.name: benchmark.description
+            for benchmark in benchmarks
+        }
+
+        # Collate tasks: queue by benchmark, then page, then repeat, then case
+        # This ensures cases on the current page are run first
+        cases_per_page = get_cases_per_page()
+
+        for benchmark in benchmarks:
+            # Determine number of repeats for this benchmark
+            # Use benchmark's repeat setting, capped by repeat_max if provided
+            num_repeats = benchmark.repeat
+            if self.repeat_max is not None:
+                num_repeats = min(num_repeats, self.repeat_max)
+
+            # Split cases into pages
+            case_list = list(enumerate(benchmark.cases))
+
+            for page_start in range(0, len(case_list), cases_per_page):
+                page_cases = case_list[page_start:page_start + cases_per_page]
+
+                for repeat_idx in range(num_repeats):
+                    for case_idx, params in page_cases:
+                        task = Task(
+                            id=f"{benchmark.name}_{case_idx}_{repeat_idx}",
+                            benchmark_name=benchmark.name,
+                            benchmark_fn=benchmark.fn,
+                            case_idx=case_idx,
+                            repeat_idx=repeat_idx,
+                            params=params,
+                            timeout=benchmark.timeout,
+                            tags=benchmark.tags,
+                        )
+                        tasks.append(task)
+
+        # Apply case-level filter if specified
+        if self.case_filter:
+            filtered_tasks = []
+            for task in tasks:
+                # Create searchable string with benchmark name and all parameter values
+                param_str = " ".join(f"{k}={v}" for k, v in sorted(task.params.items()))
+                search_str = f"{task.benchmark_name} {param_str}".lower()
+
+                if self._matches_filter(search_str, self.case_filter):
+                    filtered_tasks.append(task)
+
+            tasks = filtered_tasks
+
+        # Gather provenance metadata
+        metadata = self._collect_metadata()
+
+        # Flatten benchmark descriptions into individual tags
+        # (MLflow tags must be string key-value pairs)
+        for bench_name, description in benchmark_descriptions.items():
+            metadata[f"benchmark_desc_{bench_name}"] = description
+
+        return ExecutionPlan(tasks=tasks, metadata=metadata)
+
+    def _matches_filter(self, search_str: str, filter_expr: str) -> bool:
+        """
+        Evaluate a pytest-style filter expression against a search string.
+
+        Supports: and, or, not, parentheses
+        Example: "movie_night and mcts_iterations=400"
+                 "num_robots=1 or num_robots=2"
+                 "movie_night and not mcts_iterations=10000"
+
+        Args:
+            search_str: String to search in (lowercase)
+            filter_expr: Filter expression
+
+        Returns:
+            True if the filter matches, False otherwise
+        """
+        # Tokenize: split on whitespace and parentheses, keeping them
+        tokens = re.findall(r'\(|\)|[^\s()]+', filter_expr)
+
+        # Build evaluation expression with safe variable names
+        safe_expr_parts = []
+        namespace = {}
+        token_counter = 0
+
+        for token in tokens:
+            token_lower = token.lower()
+
+            if token_lower in ('and', 'or', 'not', '(', ')'):
+                # Preserve operators and parentheses
+                safe_expr_parts.append(token_lower)
+            else:
+                # Create a safe variable for this search term
+                var_name = f'_m{token_counter}'
+                token_counter += 1
+                namespace[var_name] = token.lower() in search_str
+                safe_expr_parts.append(var_name)
+
+        safe_expr = ' '.join(safe_expr_parts)
+
+        try:
+            # Evaluate with restricted builtins for safety
+            result = eval(safe_expr, {"__builtins__": {}}, namespace)
+            return bool(result)
+        except Exception:
+            # Fall back to simple substring match if expression is invalid
+            return filter_expr.lower() in search_str
+
+    def _collect_metadata(self) -> dict:
+        """
+        Collect environment provenance metadata.
+
+        Returns:
+            Dictionary with git hash, hostname, timestamp, etc.
+        """
+        # Git info
+        try:
+            git_hash = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=Path(__file__).parent.parent.parent,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+        except Exception:
+            git_hash = "unknown"
+
+        try:
+            git_dirty = bool(subprocess.check_output(
+                ["git", "status", "--porcelain"],
+                cwd=Path(__file__).parent.parent.parent,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip())
+        except Exception:
+            git_dirty = True
+
+        try:
+            git_branch = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=Path(__file__).parent.parent.parent,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+        except Exception:
+            git_branch = "unknown"
+
+        return {
+            "timestamp": time.time(),
+            "hostname": socket.gethostname(),
+            "user": getpass.getuser(),
+            "git_hash": git_hash,
+            "git_branch": git_branch,
+            "git_dirty": git_dirty,
+            "run_name": self.run_name if self.run_name is not None else "None",
+            "repeat_max": self.repeat_max if self.repeat_max is not None else "None",
+            "parallel_workers": self.parallel,
+            "num_benchmarks": len(self.benchmarks),
+            "include_files": self.include_files,
+        }
+
+    def dry_run(self, plan: ExecutionPlan):
+        """
+        Display execution plan without running.
+
+        Args:
+            plan: Execution plan to display
+        """
+        from .dryrun import format_dry_run
+        format_dry_run(plan)
+
+    def run(self, plan: ExecutionPlan) -> ExecutionPlan:
+        """
+        Execute the plan and return completed plan with results.
+
+        Args:
+            plan: Execution plan to run
+
+        Returns:
+            Completed execution plan with results
+        """
+        # Create MLflow experiment, named by user if provided else timestamped
+        timestamp = int(time.time())
+        if self.run_name:
+            experiment_name = f"{self.run_name}_{timestamp}"
+        else:
+            experiment_name = f"railroad_bench_{timestamp}"
+        self.tracker.create_experiment(experiment_name, plan.metadata)
+
+        # Start progress display
+        with ProgressDisplay(plan, num_workers=self.parallel) as progress:
+            # Execute in parallel
+            from .parallel import ParallelExecutor
+            executor = ParallelExecutor(
+                num_workers=self.parallel,
+                tracker=self.tracker,
+                progress=progress,
+            )
+            plan = executor.execute(plan)
+
+            # Print final error summary if there are any errors
+            progress.print_final_error_summary()
+
+        return plan
