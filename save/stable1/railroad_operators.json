@@ -775,83 +775,12 @@
   ],
   "auxiliary_operators": [
     {
-      "type": "increase_height",
-      "name": "increase_height1",
-      "from_counter": "H0",
-      "to_counter": "H1"
-    },
-    {
-      "type": "increase_height",
-      "name": "increase_height2",
-      "from_counter": "H1",
-      "to_counter": "H2"
-    },
-    {
-      "type": "increase_height",
-      "name": "increase_height3",
-      "from_counter": "H2",
-      "to_counter": "H3"
-    },
-    {
-      "type": "increase_height",
-      "name": "increase_height4",
-      "from_counter": "H3",
-      "to_counter": "H4"
-    },
-    {
-      "type": "increase_height",
-      "name": "increase_height5",
-      "from_counter": "H4",
-      "to_counter": "H5"
-    },
-    {
-      "type": "increase_height",
-      "name": "increase_height6",
-      "from_counter": "H5",
-      "to_counter": "H6"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack1",
-      "from_counter": "S0",
-      "to_counter": "S1"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack2",
-      "from_counter": "S1",
-      "to_counter": "S2"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack3",
-      "from_counter": "S2",
-      "to_counter": "S3"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack4",
-      "from_counter": "S3",
-      "to_counter": "S4"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack5",
-      "from_counter": "S4",
-      "to_counter": "S5"
-    },
-    {
-      "type": "increase_stack",
-      "name": "increase_stack6",
-      "from_counter": "S5",
-      "to_counter": "S6"
-    },
-    {
       "type": "makebase",
       "name": "makebase"
     }
   ],
   "metadata": {
+    "planner_semantics": "probabilistic_numeric_counters",
     "category_encoding": "signed_binary",
     "order": "original_deepsym_compatible",
     "code1_dim": 2,
