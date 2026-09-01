@@ -159,7 +159,11 @@ def build_probabilistic_stack_operator(spec: Dict) -> Operator:
 
     return Operator(
         name=op_name,
-        parameters=[("?below", "object"), ("?above", "object")],
+        parameters=[
+            ("?agent", "agent"),
+            ("?below", "object"),
+            ("?above", "object"),
+        ],
         preconditions=preconditions,
         effects=[probabilistic_effect, pickloc_removal],
     )
@@ -532,7 +536,28 @@ def parse_problem_railroad(scene_path: str, objects_path: Optional[str] = None):
     if missing_types:
         raise ValueError(f"Objects missing types in railroad_problem.json: {missing_types}")
 
-    return objects, obj_types, relations, counters, object_infos
+    raw_agents = data.get("agents", [])
+    agents: List[str] = []
+
+    for raw_agent in raw_agents:
+        if isinstance(raw_agent, dict):
+            name = str(raw_agent["name"]).upper()
+        else:
+            name = str(raw_agent).upper()
+
+        if not name:
+            raise ValueError("Agent name cannot be empty")
+        agents.append(name)
+
+    if not agents:
+        raise ValueError(
+            f"{scene_path} has no agents. Regenerate it with multi-agent recognize.py."
+        )
+
+    if len(set(agents)) != len(agents):
+        raise ValueError(f"Duplicate agents in {scene_path}: {agents}")
+
+    return objects, obj_types, relations, counters, object_infos, agents
 
 
 def build_initial_state(
@@ -540,6 +565,7 @@ def build_initial_state(
     obj_types: Dict[str, str],
     relations: Sequence[Tuple[str, str, str]],
     counters: Dict[str, int],
+    agents: Sequence[str],
 ):
     """Build the initial Railroad state with native numeric H/S."""
 
@@ -576,6 +602,7 @@ def build_initial_state(
         ),
         {
             "object": set(objects),
+            "agent": set(agents),
         },
     )
 
@@ -662,20 +689,25 @@ def transition_safe(state: State, action) -> List[Tuple[State, float]]:
     return [(s, p / total) for s, p in merged.values()]
 
 
-def extract_stack_actions(action_history: Sequence[str]) -> List[Tuple[str, str]]:
-    """Extract physical stack commands as (below, above)."""
-    result: List[Tuple[str, str]] = []
+def extract_stack_actions(
+    action_history: Sequence[str],
+) -> List[Tuple[str, str, str]]:
+    """Extract physical stack commands as (agent, below, above)."""
+    result: List[Tuple[str, str, str]] = []
+
     for action_name in action_history:
         parts = action_name.split()
-        if len(parts) == 3 and parts[0].startswith("stack"):
-            result.append((parts[1], parts[2]))
+
+        if len(parts) == 4 and parts[0].startswith("stack"):
+            result.append((parts[1], parts[2], parts[3]))
+
     return result
 
 
 def write_plan(plan_path: str,
                object_infos: Dict[str, Dict[str, float]],
                expected_probability: float,
-               stack_actions: Sequence[Tuple[str, str]],
+               stack_actions: Sequence[Tuple[str, str, str]],
                goal_reached_in_rollout: bool) -> None:
     with open(plan_path, "w") as f:
         if object_infos:
@@ -685,7 +717,9 @@ def write_plan(plan_path: str,
 
         f.write(f"plan probability: {expected_probability:.6f}\n")
         if expected_probability > 0.0 and stack_actions:
-            for below, above in stack_actions:
+            for agent, below, above in stack_actions:
+                # Keep legacy execution format for now. The selected agent is
+                # retained in mcts_result.json and symbolic_action_history.
                 f.write(f"stack {below.upper()} {above.upper()}\n")
         elif goal_reached_in_rollout:
             # No physical stack may be needed for a trivial goal.
@@ -1178,7 +1212,7 @@ def main() -> None:
         sys.exit(1)
 
     all_operators = load_operators_from_json(operators_path)
-    objects, obj_types, relations, counters, object_infos = parse_problem_railroad(
+    objects, obj_types, relations, counters, object_infos, agents = parse_problem_railroad(
         scene_path,
         objects_path,
     )
@@ -1187,6 +1221,7 @@ def main() -> None:
         obj_types,
         relations,
         counters,
+        agents,
     )
 
     all_actions: List[Action] = []
@@ -1199,6 +1234,7 @@ def main() -> None:
     print(f"Loaded {len(all_operators)} Railroad operators")
     print(f"Grounded {len(all_actions)} actions")
     print(f"Objects: {objects}")
+    print(f"Agents: {agents}")
     print(f"Types: {obj_types}")
     print(f"Relations: {len(relations)}")
     print(f"Initial fluents: {len(initial_state.fluents)}")
@@ -1263,8 +1299,12 @@ def main() -> None:
         },
         "symbolic_action_history": history,
         "physical_stack_actions": [
-            {"below": below, "above": above}
-            for below, above in stack_actions
+            {
+                "agent": agent,
+                "below": below,
+                "above": above,
+            }
+            for agent, below, above in stack_actions
         ],
         "representative_branch_probability": plan_probability,
         "representative_rollout_goal_reached": goal_reached,
@@ -1290,8 +1330,8 @@ def main() -> None:
     print(f"Representative rollout reaches goal: {goal_reached}")
     print(f"Plan written to: {plan_path}")
     print(f"Detailed result written to: {result_path}")
-    for below, above in stack_actions:
-        print(f"  stack {above} on {below}")
+    for agent, below, above in stack_actions:
+        print(f"  {agent}: stack {above} on {below}")
 
 
 if __name__ == "__main__":
